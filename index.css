@@ -1,0 +1,45 @@
+:root {
+	color-scheme: light dark;
+}
+
+*, ::before, ::after {
+	box-sizing: border-box;
+}
+
+body {
+	display: flex;
+	margin: 0;
+}
+
+svg {
+	display: block; /* Removes slight overscroll when svg fills height */
+	background: hsl(216 7% 14%);
+}
+
+use[href="#half"] {
+	fill: hsl(29 86% 72%);
+}
+
+use[href="#point"]:nth-child(even) {
+	fill: hsl(30 100% 84%);
+}
+
+use[href="#point"]:nth-child(odd) {
+	fill: hsl(11 33% 29%);
+}
+
+use[href="#hold"] {
+	background: hsl(216 7% 20%);
+}
+
+use[href="#checker"]:hover {
+	cursor: pointer;
+}
+
+use[href="#checker"].player1 {
+	fill: black;
+}
+
+use[href="#checker"].player2 {
+	fill: white;
+}
