@@ -43,11 +43,22 @@ points.forEach((point, pointIndex) => {
 			const checkerElement = document.createElementNS(`http://www.w3.org/2000/svg`, `use`);
 			checkerElement.classList.add(`player${point.player}`);
 			checkerElement.setAttribute(`href`, `#checker`);
-			checkerElement.setAttribute(
-				`transform`,
-				`translate(${(pointIndex < 12 ? -1 : 1) * ((pointIndex % 12 * 40) + (pointIndex % 12 >= 6 ? 50 : 0)) + (pointIndex < 12 ? 490 : 0)} ${pointIndex < 12 ? (380 - checkerIndex * 40) : (checkerIndex * 40)})`
-			);
+			checkerElement.style.transform = checkerTranslate(pointIndex, checkerIndex);
 			document.getElementById(`checkers`).append(checkerElement);
 		}
 	}
 });
+
+document.getElementById(`checkers`).childNodes.forEach(checkerElement => {
+	checkerElement.addEventListener(`click`, () => {
+		checkerElement.style.transform = checkerTranslate(1, 0);
+	});
+});
+
+/**
+ * @param {number} pointIndex
+ * @param {number} checkerIndex
+ */
+function checkerTranslate(pointIndex, checkerIndex) {
+	return `translate(${(pointIndex < 12 ? -1 : 1) * ((pointIndex % 12 * 40) + (pointIndex % 12 >= 6 ? 50 : 0)) + (pointIndex < 12 ? 490 : 0)}px, ${pointIndex < 12 ? (380 - checkerIndex * 40) : (checkerIndex * 40)}px)`;
+}

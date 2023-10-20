@@ -32,6 +32,10 @@ use[href="#hold"] {
 	background: hsl(216 7% 20%);
 }
 
+use[href="#checker"] {
+	transition: transform .3s;
+}
+
 use[href="#checker"]:hover {
 	cursor: pointer;
 }
