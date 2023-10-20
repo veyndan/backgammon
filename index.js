@@ -42,6 +42,7 @@ points.forEach((point, pointIndex) => {
 		for (let checkerIndex = 0; checkerIndex < point.checkerCount; checkerIndex++) {
 			const checkerElement = document.createElementNS(`http://www.w3.org/2000/svg`, `use`);
 			checkerElement.dataset[`player`] = `${point.player}`;
+			checkerElement.dataset[`point`] = `${pointIndex + 1}`; // 1-based indexing per standard backgammon notation.
 			checkerElement.setAttribute(`href`, `#checker`);
 			checkerElement.style.transform = checkerTranslate(pointIndex, checkerIndex);
 			document.getElementById(`checkers`).append(checkerElement);
@@ -51,10 +52,15 @@ points.forEach((point, pointIndex) => {
 
 document.getElementById(`checkers`).childNodes.forEach(checkerElement => {
 	checkerElement.addEventListener(`click`, () => {
-		const destinationPointIndex = 1;
+		const dieNumber = 4;
+		const originPointIndex = Number(checkerElement.dataset[`point`]) - 1;
+		const originPoint = points[originPointIndex];
+		const destinationPointIndex = originPointIndex - dieNumber;
 		const destinationPoint = points[destinationPointIndex];
 		checkerElement.style.transform = checkerTranslate(destinationPointIndex, destinationPoint.checkerCount);
+		originPoint.checkerCount -= 1;
 		destinationPoint.checkerCount += 1;
+		checkerElement.dataset[`point`] = `${destinationPointIndex + 1}`
 	});
 });
 
