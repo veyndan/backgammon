@@ -16,7 +16,7 @@ svg {
 	background: hsl(216 7% 14%);
 }
 
-use[href="#half"] {
+.half {
 	fill: hsl(29 86% 72%);
 }
 
