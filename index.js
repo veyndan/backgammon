@@ -51,7 +51,10 @@ points.forEach((point, pointIndex) => {
 
 document.getElementById(`checkers`).childNodes.forEach(checkerElement => {
 	checkerElement.addEventListener(`click`, () => {
-		checkerElement.style.transform = checkerTranslate(1, 0);
+		const destinationPointIndex = 1;
+		const destinationPoint = points[destinationPointIndex];
+		checkerElement.style.transform = checkerTranslate(destinationPointIndex, destinationPoint.checkerCount);
+		destinationPoint.checkerCount += 1;
 	});
 });
 
