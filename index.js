@@ -53,9 +53,10 @@ points.forEach((point, pointIndex) => {
 document.getElementById(`checkers`).childNodes.forEach(checkerElement => {
 	checkerElement.addEventListener(`click`, () => {
 		const dieNumber = 4;
+		const player = Number(checkerElement.dataset[`player`]);
 		const originPointIndex = Number(checkerElement.dataset[`point`]) - 1;
 		const originPoint = points[originPointIndex];
-		const destinationPointIndex = originPointIndex - dieNumber;
+		const destinationPointIndex = originPointIndex + (player === 1 ? -dieNumber : dieNumber);
 		const destinationPoint = points[destinationPointIndex];
 		checkerElement.style.transform = checkerTranslate(destinationPointIndex, destinationPoint.checkerCount);
 		originPoint.checkerCount -= 1;
