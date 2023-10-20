@@ -40,10 +40,10 @@ use[href="#checker"]:hover {
 	cursor: pointer;
 }
 
-use[href="#checker"].player1 {
+use[href="#checker"][data-player="1"] {
 	fill: black;
 }
 
-use[href="#checker"].player2 {
+use[href="#checker"][data-player="2"] {
 	fill: white;
 }

@@ -41,7 +41,7 @@ points.forEach((point, pointIndex) => {
 	if (point.player !== null) {
 		for (let checkerIndex = 0; checkerIndex < point.checkerCount; checkerIndex++) {
 			const checkerElement = document.createElementNS(`http://www.w3.org/2000/svg`, `use`);
-			checkerElement.classList.add(`player${point.player}`);
+			checkerElement.dataset[`player`] = `${point.player}`;
 			checkerElement.setAttribute(`href`, `#checker`);
 			checkerElement.style.transform = checkerTranslate(pointIndex, checkerIndex);
 			document.getElementById(`checkers`).append(checkerElement);
