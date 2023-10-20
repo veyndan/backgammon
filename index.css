@@ -33,7 +33,7 @@ use[href="#hold"] {
 }
 
 use[href="#checker"] {
-	transition: transform .3s;
+	transition: translate .3s;
 }
 
 use[href="#checker"]:hover {
