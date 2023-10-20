@@ -47,3 +47,7 @@ use[href="#checker"][data-player="1"] {
 use[href="#checker"][data-player="2"] {
 	fill: white;
 }
+
+.die-pip {
+	fill: white;
+}
