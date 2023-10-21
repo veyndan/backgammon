@@ -40,8 +40,12 @@ use[href="#checker"] {
 	transition: translate .3s;
 }
 
-use[href="#checker"]:hover {
+use[href="#checker"].movable:hover {
 	cursor: pointer;
+}
+
+use[href="#checker"]:not(.movable):hover {
+	cursor: not-allowed;
 }
 
 use[href="#checker"][data-player="1"] {
