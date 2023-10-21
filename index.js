@@ -1,6 +1,6 @@
 document.getElementById(`checkers`).childNodes.forEach(checkerElement => {
 	checkerElement.addEventListener(`click`, () => {
-		const dieElement = document.querySelector(`#dice-holder :first-child`);
+		const dieElement = document.querySelector(`#dice-holder :not(.played)`);
 		dieElement.classList.add(`played`);
 		const dieValue = Number(dieElement.dataset[`value`]);
 		const player = Number(checkerElement.dataset[`player`]);
