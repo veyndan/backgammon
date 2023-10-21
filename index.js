@@ -19,37 +19,42 @@ document.getElementById(`roll-dice`).addEventListener(`click`, event => {
 	 * @param {number} limit
 	 */
 	function repeatedlyRollDice(limit) {
-		function rollDice() {
-			/**
-			 * @return {SVGUseElement}
-			 */
-			function rolledDie() {
-				/**
-				 * @return {number}
-				 */
-				function getRandomDiceRoll() {
-					return Math.floor(Math.random() * 5 + 1);
-				}
-
-				const dieElement = document.createElementNS(`http://www.w3.org/2000/svg`, `use`);
-				const dieValue = getRandomDiceRoll();
-				dieElement.setAttribute(`href`, `#die-face-pip-${dieValue}`);
-				dieElement.dataset[`value`] = `${dieValue}`;
-				dieElement.classList.add(`die`);
-				return dieElement
-			}
-
-			document.querySelector(`#dice`).replaceChildren(rolledDie(), rolledDie());
+		/**
+		 * @return {number}
+		 */
+		function getRandomDiceRoll() {
+			return Math.floor(Math.random() * 5 + 1);
 		}
 
-		rollDice();
+		/**
+		 * @param {number} dieValue
+		 * @return {SVGUseElement}
+		 */
+		function rolledDie(dieValue) {
+			const dieElement = document.createElementNS(`http://www.w3.org/2000/svg`, `use`);
+			dieElement.setAttribute(`href`, `#die-face-pip-${dieValue}`);
+			dieElement.dataset[`value`] = `${dieValue}`;
+			dieElement.classList.add(`die`);
+			return dieElement
+		}
+
+		const diceElement = document.querySelector(`#dice`);
+		diceElement.replaceChildren(rolledDie(getRandomDiceRoll()), rolledDie(getRandomDiceRoll()));
 		let count = 1;
 		const intervalID = setInterval(
 			() => {
-				rollDice()
+				const firstDieValue = getRandomDiceRoll();
+				const secondDieValue = getRandomDiceRoll();
+				diceElement.replaceChildren(rolledDie(firstDieValue), rolledDie(secondDieValue));
 
 				if (++count === limit) {
 					window.clearInterval(intervalID);
+					if (firstDieValue === secondDieValue) {
+						setTimeout(
+							() => diceElement.append(rolledDie(firstDieValue), rolledDie(firstDieValue)),
+							200,
+						);
+					}
 				}
 			},
 			50,
