@@ -1,5 +1,6 @@
 Array.from(document.getElementById(`checkers`).children).forEach(checkerElement => {
 	checkerElement.addEventListener(`click`, () => {
+		if (!checkerElement.classList.contains(`movable`)) return;
 		const dieElement = document.querySelector(`#dice :not(.played)`);
 		dieElement.classList.add(`played`);
 		const dieValue = Number(dieElement.dataset[`value`]);
