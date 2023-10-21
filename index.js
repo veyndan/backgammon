@@ -1,6 +1,6 @@
 document.getElementById(`checkers`).childNodes.forEach(checkerElement => {
 	checkerElement.addEventListener(`click`, () => {
-		const dieNumber = 4;
+		const dieNumber = Number(document.querySelector(`#dice-holder :first-child`).dataset[`value`]);
 		const player = Number(checkerElement.dataset[`player`]);
 		const originPointIndex = Number(checkerElement.dataset[`point`]) - 1;
 		const destinationPointIndex = originPointIndex + (player === 1 ? -dieNumber : dieNumber);
@@ -30,7 +30,9 @@ document.getElementById(`roll-dice`).addEventListener(`click`, event => {
 				}
 
 				const dieElement = document.createElementNS(`http://www.w3.org/2000/svg`, `use`);
-				dieElement.setAttribute(`href`, `#die-face-pip-${(getRandomDiceRoll())}`);
+				const dieValue = getRandomDiceRoll();
+				dieElement.setAttribute(`href`, `#die-face-pip-${dieValue}`);
+				dieElement.dataset[`value`] = `${dieValue}`;
 				return dieElement
 			}
 
