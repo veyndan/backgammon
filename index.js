@@ -3,9 +3,9 @@ Array.from(document.getElementById(`checkers`).children).forEach(checkerElement 
 		const dieElement = document.querySelector(`#dice :not(.played)`);
 		dieElement.classList.add(`played`);
 		const dieValue = Number(dieElement.dataset[`value`]);
-		const player = Number(checkerElement.dataset[`player`]);
+		const player = checkerElement.dataset[`player`];
 		const originPointIndex = Number(checkerElement.dataset[`point`]) - 1;
-		const destinationPointIndex = originPointIndex + (player === 1 ? -dieValue : dieValue);
+		const destinationPointIndex = originPointIndex + (player === `1` ? -dieValue : dieValue);
 		const destinationPointCheckerCount = document.querySelectorAll(`use[href="#checker"][data-point="${destinationPointIndex + 1}"]`).length;
 		checkerElement.style.translate = `${(destinationPointIndex < 12 ? -1 : 1) * ((destinationPointIndex % 12 * 40) + (destinationPointIndex % 12 >= 6 ? 50 : 0)) + (destinationPointIndex < 12 ? 490 : 0)}px ${destinationPointIndex < 12 ? (380 - destinationPointCheckerCount * 40) : (destinationPointCheckerCount * 40)}px`;
 		checkerElement.dataset[`point`] = `${destinationPointIndex + 1}`;
@@ -68,11 +68,11 @@ document.getElementById(`roll-dice`).addEventListener(`click`, event => {
 
 function updateMovabilityOfCheckers(dieValue) {
 	Array.from(document.getElementById(`checkers`).children).forEach(checkerElement => {
-		const player = Number(checkerElement.dataset[`player`]);
+		const player = checkerElement.dataset[`player`];
 		const point = Number(checkerElement.dataset[`point`]);
-		const potentialDestinationPoint = point + (player === 1 ? -dieValue : dieValue);
+		const potentialDestinationPoint = point + (player === `1` ? -dieValue : dieValue);
 		const potentialDestinationCheckers = document.querySelectorAll(`use[href="#checker"][data-point="${potentialDestinationPoint}"]`)
-		const moveable = potentialDestinationPoint >= 1 && (potentialDestinationCheckers.length <= 1 || Number(potentialDestinationCheckers[0].dataset[`player`]) === player);
+		const moveable = potentialDestinationPoint >= 1 && (potentialDestinationCheckers.length <= 1 || potentialDestinationCheckers[0].dataset[`player`] === player);
 		checkerElement.classList.toggle(`movable`, moveable);
 	});
 }
