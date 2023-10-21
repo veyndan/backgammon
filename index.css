@@ -67,7 +67,7 @@ use[href="#checker"][data-player="2"] {
 	border-radius: 4px;
 }
 
-#dice-holder :last-child {
+#dice :last-child {
 	translate: 50px;
 }
 
