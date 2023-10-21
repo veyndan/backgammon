@@ -70,3 +70,7 @@ use[href="#checker"][data-player="2"] {
 #dice-holder :last-child {
 	translate: 50px;
 }
+
+.die.played {
+	opacity: .5;
+}

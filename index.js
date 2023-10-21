@@ -1,6 +1,8 @@
 document.getElementById(`checkers`).childNodes.forEach(checkerElement => {
 	checkerElement.addEventListener(`click`, () => {
-		const dieNumber = Number(document.querySelector(`#dice-holder :first-child`).dataset[`value`]);
+		const dieElement = document.querySelector(`#dice-holder :first-child`);
+		dieElement.classList.add(`played`);
+		const dieNumber = Number(dieElement.dataset[`value`]);
 		const player = Number(checkerElement.dataset[`player`]);
 		const originPointIndex = Number(checkerElement.dataset[`point`]) - 1;
 		const destinationPointIndex = originPointIndex + (player === 1 ? -dieNumber : dieNumber);
@@ -33,6 +35,7 @@ document.getElementById(`roll-dice`).addEventListener(`click`, event => {
 				const dieValue = getRandomDiceRoll();
 				dieElement.setAttribute(`href`, `#die-face-pip-${dieValue}`);
 				dieElement.dataset[`value`] = `${dieValue}`;
+				dieElement.classList.add(`die`);
 				return dieElement
 			}
 
