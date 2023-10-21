@@ -27,10 +27,9 @@ document.getElementById(`roll-dice`).addEventListener(`click`, event => {
 
 			const firstDieElement = document.createElementNS(`http://www.w3.org/2000/svg`, `use`);
 			firstDieElement.setAttribute(`href`, `#die-face-pip-${getRandomDiceRoll()}`);
-			document.querySelector(`#dice-holder > :first-child`).replaceChildren(firstDieElement);
 			const secondDieElement = document.createElementNS(`http://www.w3.org/2000/svg`, `use`);
 			secondDieElement.setAttribute(`href`, `#die-face-pip-${getRandomDiceRoll()}`);
-			document.querySelector(`#dice-holder > :last-child`).replaceChildren(secondDieElement);
+			document.querySelector(`#dice-holder`).replaceChildren(firstDieElement, secondDieElement);
 		}
 
 		rollDice();

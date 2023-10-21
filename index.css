@@ -66,3 +66,7 @@ use[href="#checker"][data-player="2"] {
 	border: none;
 	border-radius: 4px;
 }
+
+#dice-holder :last-child {
+	translate: 50px;
+}
