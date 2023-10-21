@@ -19,17 +19,22 @@ document.getElementById(`roll-dice`).addEventListener(`click`, event => {
 	function repeatedlyRollDice(limit) {
 		function rollDice() {
 			/**
-			 * @return {number}
+			 * @return {SVGUseElement}
 			 */
-			function getRandomDiceRoll() {
-				return Math.floor(Math.random() * 5 + 1);
+			function rolledDie() {
+				/**
+				 * @return {number}
+				 */
+				function getRandomDiceRoll() {
+					return Math.floor(Math.random() * 5 + 1);
+				}
+
+				const dieElement = document.createElementNS(`http://www.w3.org/2000/svg`, `use`);
+				dieElement.setAttribute(`href`, `#die-face-pip-${(getRandomDiceRoll())}`);
+				return dieElement
 			}
 
-			const firstDieElement = document.createElementNS(`http://www.w3.org/2000/svg`, `use`);
-			firstDieElement.setAttribute(`href`, `#die-face-pip-${getRandomDiceRoll()}`);
-			const secondDieElement = document.createElementNS(`http://www.w3.org/2000/svg`, `use`);
-			secondDieElement.setAttribute(`href`, `#die-face-pip-${getRandomDiceRoll()}`);
-			document.querySelector(`#dice-holder`).replaceChildren(firstDieElement, secondDieElement);
+			document.querySelector(`#dice-holder`).replaceChildren(rolledDie(), rolledDie());
 		}
 
 		rollDice();
