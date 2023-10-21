@@ -131,8 +131,14 @@
         <use data-player="1" data-point="24" href="#checker" style="translate: 490px 40px;"/>
       </g>
 
-      <use href="#die-face-pip-5" x="385" y="210"/>
-      <use href="#die-face-pip-6" x="435" y="210"/>
+      <foreignObject width="100" height="40" x="380" y="210">
+        <button id="roll-dice">Roll Dice</button>
+      </foreignObject>
+
+      <g id="dice-holder" transform="translate(385, 210)">
+        <g/>
+        <g transform="translate(50)"/>
+      </g>
     </svg>
   </body>
 </html>

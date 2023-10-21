@@ -9,3 +9,43 @@ document.getElementById(`checkers`).childNodes.forEach(checkerElement => {
 		checkerElement.dataset[`point`] = `${destinationPointIndex + 1}`;
 	});
 });
+
+document.getElementById(`roll-dice`).addEventListener(`click`, event => {
+	event.currentTarget.style.display = `none`;
+
+	/**
+	 * @param {number} limit
+	 */
+	function repeatedlyRollDice(limit) {
+		function rollDice() {
+			/**
+			 * @return {number}
+			 */
+			function getRandomDiceRoll() {
+				return Math.floor(Math.random() * 5 + 1);
+			}
+
+			const firstDieElement = document.createElementNS(`http://www.w3.org/2000/svg`, `use`);
+			firstDieElement.setAttribute(`href`, `#die-face-pip-${getRandomDiceRoll()}`);
+			document.querySelector(`#dice-holder > :first-child`).replaceChildren(firstDieElement);
+			const secondDieElement = document.createElementNS(`http://www.w3.org/2000/svg`, `use`);
+			secondDieElement.setAttribute(`href`, `#die-face-pip-${getRandomDiceRoll()}`);
+			document.querySelector(`#dice-holder > :last-child`).replaceChildren(secondDieElement);
+		}
+
+		rollDice();
+		let count = 1;
+		const intervalID = setInterval(
+			() => {
+				rollDice()
+
+				if (++count === limit) {
+					window.clearInterval(intervalID);
+				}
+			},
+			50,
+		);
+	}
+
+	repeatedlyRollDice(5);
+});
