@@ -1,17 +1,16 @@
-Array.from(document.getElementById(`checkers`).children).forEach(checkerElement => {
-	checkerElement.addEventListener(`click`, () => {
-		if (!checkerElement.classList.contains(`movable`)) return;
-		const dieElement = document.querySelector(`#dice :not(.played)`);
-		dieElement.classList.add(`played`);
-		const dieValue = Number(dieElement.dataset[`value`]);
-		const player = checkerElement.dataset[`player`];
-		const originPointIndex = Number(checkerElement.dataset[`point`]) - 1;
-		const destinationPointIndex = originPointIndex + (player === `1` ? -dieValue : dieValue);
-		const destinationPointCheckerCount = document.querySelectorAll(`use[href="#checker"][data-point="${destinationPointIndex + 1}"]`).length;
-		checkerElement.style.translate = `${(destinationPointIndex < 12 ? -1 : 1) * ((destinationPointIndex % 12 * 40) + (destinationPointIndex % 12 >= 6 ? 50 : 0)) + (destinationPointIndex < 12 ? 490 : 0)}px ${destinationPointIndex < 12 ? (380 - destinationPointCheckerCount * 40) : (destinationPointCheckerCount * 40)}px`;
-		checkerElement.dataset[`point`] = `${destinationPointIndex + 1}`;
-		updateMovabilityOfCheckers(Number(document.querySelector(`#dice :not(.played)`).dataset[`value`]));
-	});
+document.getElementById(`checkers`).addEventListener(`click`, event => {
+	const checkerElement = event.target;
+	if (!checkerElement.classList.contains(`movable`)) return;
+	const dieElement = document.querySelector(`#dice :not(.played)`);
+	dieElement.classList.add(`played`);
+	const dieValue = Number(dieElement.dataset[`value`]);
+	const player = checkerElement.dataset[`player`];
+	const originPointIndex = Number(checkerElement.dataset[`point`]) - 1;
+	const destinationPointIndex = originPointIndex + (player === `1` ? -dieValue : dieValue);
+	const destinationPointCheckerCount = document.querySelectorAll(`use[href="#checker"][data-point="${destinationPointIndex + 1}"]`).length;
+	checkerElement.style.translate = `${(destinationPointIndex < 12 ? -1 : 1) * ((destinationPointIndex % 12 * 40) + (destinationPointIndex % 12 >= 6 ? 50 : 0)) + (destinationPointIndex < 12 ? 490 : 0)}px ${destinationPointIndex < 12 ? (380 - destinationPointCheckerCount * 40) : (destinationPointCheckerCount * 40)}px`;
+	checkerElement.dataset[`point`] = `${destinationPointIndex + 1}`;
+	updateMovabilityOfCheckers(Number(document.querySelector(`#dice :not(.played)`).dataset[`value`]));
 });
 
 document.getElementById(`roll-dice`).addEventListener(`click`, event => {
