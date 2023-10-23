@@ -6,7 +6,7 @@ const checkersObserver = new MutationObserver(mutations => {
 		const originPointIndex = Number(checkerElement.dataset[`point`]) - 1;
 		const destinationPointCheckerCount = document.querySelectorAll(`use[href="#checker"][data-point="${originPointIndex + 1}"]`).length - 1;
 		checkerElement.style.translate = `${(originPointIndex < 12 ? -1 : 1) * ((originPointIndex % 12 * 40) + (originPointIndex % 12 >= 6 ? 50 : 0)) + (originPointIndex < 12 ? 490 : 0)}px ${originPointIndex < 12 ? (380 - destinationPointCheckerCount * 40) : (destinationPointCheckerCount * 40)}px`;
-		const dieElement = document.querySelector(`#dice :not(.played)`);
+		const dieElement = document.querySelector(`#dice :not([data-played="true"])`);
 		const dieValue = Number(dieElement.dataset[`value`]);
 		updateMovabilityOfCheckers(dieValue);
 	});
@@ -24,8 +24,8 @@ checkersObserver.observe(
 document.getElementById(`checkers`).addEventListener(`click`, event => {
 	const checkerElement = event.target;
 	if (!checkerElement.classList.contains(`movable`)) return;
-	const dieElement = document.querySelector(`#dice :not(.played)`);
-	dieElement.classList.add(`played`);
+	const dieElement = document.querySelector(`#dice :not([data-played="true"])`);
+	dieElement.dataset[`played`] = String(true);
 	const dieValue = Number(dieElement.dataset[`value`]);
 	const player = checkerElement.dataset[`player`];
 	const originPointIndex = Number(checkerElement.dataset[`point`]) - 1;

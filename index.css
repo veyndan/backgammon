@@ -110,6 +110,6 @@ use[href="#checker"][data-player="2"] {
 	animation: .2s .3125s 1 backwards fade-in;
 }
 
-.die.played {
+.die[data-played="true"] {
 	opacity: .5;
 }
