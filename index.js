@@ -1,3 +1,26 @@
+const checkersElement = document.getElementById('checkers');
+
+const checkersObserver = new MutationObserver(mutations => {
+	mutations.forEach(mutation => {
+		const checkerElement = mutation.target;
+		const originPointIndex = Number(checkerElement.dataset[`point`]) - 1;
+		const destinationPointCheckerCount = document.querySelectorAll(`use[href="#checker"][data-point="${originPointIndex + 1}"]`).length - 1;
+		checkerElement.style.translate = `${(originPointIndex < 12 ? -1 : 1) * ((originPointIndex % 12 * 40) + (originPointIndex % 12 >= 6 ? 50 : 0)) + (originPointIndex < 12 ? 490 : 0)}px ${originPointIndex < 12 ? (380 - destinationPointCheckerCount * 40) : (destinationPointCheckerCount * 40)}px`;
+		const dieElement = document.querySelector(`#dice :not(.played)`);
+		const dieValue = Number(dieElement.dataset[`value`]);
+		updateMovabilityOfCheckers(dieValue);
+	});
+});
+
+checkersObserver.observe(
+	checkersElement,
+	{
+		attributeFilter: [`data-point`],
+		childList: true,
+		subtree: true,
+	},
+);
+
 document.getElementById(`checkers`).addEventListener(`click`, event => {
 	const checkerElement = event.target;
 	if (!checkerElement.classList.contains(`movable`)) return;
@@ -7,10 +30,7 @@ document.getElementById(`checkers`).addEventListener(`click`, event => {
 	const player = checkerElement.dataset[`player`];
 	const originPointIndex = Number(checkerElement.dataset[`point`]) - 1;
 	const destinationPointIndex = originPointIndex + (player === `1` ? -dieValue : dieValue);
-	const destinationPointCheckerCount = document.querySelectorAll(`use[href="#checker"][data-point="${destinationPointIndex + 1}"]`).length;
-	checkerElement.style.translate = `${(destinationPointIndex < 12 ? -1 : 1) * ((destinationPointIndex % 12 * 40) + (destinationPointIndex % 12 >= 6 ? 50 : 0)) + (destinationPointIndex < 12 ? 490 : 0)}px ${destinationPointIndex < 12 ? (380 - destinationPointCheckerCount * 40) : (destinationPointCheckerCount * 40)}px`;
 	checkerElement.dataset[`point`] = `${destinationPointIndex + 1}`;
-	updateMovabilityOfCheckers(Number(document.querySelector(`#dice :not(.played)`).dataset[`value`]));
 });
 
 document.getElementById(`roll-dice`).addEventListener(`click`, event => {
