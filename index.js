@@ -23,7 +23,7 @@ checkersObserver.observe(
 
 document.getElementById(`checkers`).addEventListener(`click`, event => {
 	const checkerElement = event.target;
-	if (!checkerElement.classList.contains(`movable`)) return;
+	if (checkerElement.dataset[`movable`] === String(false)) return;
 	const dieElement = document.querySelector(`#dice :not([data-played="true"])`);
 	dieElement.dataset[`played`] = String(true);
 	const dieValue = Number(dieElement.dataset[`value`]);
@@ -93,6 +93,6 @@ function updateMovabilityOfCheckers(dieValue) {
 		const potentialDestinationPoint = point + (player === `1` ? -dieValue : dieValue);
 		const potentialDestinationCheckers = document.querySelectorAll(`use[href="#checker"][data-point="${potentialDestinationPoint}"]`)
 		const moveable = potentialDestinationPoint >= 1 && (potentialDestinationCheckers.length <= 1 || potentialDestinationCheckers[0].dataset[`player`] === player);
-		checkerElement.classList.toggle(`movable`, moveable);
+		checkerElement.dataset[`movable`] = String(moveable);
 	});
 }
