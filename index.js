@@ -92,7 +92,7 @@ function updateMovabilityOfCheckers(dieValue) {
 		const point = Number(checkerElement.dataset[`point`]);
 		const potentialDestinationPoint = point + (player === `1` ? -dieValue : dieValue);
 		const potentialDestinationCheckers = document.querySelectorAll(`use[href="#checker"][data-point="${potentialDestinationPoint}"]`)
-		const moveable = potentialDestinationPoint >= 1 && (potentialDestinationCheckers.length <= 1 || potentialDestinationCheckers[0].dataset[`player`] === player);
-		checkerElement.dataset[`movable`] = String(moveable);
+		const movable = potentialDestinationPoint >= 1 && (potentialDestinationCheckers.length <= 1 || potentialDestinationCheckers[0].dataset[`player`] === player);
+		checkerElement.dataset[`movable`] = String(movable);
 	});
 }
