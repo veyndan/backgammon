@@ -1,3 +1,22 @@
+class Checker {
+	/**
+	 * @param {string} player
+	 * @param {number} point
+	 */
+	constructor(player, point) {
+		this.player = player;
+		this.point = point;
+	}
+
+	/**
+	 * @param {number} offset
+	 * @return {Checker}
+	 */
+	moveBy(offset) {
+		return new Checker(this.player, this.point + (this.player === `1` ? -offset : offset))
+	}
+}
+
 class CheckerElement {
 	/**
 	 * @param {SVGUseElement} target
@@ -132,14 +151,14 @@ document.getElementById(`checkers`).addEventListener(`click`, event => {
 	if (!checkerElement.movable) return;
 	const dieElement = new DieElement(document.querySelector(`#dice :not([data-played="true"])`));
 	dieElement.played = true;
-	checkerElement.point = checkerElement.point + (checkerElement.player === `1` ? -dieElement.value : dieElement.value);
+	checkerElement.point = new Checker(checkerElement.player, checkerElement.point).moveBy(dieElement.value).point;
 	checkerElement.touchedAccordingToId = dieElement.id;
 });
 
 document.getElementById(`undo`).addEventListener(`click`, () => {
 	const lastPlayedDieElement = new DieElement(Array.from(document.querySelectorAll(`#dice [data-played="true"]`)).pop());
 	const lastMovedCheckerElement = new CheckerElement(document.querySelector(`#checkers > [data-touched-according-to-die${(lastPlayedDieElement.id)}="true"]`));
-	lastMovedCheckerElement.point = lastMovedCheckerElement.point + (lastMovedCheckerElement.player === `1` ? lastPlayedDieElement.value : -lastPlayedDieElement.value);
+	lastMovedCheckerElement.point = new Checker(lastMovedCheckerElement.player, lastMovedCheckerElement.point).moveBy(-lastPlayedDieElement.value).point;
 	lastMovedCheckerElement.deleteTouchedAccordingToId(lastPlayedDieElement.id);
 	lastPlayedDieElement.played = false;
 });
@@ -185,7 +204,7 @@ function updateMovabilityOfCheckers(dieElement) {
 	Array.from(document.getElementById(`checkers`).children)
 		.map(value => new CheckerElement(value))
 		.forEach(checkerElement => {
-			const potentialDestinationPoint = checkerElement.point + (checkerElement.player === `1` ? -dieElement.value : dieElement.value);
+			const potentialDestinationPoint = new Checker(checkerElement.player, checkerElement.point).moveBy(dieElement.value).point;
 			const potentialDestinationCheckers = document.querySelectorAll(`use[href="#checker"][data-point="${potentialDestinationPoint}"]`)
 			checkerElement.movable = potentialDestinationPoint >= 1 && (potentialDestinationCheckers.length <= 1 || new CheckerElement(potentialDestinationCheckers[0]).player === checkerElement.player);
 		});
