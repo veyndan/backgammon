@@ -65,6 +65,20 @@ class DieElement {
 	}
 
 	/**
+	 * @param {number} id
+	 * @param {number} value
+	 * @return {DieElement}
+	 */
+	static create(id, value = this.#generateRandomValue()) {
+		const useElement = document.createElementNS(`http://www.w3.org/2000/svg`, `use`);
+		useElement.setAttribute(`href`, `#die-face-pip-${value}`);
+		useElement.dataset[`id`] = `${id}`;
+		useElement.dataset[`value`] = `${value}`;
+		useElement.classList.add(`die`);
+		return new DieElement(useElement);
+	}
+
+	/**
 	 * @return {string}
 	 */
 	get id() {
@@ -83,6 +97,13 @@ class DieElement {
 	 */
 	get value() {
 		return Number(this.target.dataset[`value`]);
+	}
+
+	/**
+	 * @return {number}
+	 */
+	static #generateRandomValue() {
+		return Math.floor(Math.random() * 6 + 1);
 	}
 }
 
@@ -130,41 +151,20 @@ document.getElementById(`roll-dice`).addEventListener(`click`, event => {
 	 * @param {number} limit
 	 */
 	function repeatedlyRollDice(limit) {
-		/**
-		 * @return {number}
-		 */
-		function getRandomDiceRoll() {
-			return Math.floor(Math.random() * 6 + 1);
-		}
-
-		/**
-		 * @param {number} id
-		 * @param {number} dieValue
-		 * @return {DieElement}
-		 */
-		function rolledDie(id, dieValue) {
-			const useElement = document.createElementNS(`http://www.w3.org/2000/svg`, `use`);
-			useElement.setAttribute(`href`, `#die-face-pip-${dieValue}`);
-			useElement.dataset[`id`] = `${id}`;
-			useElement.dataset[`value`] = `${dieValue}`;
-			useElement.classList.add(`die`);
-			return new DieElement(useElement)
-		}
-
 		const diceElement = document.querySelector(`#dice`);
-		diceElement.replaceChildren(rolledDie(0, getRandomDiceRoll()).target, rolledDie(1, getRandomDiceRoll()).target);
+		diceElement.replaceChildren(DieElement.create(0).target, DieElement.create(1).target);
 		let count = 1;
 		const intervalID = setInterval(
 			() => {
-				const firstDieElement = rolledDie(0, getRandomDiceRoll());
-				const secondDieElement = rolledDie(0, getRandomDiceRoll());
+				const firstDieElement = DieElement.create(0);
+				const secondDieElement = DieElement.create(0);
 				diceElement.replaceChildren(firstDieElement.target, secondDieElement.target);
 
 				if (++count === limit) {
 					window.clearInterval(intervalID);
 					if (firstDieElement.value === secondDieElement.value) {
 						setTimeout(
-							() => diceElement.append(rolledDie(2, firstDieElement.value).target, rolledDie(3, firstDieElement.value).target),
+							() => diceElement.append(DieElement.create(2, firstDieElement.value).target, DieElement.create(3, firstDieElement.value).target),
 							200,
 						);
 					}
