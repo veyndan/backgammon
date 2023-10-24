@@ -60,6 +60,7 @@ use[href="#checker"][data-player="2"] {
 	fill: white;
 }
 
+#undo,
 #roll-dice {
 	width: 100%;
 	height: 100%;

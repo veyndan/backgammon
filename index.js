@@ -31,6 +31,20 @@ document.getElementById(`checkers`).addEventListener(`click`, event => {
 	const originPoint = Number(checkerElement.dataset[`point`]);
 	const destinationPoint = originPoint + (player === `1` ? -dieValue : dieValue);
 	checkerElement.dataset[`point`] = `${destinationPoint}`;
+	checkerElement.dataset[`touchedAccordingToDie${dieElement.dataset[`id`]}`] = String(true);
+});
+
+document.getElementById(`undo`).addEventListener(`click`, () => {
+	const lastPlayedDieElement = Array.from(document.querySelectorAll(`#dice [data-played="true"]`)).pop();
+	const lastPlayedDieId = lastPlayedDieElement.dataset[`id`];
+	const lastPlayedDieValue = Number(lastPlayedDieElement.dataset[`value`]);
+	const lastMovedCheckerElement = document.querySelector(`#checkers > [data-touched-according-to-die${lastPlayedDieId}="true"]`);
+	const player = lastMovedCheckerElement.dataset[`player`];
+	const originPoint = Number(lastMovedCheckerElement.dataset[`point`]);
+	const destinationPoint = originPoint + (player === `1` ? lastPlayedDieValue : -lastPlayedDieValue);
+	lastMovedCheckerElement.dataset[`point`] = `${destinationPoint}`;
+	delete lastMovedCheckerElement.dataset[`touchedAccordingToDie${lastPlayedDieId}`];
+	lastPlayedDieElement.dataset[`played`] = String(false);
 });
 
 document.getElementById(`roll-dice`).addEventListener(`click`, event => {
@@ -48,31 +62,33 @@ document.getElementById(`roll-dice`).addEventListener(`click`, event => {
 		}
 
 		/**
+		 * @param {number} id
 		 * @param {number} dieValue
 		 * @return {SVGUseElement}
 		 */
-		function rolledDie(dieValue) {
+		function rolledDie(id, dieValue) {
 			const dieElement = document.createElementNS(`http://www.w3.org/2000/svg`, `use`);
 			dieElement.setAttribute(`href`, `#die-face-pip-${dieValue}`);
+			dieElement.dataset[`id`] = `${id}`;
 			dieElement.dataset[`value`] = `${dieValue}`;
 			dieElement.classList.add(`die`);
 			return dieElement
 		}
 
 		const diceElement = document.querySelector(`#dice`);
-		diceElement.replaceChildren(rolledDie(getRandomDiceRoll()), rolledDie(getRandomDiceRoll()));
+		diceElement.replaceChildren(rolledDie(0, getRandomDiceRoll()), rolledDie(1, getRandomDiceRoll()));
 		let count = 1;
 		const intervalID = setInterval(
 			() => {
 				const firstDieValue = getRandomDiceRoll();
 				const secondDieValue = getRandomDiceRoll();
-				diceElement.replaceChildren(rolledDie(firstDieValue), rolledDie(secondDieValue));
+				diceElement.replaceChildren(rolledDie(0, firstDieValue), rolledDie(1, secondDieValue));
 
 				if (++count === limit) {
 					window.clearInterval(intervalID);
 					if (firstDieValue === secondDieValue) {
 						setTimeout(
-							() => diceElement.append(rolledDie(firstDieValue), rolledDie(firstDieValue)),
+							() => diceElement.append(rolledDie(2, firstDieValue), rolledDie(3, firstDieValue)),
 							200,
 						);
 					}
