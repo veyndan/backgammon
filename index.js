@@ -56,6 +56,36 @@ class CheckerElement {
 	}
 }
 
+class DieElement {
+	/**
+	 * @param {SVGUseElement} target
+	 */
+	constructor(target) {
+		this.target = target;
+	}
+
+	/**
+	 * @return {string}
+	 */
+	get id() {
+		return this.target.dataset[`id`];
+	}
+
+	/**
+	 * @param {boolean} value
+	 */
+	set played(value) {
+		this.target.dataset[`played`] = String(value);
+	}
+
+	/**
+	 * @return {number}
+	 */
+	get value() {
+		return Number(this.target.dataset[`value`]);
+	}
+}
+
 const checkersElement = document.getElementById('checkers');
 
 const checkersObserver = new MutationObserver(mutations => {
@@ -63,9 +93,7 @@ const checkersObserver = new MutationObserver(mutations => {
 		const checkerElement = new CheckerElement(mutation.target);
 		const destinationPointCheckerCount = document.querySelectorAll(`use[href="#checker"][data-point="${(checkerElement.point)}"]`).length - 1;
 		checkerElement.target.style.translate = `${(checkerElement.point <= 12 ? -1 : 1) * (((checkerElement.point - 1) % 12 * 40) + ((checkerElement.point - 1) % 12 >= 6 ? 50 : 0)) + (checkerElement.point <= 12 ? 490 : 0)}px ${checkerElement.point <= 12 ? (380 - destinationPointCheckerCount * 40) : (destinationPointCheckerCount * 40)}px`;
-		const dieElement = document.querySelector(`#dice :not([data-played="true"])`);
-		const dieValue = Number(dieElement.dataset[`value`]);
-		updateMovabilityOfCheckers(dieValue);
+		updateMovabilityOfCheckers(new DieElement(document.querySelector(`#dice :not([data-played="true"])`)));
 	});
 });
 
@@ -81,21 +109,18 @@ checkersObserver.observe(
 document.getElementById(`checkers`).addEventListener(`click`, event => {
 	const checkerElement = new CheckerElement(event.target);
 	if (!checkerElement.movable) return;
-	const dieElement = document.querySelector(`#dice :not([data-played="true"])`);
-	dieElement.dataset[`played`] = String(true);
-	const dieValue = Number(dieElement.dataset[`value`]);
-	checkerElement.point = checkerElement.point + (checkerElement.player === `1` ? -dieValue : dieValue);
-	checkerElement.touchedAccordingToId = dieElement.dataset[`id`];
+	const dieElement = new DieElement(document.querySelector(`#dice :not([data-played="true"])`));
+	dieElement.played = true;
+	checkerElement.point = checkerElement.point + (checkerElement.player === `1` ? -dieElement.value : dieElement.value);
+	checkerElement.touchedAccordingToId = dieElement.id;
 });
 
 document.getElementById(`undo`).addEventListener(`click`, () => {
-	const lastPlayedDieElement = Array.from(document.querySelectorAll(`#dice [data-played="true"]`)).pop();
-	const lastPlayedDieId = lastPlayedDieElement.dataset[`id`];
-	const lastPlayedDieValue = Number(lastPlayedDieElement.dataset[`value`]);
-	const lastMovedCheckerElement = new CheckerElement(document.querySelector(`#checkers > [data-touched-according-to-die${lastPlayedDieId}="true"]`));
-	lastMovedCheckerElement.point = lastMovedCheckerElement.point + (lastMovedCheckerElement.player === `1` ? lastPlayedDieValue : -lastPlayedDieValue);
-	lastMovedCheckerElement.deleteTouchedAccordingToId(lastPlayedDieId);
-	lastPlayedDieElement.dataset[`played`] = String(false);
+	const lastPlayedDieElement = new DieElement(Array.from(document.querySelectorAll(`#dice [data-played="true"]`)).pop());
+	const lastMovedCheckerElement = new CheckerElement(document.querySelector(`#checkers > [data-touched-according-to-die${(lastPlayedDieElement.id)}="true"]`));
+	lastMovedCheckerElement.point = lastMovedCheckerElement.point + (lastMovedCheckerElement.player === `1` ? lastPlayedDieElement.value : -lastPlayedDieElement.value);
+	lastMovedCheckerElement.deleteTouchedAccordingToId(lastPlayedDieElement.id);
+	lastPlayedDieElement.played = false;
 });
 
 document.getElementById(`roll-dice`).addEventListener(`click`, event => {
@@ -115,35 +140,35 @@ document.getElementById(`roll-dice`).addEventListener(`click`, event => {
 		/**
 		 * @param {number} id
 		 * @param {number} dieValue
-		 * @return {SVGUseElement}
+		 * @return {DieElement}
 		 */
 		function rolledDie(id, dieValue) {
-			const dieElement = document.createElementNS(`http://www.w3.org/2000/svg`, `use`);
-			dieElement.setAttribute(`href`, `#die-face-pip-${dieValue}`);
-			dieElement.dataset[`id`] = `${id}`;
-			dieElement.dataset[`value`] = `${dieValue}`;
-			dieElement.classList.add(`die`);
-			return dieElement
+			const useElement = document.createElementNS(`http://www.w3.org/2000/svg`, `use`);
+			useElement.setAttribute(`href`, `#die-face-pip-${dieValue}`);
+			useElement.dataset[`id`] = `${id}`;
+			useElement.dataset[`value`] = `${dieValue}`;
+			useElement.classList.add(`die`);
+			return new DieElement(useElement)
 		}
 
 		const diceElement = document.querySelector(`#dice`);
-		diceElement.replaceChildren(rolledDie(0, getRandomDiceRoll()), rolledDie(1, getRandomDiceRoll()));
+		diceElement.replaceChildren(rolledDie(0, getRandomDiceRoll()).target, rolledDie(1, getRandomDiceRoll()).target);
 		let count = 1;
 		const intervalID = setInterval(
 			() => {
-				const firstDieValue = getRandomDiceRoll();
-				const secondDieValue = getRandomDiceRoll();
-				diceElement.replaceChildren(rolledDie(0, firstDieValue), rolledDie(1, secondDieValue));
+				const firstDieElement = rolledDie(0, getRandomDiceRoll());
+				const secondDieElement = rolledDie(0, getRandomDiceRoll());
+				diceElement.replaceChildren(firstDieElement.target, secondDieElement.target);
 
 				if (++count === limit) {
 					window.clearInterval(intervalID);
-					if (firstDieValue === secondDieValue) {
+					if (firstDieElement.value === secondDieElement.value) {
 						setTimeout(
-							() => diceElement.append(rolledDie(2, firstDieValue), rolledDie(3, firstDieValue)),
+							() => diceElement.append(rolledDie(2, firstDieElement.value).target, rolledDie(3, firstDieElement.value).target),
 							200,
 						);
 					}
-					updateMovabilityOfCheckers(firstDieValue);
+					updateMovabilityOfCheckers(firstDieElement);
 				}
 			},
 			50,
@@ -153,11 +178,14 @@ document.getElementById(`roll-dice`).addEventListener(`click`, event => {
 	repeatedlyRollDice(5);
 });
 
-function updateMovabilityOfCheckers(dieValue) {
+/**
+ * @param {DieElement} dieElement
+ */
+function updateMovabilityOfCheckers(dieElement) {
 	Array.from(document.getElementById(`checkers`).children)
 		.map(value => new CheckerElement(value))
 		.forEach(checkerElement => {
-			const potentialDestinationPoint = checkerElement.point + (checkerElement.player === `1` ? -dieValue : dieValue);
+			const potentialDestinationPoint = checkerElement.point + (checkerElement.player === `1` ? -dieElement.value : dieElement.value);
 			const potentialDestinationCheckers = document.querySelectorAll(`use[href="#checker"][data-point="${potentialDestinationPoint}"]`)
 			checkerElement.movable = potentialDestinationPoint >= 1 && (potentialDestinationCheckers.length <= 1 || new CheckerElement(potentialDestinationCheckers[0]).player === checkerElement.player);
 		});
