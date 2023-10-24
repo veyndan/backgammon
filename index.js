@@ -3,9 +3,9 @@ const checkersElement = document.getElementById('checkers');
 const checkersObserver = new MutationObserver(mutations => {
 	mutations.forEach(mutation => {
 		const checkerElement = mutation.target;
-		const originPointIndex = Number(checkerElement.dataset[`point`]) - 1;
-		const destinationPointCheckerCount = document.querySelectorAll(`use[href="#checker"][data-point="${originPointIndex + 1}"]`).length - 1;
-		checkerElement.style.translate = `${(originPointIndex < 12 ? -1 : 1) * ((originPointIndex % 12 * 40) + (originPointIndex % 12 >= 6 ? 50 : 0)) + (originPointIndex < 12 ? 490 : 0)}px ${originPointIndex < 12 ? (380 - destinationPointCheckerCount * 40) : (destinationPointCheckerCount * 40)}px`;
+		const originPoint = Number(checkerElement.dataset[`point`])
+		const destinationPointCheckerCount = document.querySelectorAll(`use[href="#checker"][data-point="${originPoint}"]`).length - 1;
+		checkerElement.style.translate = `${(originPoint <= 12 ? -1 : 1) * (((originPoint - 1) % 12 * 40) + ((originPoint - 1) % 12 >= 6 ? 50 : 0)) + (originPoint <= 12 ? 490 : 0)}px ${originPoint <= 12 ? (380 - destinationPointCheckerCount * 40) : (destinationPointCheckerCount * 40)}px`;
 		const dieElement = document.querySelector(`#dice :not([data-played="true"])`);
 		const dieValue = Number(dieElement.dataset[`value`]);
 		updateMovabilityOfCheckers(dieValue);
@@ -28,9 +28,9 @@ document.getElementById(`checkers`).addEventListener(`click`, event => {
 	dieElement.dataset[`played`] = String(true);
 	const dieValue = Number(dieElement.dataset[`value`]);
 	const player = checkerElement.dataset[`player`];
-	const originPointIndex = Number(checkerElement.dataset[`point`]) - 1;
-	const destinationPointIndex = originPointIndex + (player === `1` ? -dieValue : dieValue);
-	checkerElement.dataset[`point`] = `${destinationPointIndex + 1}`;
+	const originPoint = Number(checkerElement.dataset[`point`]);
+	const destinationPoint = originPoint + (player === `1` ? -dieValue : dieValue);
+	checkerElement.dataset[`point`] = `${destinationPoint}`;
 });
 
 document.getElementById(`roll-dice`).addEventListener(`click`, event => {
