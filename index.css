@@ -13,6 +13,7 @@ html {
 body {
 	display: flex;
 	margin: 0;
+	height: 100vb;
 }
 
 svg {
