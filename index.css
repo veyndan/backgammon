@@ -22,14 +22,17 @@ svg {
 
 .half {
 	fill: hsl(29 86% 72%);
+	clip-path: fill-box inset(0 round 4px);
 }
 
 use[href="#point"]:nth-child(even) {
 	fill: hsl(30 100% 84%);
+	stroke: hsl(30 100% 84%);
 }
 
 use[href="#point"]:nth-child(odd) {
 	fill: hsl(11 33% 29%);
+	stroke: hsl(11 33% 29%);
 }
 
 use[href="#hold"] {
