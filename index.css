@@ -17,7 +17,6 @@ body {
 }
 
 svg {
-	display: block; /* Removes slight overscroll when svg fills height */
 	background: hsl(216 7% 14%);
 }
 
