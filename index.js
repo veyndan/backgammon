@@ -180,7 +180,7 @@ document.getElementById(`roll-dice`).addEventListener(`click`, event => {
 				diceElement.replaceChildren(firstDieElement.target, secondDieElement.target);
 
 				if (++count === limit) {
-					window.clearInterval(intervalID);
+					clearInterval(intervalID);
 					if (firstDieElement.value === secondDieElement.value) {
 						setTimeout(
 							() => diceElement.append(DieElement.create(2, firstDieElement.value).target, DieElement.create(3, firstDieElement.value).target),
