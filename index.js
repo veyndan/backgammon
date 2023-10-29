@@ -1,3 +1,15 @@
+/**
+ * https://rwaldron.github.io/proposal-math-extensions/#sec-math.clamp
+ *
+ * @param {number} x
+ * @param {number} lower
+ * @param {number} upper
+ * @return {number}
+ */
+Math.clamp = function (x, lower, upper) {
+	return Math.min(Math.max(x, lower), upper);
+};
+
 class Checker {
 	/**
 	 * @param {string} player
@@ -126,6 +138,7 @@ class DieElement {
 	}
 }
 
+const svgElement = document.getElementsByTagName(`svg`)[0];
 const checkersElement = document.getElementById('checkers');
 
 const checkersObserver = new MutationObserver(mutations => {
@@ -209,3 +222,78 @@ function updateMovabilityOfCheckers(dieElement) {
 			checkerElement.movable = potentialDestinationPoint >= 1 && (potentialDestinationCheckers.length <= 1 || new CheckerElement(potentialDestinationCheckers[0]).player === checkerElement.player);
 		});
 }
+
+(function makeDraggable() {
+	let selectedElement, offset, minX, maxX, minY, maxY;
+
+	const boundaryX1 = 0;
+	const boundaryX2 = checkersElement.getBBox().width;
+	const boundaryY1 = 0;
+	const boundaryY2 = checkersElement.getBBox().height;
+
+	const getMousePosition = evt => {
+		const CTM = svgElement.getScreenCTM();
+		if (evt.touches) {
+			evt = evt.touches[0];
+		}
+		return {
+			x: (evt.clientX - CTM.e) / CTM.a,
+			y: (evt.clientY - CTM.f) / CTM.d,
+		};
+	};
+
+	const startDrag = evt => {
+		const checkerElement = new CheckerElement(evt.target);
+		if (!checkerElement.movable) return;
+		selectedElement = evt.target;
+		offset = getMousePosition(evt);
+
+		// Replace string parsing with CSS Typed Object Model API when it's available on Firefox.
+		//  https://developer.mozilla.org/en-US/docs/Web/API/CSS_Typed_OM_API#browser_compatibility
+		const translateCoordinates = window.getComputedStyle(selectedElement).translate
+			.split(` `)
+			.map(coordinateString => Number(coordinateString.substring(0, coordinateString.indexOf(`px`))));
+
+		// Get initial translation
+		offset.x -= translateCoordinates[0];
+		offset.y -= translateCoordinates[1] ?? 0;
+
+		// BEGIN Confine
+		const bbox = selectedElement.getBBox();
+		minX = boundaryX1 - bbox.x;
+		maxX = boundaryX2 - bbox.x - bbox.width;
+		minY = boundaryY1 - bbox.y;
+		maxY = boundaryY2 - bbox.y - bbox.height;
+		// END Confine
+	};
+
+	const drag = evt => {
+		if (selectedElement !== undefined && selectedElement !== null) {
+			selectedElement.classList.add(`dragging`);
+			evt.preventDefault();
+
+			const coord = getMousePosition(evt);
+			const dx = Math.clamp(coord.x - offset.x, minX, maxX);
+			const dy = Math.clamp(coord.y - offset.y, minY, maxY);
+
+			selectedElement.style.translate = `${dx}px ${dy}px`
+		}
+	};
+
+	const endDrag = () => {
+		if (selectedElement !== undefined && selectedElement !== null) {
+			selectedElement.classList.remove(`dragging`);
+			selectedElement = null;
+		}
+	};
+
+	svgElement.addEventListener('mousedown', startDrag);
+	svgElement.addEventListener('mousemove', drag);
+	svgElement.addEventListener('mouseup', endDrag);
+	svgElement.addEventListener('mouseleave', endDrag);
+	svgElement.addEventListener('touchstart', startDrag);
+	svgElement.addEventListener('touchmove', drag);
+	svgElement.addEventListener('touchend', endDrag);
+	svgElement.addEventListener('touchleave', endDrag);
+	svgElement.addEventListener('touchcancel', endDrag);
+})()

@@ -47,6 +47,11 @@ use[href="#checker"][data-movable="true"]:hover {
 	cursor: pointer;
 }
 
+use[href="#checker"][data-movable="true"].dragging {
+	transition: initial;
+	cursor: move;
+}
+
 use[href="#checker"][data-movable="false"]:hover {
 	cursor: not-allowed;
 }
