@@ -159,7 +159,7 @@ const checkersObserver = new MutationObserver(mutations => {
 		const checkerElement = new CheckerElement(mutation.target);
 		const destinationPointCheckerCount = document.querySelectorAll(`use[href="#checker"][data-point="${(checkerElement.point)}"]`).length - 1;
 		checkerElement.target.style.translate = pointTranslation(checkerElement.point, 380, destinationPointCheckerCount);
-		updateMovabilityOfCheckers(new DieElement(document.querySelector(`#dice :not([data-played="true"])`)));
+		updateMovabilityOfCheckers();
 	});
 });
 
@@ -219,7 +219,7 @@ document.getElementById(`roll-dice`).addEventListener(`click`, event => {
 							200,
 						);
 					}
-					updateMovabilityOfCheckers(firstDieElement);
+					updateMovabilityOfCheckers();
 				}
 			},
 			50,
@@ -229,17 +229,22 @@ document.getElementById(`roll-dice`).addEventListener(`click`, event => {
 	repeatedlyRollDice(5);
 });
 
-/**
- * @param {DieElement} dieElement
- */
-function updateMovabilityOfCheckers(dieElement) {
-	Array.from(document.getElementById(`checkers`).children)
-		.map(value => new CheckerElement(value))
-		.forEach(checkerElement => {
+function updateMovabilityOfCheckers() {
+	const dieElementTarget = document.querySelector(`#dice :not([data-played="true"])`);
+	const checkerElements = Array.from(document.getElementById(`checkers`).children)
+		.map(value => new CheckerElement(value));
+	if (dieElementTarget !== null) {
+		const dieElement = new DieElement(dieElementTarget);
+		checkerElements.forEach(checkerElement => {
 			const potentialDestinationPoint = new Checker(checkerElement.player, checkerElement.point).moveBy(dieElement.value).point;
 			const potentialDestinationCheckers = document.querySelectorAll(`use[href="#checker"][data-point="${potentialDestinationPoint}"]`)
 			checkerElement.movable = potentialDestinationPoint >= 1 && potentialDestinationPoint <= 24 && (potentialDestinationCheckers.length <= 1 || new CheckerElement(potentialDestinationCheckers[0]).player === checkerElement.player);
 		});
+	} else {
+		checkerElements.forEach(checkerElement => {
+			checkerElement.movable = false;
+		});
+	}
 }
 
 (function makeDraggable() {
