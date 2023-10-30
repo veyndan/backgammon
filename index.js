@@ -143,13 +143,13 @@ const checkersElement = document.getElementById('checkers');
 
 /**
  * @param {number} point
+ * @param {number} containerHeight
  * @param {number} destinationPointCheckerCount
  * @return {string}
  */
-const pointTranslation = (point, destinationPointCheckerCount) => {
+const pointTranslation = (point, containerHeight, destinationPointCheckerCount = 0) => {
 	const checkerDiameter = 40;
 	const barWidth = 50;
-	const containerHeight = 380;
 	const containerWidth = 490;
 	return `${(point <= 12 ? -1 : 1) * (((point - 1) % 12 * checkerDiameter) + ((point - 1) % 12 >= 6 ? barWidth : 0)) + (point <= 12 ? containerWidth : 0)}px ${point <= 12 ? (containerHeight - destinationPointCheckerCount * checkerDiameter) : (destinationPointCheckerCount * checkerDiameter)}px`;
 };
@@ -158,7 +158,7 @@ const checkersObserver = new MutationObserver(mutations => {
 	mutations.forEach(mutation => {
 		const checkerElement = new CheckerElement(mutation.target);
 		const destinationPointCheckerCount = document.querySelectorAll(`use[href="#checker"][data-point="${(checkerElement.point)}"]`).length - 1;
-		checkerElement.target.style.translate = pointTranslation(checkerElement.point, destinationPointCheckerCount);
+		checkerElement.target.style.translate = pointTranslation(checkerElement.point, 380, destinationPointCheckerCount);
 		updateMovabilityOfCheckers(new DieElement(document.querySelector(`#dice :not([data-played="true"])`)));
 	});
 });
@@ -237,7 +237,7 @@ function updateMovabilityOfCheckers(dieElement) {
 }
 
 (function makeDraggable() {
-	let selectedElement, offset, minX, maxX, minY, maxY;
+	let selectedCheckerElement, offset, minX, maxX, minY, maxY;
 
 	const boundaryX1 = 0;
 	const boundaryX2 = checkersElement.getBBox().width;
@@ -258,12 +258,12 @@ function updateMovabilityOfCheckers(dieElement) {
 	const startDrag = evt => {
 		const checkerElement = new CheckerElement(evt.target);
 		if (!checkerElement.movable) return;
-		selectedElement = evt.target;
+		selectedCheckerElement = checkerElement;
 		offset = getMousePosition(evt);
 
 		// Replace string parsing with CSS Typed Object Model API when it's available on Firefox.
 		//  https://developer.mozilla.org/en-US/docs/Web/API/CSS_Typed_OM_API#browser_compatibility
-		const translateCoordinates = window.getComputedStyle(selectedElement).translate
+		const translateCoordinates = window.getComputedStyle(selectedCheckerElement.target).translate
 			.split(` `)
 			.map(coordinateString => Number(coordinateString.substring(0, coordinateString.indexOf(`px`))));
 
@@ -272,7 +272,7 @@ function updateMovabilityOfCheckers(dieElement) {
 		offset.y -= translateCoordinates[1] ?? 0;
 
 		// BEGIN Confine
-		const bbox = selectedElement.getBBox();
+		const bbox = selectedCheckerElement.target.getBBox();
 		minX = boundaryX1 - bbox.x;
 		maxX = boundaryX2 - bbox.x - bbox.width;
 		minY = boundaryY1 - bbox.y;
@@ -281,22 +281,30 @@ function updateMovabilityOfCheckers(dieElement) {
 	};
 
 	const drag = evt => {
-		if (selectedElement !== undefined && selectedElement !== null) {
-			selectedElement.classList.add(`dragging`);
+		if (selectedCheckerElement !== undefined && selectedCheckerElement !== null) {
+			selectedCheckerElement.target.classList.add(`dragging`);
 			evt.preventDefault();
 
 			const coord = getMousePosition(evt);
 			const dx = Math.clamp(coord.x - offset.x, minX, maxX);
 			const dy = Math.clamp(coord.y - offset.y, minY, maxY);
 
-			selectedElement.style.translate = `${dx}px ${dy}px`
+			selectedCheckerElement.target.style.translate = `${dx}px ${dy}px`;
+
+			const dieElement = new DieElement(document.querySelector(`#dice :not([data-played="true"])`));
+			const point = new Checker(selectedCheckerElement.player, selectedCheckerElement.point).moveBy(dieElement.value).point;
+			const dropPointElement = document.createElementNS(`http://www.w3.org/2000/svg`, `use`);
+			dropPointElement.setAttribute(`href`, `#drop-point`);
+			dropPointElement.style.translate = pointTranslation(point, 446);
+			document.getElementById(`drop-points`).append(dropPointElement);
 		}
 	};
 
 	const endDrag = () => {
-		if (selectedElement !== undefined && selectedElement !== null) {
-			selectedElement.classList.remove(`dragging`);
-			selectedElement = null;
+		if (selectedCheckerElement !== undefined && selectedCheckerElement !== null) {
+			selectedCheckerElement.target.classList.remove(`dragging`);
+			document.getElementById(`drop-points`).replaceChildren();
+			selectedCheckerElement = null;
 		}
 	};
 
