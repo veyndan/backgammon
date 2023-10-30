@@ -80,6 +80,10 @@ use[href="#checker"][data-player="2"] {
 	border-radius: 4px;
 }
 
+#undo {
+	display: none;
+}
+
 #dice :nth-child(1):nth-last-child(4),
 #dice :nth-child(2):nth-last-child(3) {
 	transition: translate .4s;

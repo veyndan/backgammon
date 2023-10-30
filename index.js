@@ -177,12 +177,18 @@ document.getElementById(`checkers`).addEventListener(`click`, event => {
 	if (!checkerElement.movable) return;
 	const dieElement = new DieElement(document.querySelector(`#dice :not([data-played="true"])`));
 	dieElement.played = true;
+	document.getElementById(`undo`).style.display = `unset`;
 	checkerElement.point = new Checker(checkerElement.player, checkerElement.point).moveBy(dieElement.value).point;
 	checkerElement.touchedAccordingToId = dieElement.id;
 });
 
 document.getElementById(`undo`).addEventListener(`click`, () => {
-	const lastPlayedDieElement = new DieElement(Array.from(document.querySelectorAll(`#dice [data-played="true"]`)).pop());
+	const playedDieElements = Array.from(document.querySelectorAll(`#dice [data-played="true"]`))
+		.map(target => new DieElement(target));
+	if (playedDieElements.length === 1) {
+		document.getElementById(`undo`).style.display = `none`;
+	}
+	const lastPlayedDieElement = playedDieElements.pop();
 	const lastMovedCheckerElement = new CheckerElement(document.querySelector(`#checkers > [data-touched-according-to-die${(lastPlayedDieElement.id)}="true"]`));
 	lastMovedCheckerElement.point = new Checker(lastMovedCheckerElement.player, lastMovedCheckerElement.point).moveBy(-lastPlayedDieElement.value).point;
 	lastMovedCheckerElement.deleteTouchedAccordingToId(lastPlayedDieElement.id);
