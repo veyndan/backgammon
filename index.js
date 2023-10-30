@@ -172,16 +172,6 @@ checkersObserver.observe(
 	},
 );
 
-document.getElementById(`checkers`).addEventListener(`click`, event => {
-	const checkerElement = new CheckerElement(event.target);
-	if (!checkerElement.movable) return;
-	const dieElement = new DieElement(document.querySelector(`#dice :not([data-played="true"])`));
-	dieElement.played = true;
-	document.getElementById(`undo`).style.display = `unset`;
-	checkerElement.point = new Checker(checkerElement.player, checkerElement.point).moveBy(dieElement.value).point;
-	checkerElement.touchedAccordingToId = dieElement.id;
-});
-
 document.getElementById(`undo`).addEventListener(`click`, () => {
 	const playedDieElements = Array.from(document.querySelectorAll(`#dice [data-played="true"]`))
 		.map(target => new DieElement(target));
@@ -313,12 +303,27 @@ function updateMovabilityOfCheckers() {
 
 	const endDrag = () => {
 		if (selectedCheckerElement !== undefined && selectedCheckerElement !== null) {
+			const dieElement = new DieElement(document.querySelector(`#dice :not([data-played="true"])`));
+			dieElement.played = true;
+			document.getElementById(`undo`).style.display = `unset`;
+			selectedCheckerElement.point = new Checker(selectedCheckerElement.player, selectedCheckerElement.point).moveBy(dieElement.value).point;
+			selectedCheckerElement.touchedAccordingToId = dieElement.id;
 			selectedCheckerElement.target.classList.remove(`dragging`);
 			document.getElementById(`drop-points`).replaceChildren();
 			selectedCheckerElement = null;
 		}
 	};
 
+	addEventListener(`keydown`, (event) => {
+		if (selectedCheckerElement !== undefined && selectedCheckerElement !== null && event.key === `Escape`) {
+			event.preventDefault();
+			const destinationPointCheckerCount = document.querySelectorAll(`use[href="#checker"][data-point="${(selectedCheckerElement.point)}"]`).length - 1;
+			selectedCheckerElement.target.style.translate = pointTranslation(selectedCheckerElement.point, 380, destinationPointCheckerCount);
+			selectedCheckerElement.target.classList.remove(`dragging`);
+			document.getElementById(`drop-points`).replaceChildren();
+			selectedCheckerElement = null;
+		}
+	});
 	svgElement.addEventListener('mousedown', startDrag);
 	svgElement.addEventListener('mousemove', drag);
 	svgElement.addEventListener('mouseup', endDrag);
