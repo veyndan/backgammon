@@ -141,11 +141,24 @@ class DieElement {
 const svgElement = document.getElementsByTagName(`svg`)[0];
 const checkersElement = document.getElementById('checkers');
 
+/**
+ * @param {number} point
+ * @param {number} destinationPointCheckerCount
+ * @return {string}
+ */
+const pointTranslation = (point, destinationPointCheckerCount) => {
+	const checkerDiameter = 40;
+	const barWidth = 50;
+	const containerHeight = 380;
+	const containerWidth = 490;
+	return `${(point <= 12 ? -1 : 1) * (((point - 1) % 12 * checkerDiameter) + ((point - 1) % 12 >= 6 ? barWidth : 0)) + (point <= 12 ? containerWidth : 0)}px ${point <= 12 ? (containerHeight - destinationPointCheckerCount * checkerDiameter) : (destinationPointCheckerCount * checkerDiameter)}px`;
+};
+
 const checkersObserver = new MutationObserver(mutations => {
 	mutations.forEach(mutation => {
 		const checkerElement = new CheckerElement(mutation.target);
 		const destinationPointCheckerCount = document.querySelectorAll(`use[href="#checker"][data-point="${(checkerElement.point)}"]`).length - 1;
-		checkerElement.target.style.translate = `${(checkerElement.point <= 12 ? -1 : 1) * (((checkerElement.point - 1) % 12 * 40) + ((checkerElement.point - 1) % 12 >= 6 ? 50 : 0)) + (checkerElement.point <= 12 ? 490 : 0)}px ${checkerElement.point <= 12 ? (380 - destinationPointCheckerCount * 40) : (destinationPointCheckerCount * 40)}px`;
+		checkerElement.target.style.translate = pointTranslation(checkerElement.point, destinationPointCheckerCount);
 		updateMovabilityOfCheckers(new DieElement(document.querySelector(`#dice :not([data-played="true"])`)));
 	});
 });
