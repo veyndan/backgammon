@@ -245,22 +245,22 @@ function updateMovabilityOfCheckers() {
 	const boundaryY1 = 0;
 	const boundaryY2 = checkersElement.getBBox().height;
 
-	const getMousePosition = evt => {
+	const getMousePosition = event => {
 		const CTM = svgElement.getScreenCTM();
-		if (evt.touches) {
-			evt = evt.touches[0];
+		if (event.touches) {
+			event = event.touches[0];
 		}
 		return {
-			x: (evt.clientX - CTM.e) / CTM.a,
-			y: (evt.clientY - CTM.f) / CTM.d,
+			x: (event.clientX - CTM.e) / CTM.a,
+			y: (event.clientY - CTM.f) / CTM.d,
 		};
 	};
 
-	const startDrag = evt => {
-		const checkerElement = new CheckerElement(evt.target);
+	const startDrag = event => {
+		const checkerElement = new CheckerElement(event.target);
 		if (!checkerElement.movable) return;
 		selectedCheckerElement = checkerElement;
-		offset = getMousePosition(evt);
+		offset = getMousePosition(event);
 
 		// Replace string parsing with CSS Typed Object Model API when it's available on Firefox.
 		//  https://developer.mozilla.org/en-US/docs/Web/API/CSS_Typed_OM_API#browser_compatibility
@@ -281,12 +281,12 @@ function updateMovabilityOfCheckers() {
 		// END Confine
 	};
 
-	const drag = evt => {
+	const drag = event => {
 		if (selectedCheckerElement !== undefined && selectedCheckerElement !== null) {
 			selectedCheckerElement.target.classList.add(`dragging`);
-			evt.preventDefault();
+			event.preventDefault();
 
-			const coord = getMousePosition(evt);
+			const coord = getMousePosition(event);
 			const dx = Math.clamp(coord.x - offset.x, minX, maxX);
 			const dy = Math.clamp(coord.y - offset.y, minY, maxY);
 
