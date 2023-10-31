@@ -1,5 +1,6 @@
 :root {
 	color-scheme: light dark;
+	--background-hsl: 216 7% 14%;
 }
 
 *, ::before, ::after {
@@ -17,7 +18,7 @@ body {
 }
 
 svg {
-	background: hsl(216 7% 14%);
+	background: hsl(var(--background-hsl));
 }
 
 .half {
@@ -48,8 +49,9 @@ use[href="#checker"][data-movable="true"]:hover {
 }
 
 use[href="#checker"][data-movable="true"].dragging {
-	transition: initial;
+	transition: filter .3s;
 	cursor: move;
+	filter: drop-shadow(2px 4px 4px hsl(var(--background-hsl) / .3));
 }
 
 use[href="#checker"][data-movable="false"]:hover {
