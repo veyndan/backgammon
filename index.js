@@ -198,7 +198,7 @@ document.getElementById(`roll-dice`).addEventListener(`click`, event => {
 		const intervalID = setInterval(
 			() => {
 				const firstDieElement = DieElement.create(0);
-				const secondDieElement = DieElement.create(0);
+				const secondDieElement = DieElement.create(1);
 				diceElement.replaceChildren(firstDieElement.target, secondDieElement.target);
 
 				if (++count === limit) {
