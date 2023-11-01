@@ -260,6 +260,11 @@ function updateMovabilityOfCheckers() {
 		const checkerElement = new CheckerElement(event.target);
 		if (!checkerElement.movable) return;
 		selectedCheckerElement = checkerElement;
+
+		// Making the checker the last sibling checker
+		// means that the selected checker can draw over all other checkers.
+		selectedCheckerElement.target.parentElement.appendChild(selectedCheckerElement.target);
+
 		offset = getMousePosition(event);
 
 		// Replace string parsing with CSS Typed Object Model API when it's available on Firefox.
