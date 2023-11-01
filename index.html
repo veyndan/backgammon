@@ -100,6 +100,16 @@
       <use href="#hold" y="77.5"/>
       <use href="#hold" y="287.5"/>
 
+      <foreignObject width="100" height="40" x="100" y="220">
+        <button id="undo">Undo</button>
+      </foreignObject>
+
+      <foreignObject width="100" height="40" x="380" y="220">
+        <button id="roll-dice">Roll Dice</button>
+      </foreignObject>
+
+      <g id="dice" transform="translate(385, 220)"/>
+
       <g id="checkers" transform="translate(20 30)">
         <use data-player="2" data-point="1" href="#checker" style="translate: 490px 380px;"/>
         <use data-player="2" data-point="1" href="#checker" style="translate: 490px 340px;"/>
@@ -134,16 +144,6 @@
       </g>
 
       <g id="drop-points" transform="translate(40 16)"/>
-
-      <foreignObject width="100" height="40" x="100" y="220">
-        <button id="undo">Undo</button>
-      </foreignObject>
-
-      <foreignObject width="100" height="40" x="380" y="220">
-        <button id="roll-dice">Roll Dice</button>
-      </foreignObject>
-
-      <g id="dice" transform="translate(385, 220)"/>
     </svg>
   </body>
 </html>
