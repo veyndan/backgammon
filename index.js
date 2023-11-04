@@ -73,6 +73,20 @@ class CheckerElement {
 	}
 
 	/**
+	 * @return {number}
+	 */
+	get pointStackIndex() {
+		return Number(this.target.dataset[`pointStackIndex`]);
+	}
+
+	/**
+	 * @param {number} value
+	 */
+	set pointStackIndex(value) {
+		this.target.dataset[`pointStackIndex`] = `${value}`
+	}
+
+	/**
 	 * @param {string} value
 	 */
 	set touchedAccordingToId(value) {
@@ -157,8 +171,8 @@ const pointTranslation = (point, containerHeight, destinationPointStackIndex = 0
 const checkersObserver = new MutationObserver(mutations => {
 	mutations.forEach(mutation => {
 		const checkerElement = new CheckerElement(mutation.target);
-		const destinationPointStackIndex = document.querySelectorAll(`use[href="#checker"][data-point="${(checkerElement.point)}"]`).length - 1;
-		checkerElement.target.style.translate = pointTranslation(checkerElement.point, 380, destinationPointStackIndex);
+		checkerElement.pointStackIndex = document.querySelectorAll(`use[href="#checker"][data-point="${(checkerElement.point)}"]`).length - 1;
+		checkerElement.target.style.translate = pointTranslation(checkerElement.point, 380, checkerElement.pointStackIndex);
 		updateMovabilityOfCheckers();
 	});
 });
