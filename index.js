@@ -144,21 +144,21 @@ const checkersElement = document.getElementById('checkers');
 /**
  * @param {number} point
  * @param {number} containerHeight
- * @param {number} destinationPointCheckerCount
+ * @param {number} destinationPointStackIndex
  * @return {string}
  */
-const pointTranslation = (point, containerHeight, destinationPointCheckerCount = 0) => {
+const pointTranslation = (point, containerHeight, destinationPointStackIndex = 0) => {
 	const checkerDiameter = 40;
 	const barWidth = 50;
 	const containerWidth = 490;
-	return `${(point <= 12 ? -1 : 1) * (((point - 1) % 12 * checkerDiameter) + ((point - 1) % 12 >= 6 ? barWidth : 0)) + (point <= 12 ? containerWidth : 0)}px ${point <= 12 ? (containerHeight - destinationPointCheckerCount * checkerDiameter) : (destinationPointCheckerCount * checkerDiameter)}px`;
+	return `${(point <= 12 ? -1 : 1) * (((point - 1) % 12 * checkerDiameter) + ((point - 1) % 12 >= 6 ? barWidth : 0)) + (point <= 12 ? containerWidth : 0)}px ${point <= 12 ? (containerHeight - destinationPointStackIndex * checkerDiameter) : (destinationPointStackIndex * checkerDiameter)}px`;
 };
 
 const checkersObserver = new MutationObserver(mutations => {
 	mutations.forEach(mutation => {
 		const checkerElement = new CheckerElement(mutation.target);
-		const destinationPointCheckerCount = document.querySelectorAll(`use[href="#checker"][data-point="${(checkerElement.point)}"]`).length - 1;
-		checkerElement.target.style.translate = pointTranslation(checkerElement.point, 380, destinationPointCheckerCount);
+		const destinationPointStackIndex = document.querySelectorAll(`use[href="#checker"][data-point="${(checkerElement.point)}"]`).length - 1;
+		checkerElement.target.style.translate = pointTranslation(checkerElement.point, 380, destinationPointStackIndex);
 		updateMovabilityOfCheckers();
 	});
 });
@@ -322,8 +322,8 @@ function updateMovabilityOfCheckers() {
 	addEventListener(`keydown`, (event) => {
 		if (selectedCheckerElement !== undefined && selectedCheckerElement !== null && event.key === `Escape`) {
 			event.preventDefault();
-			const destinationPointCheckerCount = document.querySelectorAll(`use[href="#checker"][data-point="${(selectedCheckerElement.point)}"]`).length - 1;
-			selectedCheckerElement.target.style.translate = pointTranslation(selectedCheckerElement.point, 380, destinationPointCheckerCount);
+			const destinationPointStackIndex = document.querySelectorAll(`use[href="#checker"][data-point="${(selectedCheckerElement.point)}"]`).length - 1;
+			selectedCheckerElement.target.style.translate = pointTranslation(selectedCheckerElement.point, 380, destinationPointStackIndex);
 			selectedCheckerElement.target.classList.remove(`dragging`);
 			document.getElementById(`drop-points`).replaceChildren();
 			selectedCheckerElement = null;
