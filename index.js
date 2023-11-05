@@ -181,7 +181,6 @@ checkersObserver.observe(
 	checkersElement,
 	{
 		attributeFilter: [`data-point`],
-		childList: true,
 		subtree: true,
 	},
 );
