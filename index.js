@@ -173,6 +173,13 @@ const checkersObserver = new MutationObserver(mutations => {
 		const checkerElement = new CheckerElement(mutation.target);
 		checkerElement.pointStackIndex = document.querySelectorAll(`use[href="#checker"][data-point="${(checkerElement.point)}"]`).length - 1;
 		checkerElement.target.style.translate = pointTranslation(checkerElement.point, 380, checkerElement.pointStackIndex);
+		// When moving a checker that isn't on the top of the stack, reposition the checkers such that there is no longer a gap.
+		Array.from(document.querySelectorAll(`use[href="#checker"][data-point="${mutation.oldValue}"]`))
+			.map(target => new CheckerElement(target))
+			.forEach((checkerElement, index) => {
+				checkerElement.pointStackIndex = index;
+				checkerElement.target.style.translate = pointTranslation(checkerElement.point, 380, index);
+			});
 		updateMovabilityOfCheckers();
 	});
 });
@@ -181,6 +188,7 @@ checkersObserver.observe(
 	checkersElement,
 	{
 		attributeFilter: [`data-point`],
+		attributeOldValue: true,
 		subtree: true,
 	},
 );
