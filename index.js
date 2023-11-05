@@ -336,8 +336,11 @@ function updateMovabilityOfCheckers() {
 	addEventListener(`keydown`, (event) => {
 		if (selectedCheckerElement !== undefined && selectedCheckerElement !== null && event.key === `Escape`) {
 			event.preventDefault();
-			const destinationPointStackIndex = document.querySelectorAll(`use[href="#checker"][data-point="${(selectedCheckerElement.point)}"]`).length - 1;
-			selectedCheckerElement.target.style.translate = pointTranslation(selectedCheckerElement.point, 380, destinationPointStackIndex);
+			const checkersOnDestinationPoint = Array.from(document.querySelectorAll(`use[href="#checker"][data-point="${(selectedCheckerElement.point)}"]`))
+				.map(target => new CheckerElement(target));
+			const destinationPointGapInStackIndex = checkersOnDestinationPoint.findIndex((checkerOnPoint, index) => checkerOnPoint.pointStackIndex !== index);
+			selectedCheckerElement.pointStackIndex = (destinationPointGapInStackIndex !== -1) ? destinationPointGapInStackIndex : checkersOnDestinationPoint.length - 1;
+			selectedCheckerElement.target.style.translate = pointTranslation(selectedCheckerElement.point, 380, selectedCheckerElement.pointStackIndex);
 			selectedCheckerElement.target.classList.remove(`dragging`);
 			document.getElementById(`drop-points`).replaceChildren();
 			selectedCheckerElement = null;
