@@ -171,16 +171,21 @@ const pointTranslation = (point, containerHeight, destinationPointStackIndex = 0
 const checkersObserver = new MutationObserver(mutations => {
 	mutations.forEach(mutation => {
 		const checkerElement = new CheckerElement(mutation.target);
-		checkerElement.pointStackIndex = document.querySelectorAll(`use[href="#checker"][data-point="${(checkerElement.point)}"]`).length - 1;
-		checkerElement.target.style.translate = pointTranslation(checkerElement.point, 380, checkerElement.pointStackIndex);
-		// When moving a checker that isn't on the top of the stack, reposition the checkers such that there is no longer a gap.
-		Array.from(document.querySelectorAll(`use[href="#checker"][data-point="${mutation.oldValue}"]`))
-			.map(target => new CheckerElement(target))
-			.sort((a, b) => a.pointStackIndex - b.pointStackIndex)
-			.forEach((checkerElement, index) => {
-				checkerElement.pointStackIndex = index;
-				checkerElement.target.style.translate = pointTranslation(checkerElement.point, 380, index);
-			});
+		if (checkerElement.point === Number(mutation.oldValue)) {
+			// Move the checker to its original position.
+			checkerElement.target.style.translate = pointTranslation(checkerElement.point, 380, checkerElement.pointStackIndex);
+		} else {
+			checkerElement.pointStackIndex = document.querySelectorAll(`use[href="#checker"][data-point="${(checkerElement.point)}"]`).length - 1;
+			checkerElement.target.style.translate = pointTranslation(checkerElement.point, 380, checkerElement.pointStackIndex);
+			// When moving a checker that isn't on the top of the stack, reposition the checkers such that there is no longer a gap.
+			Array.from(document.querySelectorAll(`use[href="#checker"][data-point="${mutation.oldValue}"]`))
+				.map(target => new CheckerElement(target))
+				.sort((a, b) => a.pointStackIndex - b.pointStackIndex)
+				.forEach((checkerElement, index) => {
+					checkerElement.pointStackIndex = index;
+					checkerElement.target.style.translate = pointTranslation(checkerElement.point, 380, index);
+				});
+		}
 		updateMovabilityOfCheckers();
 	});
 });
@@ -332,15 +337,64 @@ function updateMovabilityOfCheckers() {
 		}
 	};
 
-	const endDrag = () => {
+	const pointFromCoordinates = (coordinates) => {
+		const dx = Math.clamp(coordinates.x - offset.x, minX, maxX);
+		const dy = Math.clamp(coordinates.y - offset.y, minY, maxY);
+		let point = null;
+		const halfBoardWidth = 240;
+		const halfBoardHeight = 420;
+		const checkerDiameter = 40;
+		const pointHeight = 158;
+		const barWidth = 50;
+		let additionalPoints;
+		let multiplier;
+		if (dy <= pointHeight) {
+			additionalPoints = 12;
+			multiplier = 1;
+		} else if (dy >= (halfBoardHeight - checkerDiameter - pointHeight)) {
+			additionalPoints = 13;
+			multiplier = -1;
+		} else {
+			additionalPoints = null;
+		}
+		if (additionalPoints !== null) {
+			if (dx <= halfBoardWidth - (checkerDiameter / 2)) {
+				point = multiplier * Math.round(dx / checkerDiameter + 1) + additionalPoints;
+			} else if (dx >= halfBoardWidth && dx <= (halfBoardWidth + barWidth - checkerDiameter)) {
+				point = null
+			} else if (dx < halfBoardWidth) {
+				// If most of the checker is on the bar, but some of it is on a point in the left half of the board,
+				// just put it on the point on the left half.
+				point = additionalPoints + multiplier * 6;
+			} else if (dx < halfBoardWidth + barWidth - (checkerDiameter / 2)) {
+				// If most of the checker is on the bar, but some of it is on a point in the right half of the board,
+				// just put it on the point on the right half.
+				point = additionalPoints + multiplier * 7;
+			} else {
+				point = multiplier * Math.round((dx - barWidth) / checkerDiameter + 1) + additionalPoints;
+			}
+		}
+		return point;
+	};
+
+	const endDrag = (event) => {
 		if (selectedCheckerElement !== undefined && selectedCheckerElement !== null) {
 			const dieElement = new DieElement(document.querySelector(`#dice :not([data-played="true"])`));
-			dieElement.played = true;
-			document.getElementById(`undo`).style.display = `unset`;
-			selectedCheckerElement.point = new Checker(selectedCheckerElement.player, selectedCheckerElement.point).moveBy(dieElement.value).point;
-			selectedCheckerElement.touchedAccordingToId = dieElement.id;
-			selectedCheckerElement.target.classList.remove(`dragging`);
+			const permissibleDestinationPoint = new Checker(selectedCheckerElement.player, selectedCheckerElement.point).moveBy(dieElement.value).point;
+			const coord = getMousePosition(event);
+			const point = pointFromCoordinates(coord);
+			if (permissibleDestinationPoint === point) {
+				dieElement.played = true;
+				document.getElementById(`undo`).style.display = `unset`;
+				selectedCheckerElement.point = point;
+				selectedCheckerElement.touchedAccordingToId = dieElement.id;
+			} else {
+				// Triggers movement back to point of origin.
+				// noinspection SillyAssignmentJS
+				selectedCheckerElement.point = selectedCheckerElement.point;
+			}
 			document.getElementById(`drop-points`).replaceChildren();
+			selectedCheckerElement.target.classList.remove(`dragging`);
 			selectedCheckerElement = null;
 		}
 	};
@@ -357,6 +411,15 @@ function updateMovabilityOfCheckers() {
 			document.getElementById(`drop-points`).replaceChildren();
 			selectedCheckerElement = null;
 		}
+	});
+	svgElement.addEventListener(`click`, event => {
+		const checkerElement = new CheckerElement(event.target);
+		if (!checkerElement.movable) return;
+		const dieElement = new DieElement(document.querySelector(`#dice :not([data-played="true"])`));
+		dieElement.played = true;
+		document.getElementById(`undo`).style.display = `unset`;
+		checkerElement.point = new Checker(checkerElement.player, checkerElement.point).moveBy(dieElement.value).point;
+		checkerElement.touchedAccordingToId = dieElement.id;
 	});
 	svgElement.addEventListener('mousedown', startDrag);
 	svgElement.addEventListener('mousemove', drag);
