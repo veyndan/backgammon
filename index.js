@@ -176,6 +176,7 @@ const checkersObserver = new MutationObserver(mutations => {
 		// When moving a checker that isn't on the top of the stack, reposition the checkers such that there is no longer a gap.
 		Array.from(document.querySelectorAll(`use[href="#checker"][data-point="${mutation.oldValue}"]`))
 			.map(target => new CheckerElement(target))
+			.sort((a, b) => a.pointStackIndex - b.pointStackIndex)
 			.forEach((checkerElement, index) => {
 				checkerElement.pointStackIndex = index;
 				checkerElement.target.style.translate = pointTranslation(checkerElement.point, 380, index);
@@ -282,10 +283,6 @@ function updateMovabilityOfCheckers() {
 		if (!checkerElement.movable) return;
 		selectedCheckerElement = checkerElement;
 
-		// Making the checker the last sibling checker
-		// means that the selected checker can draw over all other checkers.
-		selectedCheckerElement.target.parentElement.appendChild(selectedCheckerElement.target);
-
 		offset = getMousePosition(event);
 
 		// Replace string parsing with CSS Typed Object Model API when it's available on Firefox.
@@ -309,6 +306,14 @@ function updateMovabilityOfCheckers() {
 
 	const drag = event => {
 		if (selectedCheckerElement !== undefined && selectedCheckerElement !== null) {
+			/**
+			 * Making the checker the last sibling checker means that the selected checker can draw over all other
+			 * checkers.
+			 *
+			 * Invoked on drag so that the click event continues to be observable.
+			 */
+			selectedCheckerElement.target.parentElement.appendChild(selectedCheckerElement.target);
+
 			selectedCheckerElement.target.classList.add(`dragging`);
 			event.preventDefault();
 
