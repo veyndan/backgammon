@@ -264,7 +264,19 @@ function updateMovabilityOfCheckers() {
 	}
 }
 
-(function makeDraggable() {
+svgElement.addEventListener(`click`, event => {
+	const checkerElement = new CheckerElement(event.target);
+	if (!checkerElement.movable) return;
+	const dieElement = new DieElement(document.querySelector(`#dice :not([data-played="true"])`));
+	dieElement.played = true;
+	document.getElementById(`undo`).style.display = `unset`;
+	checkerElement.point = new Checker(checkerElement.player, checkerElement.point).moveBy(dieElement.value).point;
+	checkerElement.touchedAccordingToId = dieElement.id;
+});
+svgElement.addEventListener('pointerdown', event => {
+	const checkerElement = new CheckerElement(event.target);
+	if (!checkerElement.movable) return;
+
 	const boundaryX1 = 0;
 	const boundaryX2 = checkersElement.getBBox().width;
 	const boundaryY1 = 0;
@@ -278,150 +290,136 @@ function updateMovabilityOfCheckers() {
 		};
 	};
 
-	svgElement.addEventListener(`click`, event => {
-		const checkerElement = new CheckerElement(event.target);
-		if (!checkerElement.movable) return;
+	const offset = getPointerPosition(event);
+
+	// Replace string parsing with CSS Typed Object Model API when it's available on Firefox.
+	//  https://developer.mozilla.org/en-US/docs/Web/API/CSS_Typed_OM_API#browser_compatibility
+	const translateCoordinates = window.getComputedStyle(checkerElement.target).translate
+		.split(` `)
+		.map(coordinateString => Number(coordinateString.substring(0, coordinateString.indexOf(`px`))));
+
+	// Get initial translation
+	offset.x -= translateCoordinates[0];
+	offset.y -= translateCoordinates[1] ?? 0;
+
+	// BEGIN Confine
+	const bbox = checkerElement.target.getBBox();
+	const minX = boundaryX1 - bbox.x;
+	const maxX = boundaryX2 - bbox.x - bbox.width;
+	const minY = boundaryY1 - bbox.y;
+	const maxY = boundaryY2 - bbox.y - bbox.height;
+	// END Confine
+
+	const drag = event => {
+		/**
+		 * Making the checker the last sibling checker means that the selected checker can draw over all other
+		 * checkers.
+		 *
+		 * Invoked on drag so that the click event continues to be observable.
+		 */
+		checkerElement.target.parentElement.appendChild(checkerElement.target);
+
+		checkerElement.target.classList.add(`dragging`);
+		event.preventDefault();
+
+		const coord = getPointerPosition(event);
+		const dx = Math.clamp(coord.x - offset.x, minX, maxX);
+		const dy = Math.clamp(coord.y - offset.y, minY, maxY);
+
+		checkerElement.target.style.translate = `${dx}px ${dy}px`;
+
 		const dieElement = new DieElement(document.querySelector(`#dice :not([data-played="true"])`));
-		dieElement.played = true;
-		document.getElementById(`undo`).style.display = `unset`;
-		checkerElement.point = new Checker(checkerElement.player, checkerElement.point).moveBy(dieElement.value).point;
-		checkerElement.touchedAccordingToId = dieElement.id;
-	});
-	svgElement.addEventListener('pointerdown', event => {
-		const checkerElement = new CheckerElement(event.target);
-		if (!checkerElement.movable) return;
+		const point = new Checker(checkerElement.player, checkerElement.point).moveBy(dieElement.value).point;
+		const dropPointElement = document.createElementNS(`http://www.w3.org/2000/svg`, `use`);
+		dropPointElement.setAttribute(`href`, `#drop-point`);
+		dropPointElement.style.translate = pointTranslation(point, 446);
+		document.getElementById(`drop-points`).append(dropPointElement);
+	};
 
-		const offset = getPointerPosition(event);
+	const pointFromCoordinates = (coordinates) => {
+		const dx = Math.clamp(coordinates.x - offset.x, minX, maxX);
+		const dy = Math.clamp(coordinates.y - offset.y, minY, maxY);
+		let point = null;
+		const halfBoardWidth = 240;
+		const halfBoardHeight = 420;
+		const checkerDiameter = 40;
+		const pointHeight = 158;
+		const barWidth = 50;
+		let additionalPoints;
+		let multiplier;
+		if (dy <= pointHeight) {
+			additionalPoints = 12;
+			multiplier = 1;
+		} else if (dy >= (halfBoardHeight - checkerDiameter - pointHeight)) {
+			additionalPoints = 13;
+			multiplier = -1;
+		} else {
+			additionalPoints = null;
+		}
+		if (additionalPoints !== null) {
+			if (dx <= halfBoardWidth - (checkerDiameter / 2)) {
+				point = multiplier * Math.round(dx / checkerDiameter + 1) + additionalPoints;
+			} else if (dx >= halfBoardWidth && dx <= (halfBoardWidth + barWidth - checkerDiameter)) {
+				point = null
+			} else if (dx < halfBoardWidth) {
+				// If most of the checker is on the bar, but some of it is on a point in the left half of the board,
+				// just put it on the point on the left half.
+				point = additionalPoints + multiplier * 6;
+			} else if (dx < halfBoardWidth + barWidth - (checkerDiameter / 2)) {
+				// If most of the checker is on the bar, but some of it is on a point in the right half of the board,
+				// just put it on the point on the right half.
+				point = additionalPoints + multiplier * 7;
+			} else {
+				point = multiplier * Math.round((dx - barWidth) / checkerDiameter + 1) + additionalPoints;
+			}
+		}
+		return point;
+	};
 
-		// Replace string parsing with CSS Typed Object Model API when it's available on Firefox.
-		//  https://developer.mozilla.org/en-US/docs/Web/API/CSS_Typed_OM_API#browser_compatibility
-		const translateCoordinates = window.getComputedStyle(checkerElement.target).translate
-			.split(` `)
-			.map(coordinateString => Number(coordinateString.substring(0, coordinateString.indexOf(`px`))));
+	const endDrag = (event) => {
+		const dieElement = new DieElement(document.querySelector(`#dice :not([data-played="true"])`));
+		const permissibleDestinationPoint = new Checker(checkerElement.player, checkerElement.point).moveBy(dieElement.value).point;
+		const coord = getPointerPosition(event);
+		const point = pointFromCoordinates(coord);
+		if (permissibleDestinationPoint === point) {
+			dieElement.played = true;
+			document.getElementById(`undo`).style.display = `unset`;
+			checkerElement.point = point;
+			checkerElement.touchedAccordingToId = dieElement.id;
+		} else {
+			// Triggers movement back to point of origin.
+			// noinspection SillyAssignmentJS
+			checkerElement.point = checkerElement.point;
+		}
+		document.getElementById(`drop-points`).replaceChildren();
+		checkerElement.target.classList.remove(`dragging`);
+		svgElement.removeEventListener(`pointermove`, drag);
+		svgElement.removeEventListener('pointerup', endDrag);
+		svgElement.removeEventListener('pointerleave', endDrag);
+		svgElement.removeEventListener('pointercancel', endDrag);
+		removeEventListener(`keydown`, keydownEventListener);
+	};
 
-		// Get initial translation
-		offset.x -= translateCoordinates[0];
-		offset.y -= translateCoordinates[1] ?? 0;
-
-		// BEGIN Confine
-		const bbox = checkerElement.target.getBBox();
-		const minX = boundaryX1 - bbox.x;
-		const maxX = boundaryX2 - bbox.x - bbox.width;
-		const minY = boundaryY1 - bbox.y;
-		const maxY = boundaryY2 - bbox.y - bbox.height;
-		// END Confine
-
-		const drag = event => {
-			/**
-			 * Making the checker the last sibling checker means that the selected checker can draw over all other
-			 * checkers.
-			 *
-			 * Invoked on drag so that the click event continues to be observable.
-			 */
-			checkerElement.target.parentElement.appendChild(checkerElement.target);
-
-			checkerElement.target.classList.add(`dragging`);
+	const keydownEventListener = (event) => {
+		if (event.key === `Escape`) {
 			event.preventDefault();
-
-			const coord = getPointerPosition(event);
-			const dx = Math.clamp(coord.x - offset.x, minX, maxX);
-			const dy = Math.clamp(coord.y - offset.y, minY, maxY);
-
-			checkerElement.target.style.translate = `${dx}px ${dy}px`;
-
-			const dieElement = new DieElement(document.querySelector(`#dice :not([data-played="true"])`));
-			const point = new Checker(checkerElement.player, checkerElement.point).moveBy(dieElement.value).point;
-			const dropPointElement = document.createElementNS(`http://www.w3.org/2000/svg`, `use`);
-			dropPointElement.setAttribute(`href`, `#drop-point`);
-			dropPointElement.style.translate = pointTranslation(point, 446);
-			document.getElementById(`drop-points`).append(dropPointElement);
-		};
-
-		const pointFromCoordinates = (coordinates) => {
-			const dx = Math.clamp(coordinates.x - offset.x, minX, maxX);
-			const dy = Math.clamp(coordinates.y - offset.y, minY, maxY);
-			let point = null;
-			const halfBoardWidth = 240;
-			const halfBoardHeight = 420;
-			const checkerDiameter = 40;
-			const pointHeight = 158;
-			const barWidth = 50;
-			let additionalPoints;
-			let multiplier;
-			if (dy <= pointHeight) {
-				additionalPoints = 12;
-				multiplier = 1;
-			} else if (dy >= (halfBoardHeight - checkerDiameter - pointHeight)) {
-				additionalPoints = 13;
-				multiplier = -1;
-			} else {
-				additionalPoints = null;
-			}
-			if (additionalPoints !== null) {
-				if (dx <= halfBoardWidth - (checkerDiameter / 2)) {
-					point = multiplier * Math.round(dx / checkerDiameter + 1) + additionalPoints;
-				} else if (dx >= halfBoardWidth && dx <= (halfBoardWidth + barWidth - checkerDiameter)) {
-					point = null
-				} else if (dx < halfBoardWidth) {
-					// If most of the checker is on the bar, but some of it is on a point in the left half of the board,
-					// just put it on the point on the left half.
-					point = additionalPoints + multiplier * 6;
-				} else if (dx < halfBoardWidth + barWidth - (checkerDiameter / 2)) {
-					// If most of the checker is on the bar, but some of it is on a point in the right half of the board,
-					// just put it on the point on the right half.
-					point = additionalPoints + multiplier * 7;
-				} else {
-					point = multiplier * Math.round((dx - barWidth) / checkerDiameter + 1) + additionalPoints;
-				}
-			}
-			return point;
-		};
-
-		const endDrag = (event) => {
-			const dieElement = new DieElement(document.querySelector(`#dice :not([data-played="true"])`));
-			const permissibleDestinationPoint = new Checker(checkerElement.player, checkerElement.point).moveBy(dieElement.value).point;
-			const coord = getPointerPosition(event);
-			const point = pointFromCoordinates(coord);
-			if (permissibleDestinationPoint === point) {
-				dieElement.played = true;
-				document.getElementById(`undo`).style.display = `unset`;
-				checkerElement.point = point;
-				checkerElement.touchedAccordingToId = dieElement.id;
-			} else {
-				// Triggers movement back to point of origin.
-				// noinspection SillyAssignmentJS
-				checkerElement.point = checkerElement.point;
-			}
-			document.getElementById(`drop-points`).replaceChildren();
+			const checkersOnDestinationPoint = Array.from(document.querySelectorAll(`use[href="#checker"][data-point="${(checkerElement.point)}"]`))
+				.map(target => new CheckerElement(target));
+			const destinationPointGapInStackIndex = checkersOnDestinationPoint.findIndex((checkerOnPoint, index) => checkerOnPoint.pointStackIndex !== index);
+			checkerElement.pointStackIndex = (destinationPointGapInStackIndex !== -1) ? destinationPointGapInStackIndex : checkersOnDestinationPoint.length - 1;
+			checkerElement.target.style.translate = pointTranslation(checkerElement.point, 380, checkerElement.pointStackIndex);
 			checkerElement.target.classList.remove(`dragging`);
+			document.getElementById(`drop-points`).replaceChildren();
 			svgElement.removeEventListener(`pointermove`, drag);
 			svgElement.removeEventListener('pointerup', endDrag);
 			svgElement.removeEventListener('pointerleave', endDrag);
 			svgElement.removeEventListener('pointercancel', endDrag);
 			removeEventListener(`keydown`, keydownEventListener);
-		};
-
-		const keydownEventListener = (event) => {
-			if (event.key === `Escape`) {
-				event.preventDefault();
-				const checkersOnDestinationPoint = Array.from(document.querySelectorAll(`use[href="#checker"][data-point="${(checkerElement.point)}"]`))
-					.map(target => new CheckerElement(target));
-				const destinationPointGapInStackIndex = checkersOnDestinationPoint.findIndex((checkerOnPoint, index) => checkerOnPoint.pointStackIndex !== index);
-				checkerElement.pointStackIndex = (destinationPointGapInStackIndex !== -1) ? destinationPointGapInStackIndex : checkersOnDestinationPoint.length - 1;
-				checkerElement.target.style.translate = pointTranslation(checkerElement.point, 380, checkerElement.pointStackIndex);
-				checkerElement.target.classList.remove(`dragging`);
-				document.getElementById(`drop-points`).replaceChildren();
-				svgElement.removeEventListener(`pointermove`, drag);
-				svgElement.removeEventListener('pointerup', endDrag);
-				svgElement.removeEventListener('pointerleave', endDrag);
-				svgElement.removeEventListener('pointercancel', endDrag);
-				removeEventListener(`keydown`, keydownEventListener);
-			}
-		};
-		addEventListener(`keydown`, keydownEventListener);
-		svgElement.addEventListener('pointermove', drag);
-		svgElement.addEventListener('pointerup', endDrag);
-		svgElement.addEventListener('pointerleave', endDrag);
-		svgElement.addEventListener('pointercancel', endDrag);
-	});
-})()
+		}
+	};
+	addEventListener(`keydown`, keydownEventListener);
+	svgElement.addEventListener('pointermove', drag);
+	svgElement.addEventListener('pointerup', endDrag);
+	svgElement.addEventListener('pointerleave', endDrag);
+	svgElement.addEventListener('pointercancel', endDrag);
+});
