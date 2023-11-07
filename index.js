@@ -272,11 +272,8 @@ function updateMovabilityOfCheckers() {
 	const boundaryY1 = 0;
 	const boundaryY2 = checkersElement.getBBox().height;
 
-	const getMousePosition = event => {
+	const getPointerPosition = event => {
 		const CTM = svgElement.getScreenCTM();
-		if (event.touches) {
-			event = event.touches[0];
-		}
 		return {
 			x: (event.clientX - CTM.e) / CTM.a,
 			y: (event.clientY - CTM.f) / CTM.d,
@@ -288,7 +285,7 @@ function updateMovabilityOfCheckers() {
 		if (!checkerElement.movable) return;
 		selectedCheckerElement = checkerElement;
 
-		offset = getMousePosition(event);
+		offset = getPointerPosition(event);
 
 		// Replace string parsing with CSS Typed Object Model API when it's available on Firefox.
 		//  https://developer.mozilla.org/en-US/docs/Web/API/CSS_Typed_OM_API#browser_compatibility
@@ -322,7 +319,7 @@ function updateMovabilityOfCheckers() {
 			selectedCheckerElement.target.classList.add(`dragging`);
 			event.preventDefault();
 
-			const coord = getMousePosition(event);
+			const coord = getPointerPosition(event);
 			const dx = Math.clamp(coord.x - offset.x, minX, maxX);
 			const dy = Math.clamp(coord.y - offset.y, minY, maxY);
 
@@ -381,7 +378,7 @@ function updateMovabilityOfCheckers() {
 		if (selectedCheckerElement !== undefined && selectedCheckerElement !== null) {
 			const dieElement = new DieElement(document.querySelector(`#dice :not([data-played="true"])`));
 			const permissibleDestinationPoint = new Checker(selectedCheckerElement.player, selectedCheckerElement.point).moveBy(dieElement.value).point;
-			const coord = getMousePosition(event);
+			const coord = getPointerPosition(event);
 			const point = pointFromCoordinates(coord);
 			if (permissibleDestinationPoint === point) {
 				dieElement.played = true;
@@ -421,13 +418,9 @@ function updateMovabilityOfCheckers() {
 		checkerElement.point = new Checker(checkerElement.player, checkerElement.point).moveBy(dieElement.value).point;
 		checkerElement.touchedAccordingToId = dieElement.id;
 	});
-	svgElement.addEventListener('mousedown', startDrag);
-	svgElement.addEventListener('mousemove', drag);
-	svgElement.addEventListener('mouseup', endDrag);
-	svgElement.addEventListener('mouseleave', endDrag);
-	svgElement.addEventListener('touchstart', startDrag);
-	svgElement.addEventListener('touchmove', drag);
-	svgElement.addEventListener('touchend', endDrag);
-	svgElement.addEventListener('touchleave', endDrag);
-	svgElement.addEventListener('touchcancel', endDrag);
+	svgElement.addEventListener('pointerdown', startDrag);
+	svgElement.addEventListener('pointermove', drag);
+	svgElement.addEventListener('pointerup', endDrag);
+	svgElement.addEventListener('pointerleave', endDrag);
+	svgElement.addEventListener('pointercancel', endDrag);
 })()
