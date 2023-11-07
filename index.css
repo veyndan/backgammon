@@ -19,6 +19,7 @@ body {
 
 svg {
 	background: hsl(var(--background-hsl));
+	touch-action: none;
 }
 
 .half {
