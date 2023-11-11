@@ -14,136 +14,137 @@
         <polyline id="point" points="2,0 20,158 38,0" stroke-width="4" stroke-linejoin="round" stroke-linecap="square"/>
         <circle id="drop-point" r="6" fill="darkorange"/>
         <!-- A checker has a height of 5. This matters when displaying the checker height in the hold after bearing off. -->
-        <circle id="checker" cx="20" cy="20" r="20"/>
-        <!-- The height is the number of pieces (15) multiplied by the checker height (5) -->
-        <rect id="hold" x="555" y="20" width="40" height="75" rx="4"/>
+        <circle id="checker"/>
+        <rect id="hold" rx="4"/>
         <rect id="die-face-background" width="40" height="40" rx="4" fill="firebrick"/>
         <g id="die-face-pip-1">
           <use href="#die-face-background"/>
-          <circle class="die-pip" cx="20" cy="20" r="4"/>
+          <circle class="die-pip" cx="20" cy="20"/>
         </g>
         <g id="die-face-pip-2">
           <use href="#die-face-background"/>
-          <circle class="die-pip" cx="10" cy="10" r="4"/>
-          <circle class="die-pip" cx="30" cy="30" r="4"/>
+          <circle class="die-pip" cx="10" cy="10"/>
+          <circle class="die-pip" cx="30" cy="30"/>
         </g>
         <g id="die-face-pip-3">
           <use href="#die-face-background"/>
-          <circle class="die-pip" cx="10" cy="10" r="4"/>
-          <circle class="die-pip" cx="20" cy="20" r="4"/>
-          <circle class="die-pip" cx="30" cy="30" r="4"/>
+          <circle class="die-pip" cx="10" cy="10"/>
+          <circle class="die-pip" cx="20" cy="20"/>
+          <circle class="die-pip" cx="30" cy="30"/>
         </g>
         <g id="die-face-pip-4">
           <use href="#die-face-background"/>
-          <circle class="die-pip" cx="10" cy="10" r="4"/>
-          <circle class="die-pip" cx="10" cy="30" r="4"/>
-          <circle class="die-pip" cx="30" cy="10" r="4"/>
-          <circle class="die-pip" cx="30" cy="30" r="4"/>
+          <circle class="die-pip" cx="10" cy="10"/>
+          <circle class="die-pip" cx="10" cy="30"/>
+          <circle class="die-pip" cx="30" cy="10"/>
+          <circle class="die-pip" cx="30" cy="30"/>
         </g>
         <g id="die-face-pip-5">
           <use href="#die-face-background"/>
-          <circle class="die-pip" cx="10" cy="10" r="4"/>
-          <circle class="die-pip" cx="10" cy="30" r="4"/>
-          <circle class="die-pip" cx="20" cy="20" r="4"/>
-          <circle class="die-pip" cx="30" cy="10" r="4"/>
-          <circle class="die-pip" cx="30" cy="30" r="4"/>
+          <circle class="die-pip" cx="10" cy="10"/>
+          <circle class="die-pip" cx="10" cy="30"/>
+          <circle class="die-pip" cx="20" cy="20"/>
+          <circle class="die-pip" cx="30" cy="10"/>
+          <circle class="die-pip" cx="30" cy="30"/>
         </g>
         <g id="die-face-pip-6">
           <use href="#die-face-background"/>
-          <circle class="die-pip" cx="10" cy="10" r="4"/>
-          <circle class="die-pip" cx="10" cy="20" r="4"/>
-          <circle class="die-pip" cx="10" cy="30" r="4"/>
-          <circle class="die-pip" cx="30" cy="10" r="4"/>
-          <circle class="die-pip" cx="30" cy="20" r="4"/>
-          <circle class="die-pip" cx="30" cy="30" r="4"/>
+          <circle class="die-pip" cx="10" cy="10"/>
+          <circle class="die-pip" cx="10" cy="20"/>
+          <circle class="die-pip" cx="10" cy="30"/>
+          <circle class="die-pip" cx="30" cy="10"/>
+          <circle class="die-pip" cx="30" cy="20"/>
+          <circle class="die-pip" cx="30" cy="30"/>
         </g>
       </defs>
 
-      <g class="half" transform="translate(20 30)">
-        <rect width="240" height="420"/>
-        <g class="quadrant">
-          <use href="#point" data-point="13"/>
-          <use href="#point" data-point="14" transform="translate(40)"/>
-          <use href="#point" data-point="15" transform="translate(80)"/>
-          <use href="#point" data-point="16" transform="translate(120)"/>
-          <use href="#point" data-point="17" transform="translate(160)"/>
-          <use href="#point" data-point="18" transform="translate(200)"/>
+      <g transform="translate(20 30)">
+        <g class="half">
+          <rect/>
+          <g class="quadrant">
+            <use href="#point" data-point="13"/>
+            <use href="#point" data-point="14"/>
+            <use href="#point" data-point="15"/>
+            <use href="#point" data-point="16"/>
+            <use href="#point" data-point="17"/>
+            <use href="#point" data-point="18"/>
+          </g>
+          <g class="quadrant">
+            <use href="#point" data-point="7"/>
+            <use href="#point" data-point="8"/>
+            <use href="#point" data-point="9"/>
+            <use href="#point" data-point="10"/>
+            <use href="#point" data-point="11"/>
+            <use href="#point" data-point="12"/>
+          </g>
         </g>
-        <g class="quadrant" transform="translate(0 420) rotate(180 120 0)">
-          <use href="#point" data-point="7"/>
-          <use href="#point" data-point="8" transform="translate(40)"/>
-          <use href="#point" data-point="9" transform="translate(80)"/>
-          <use href="#point" data-point="10" transform="translate(120)"/>
-          <use href="#point" data-point="11" transform="translate(160)"/>
-          <use href="#point" data-point="12" transform="translate(200)"/>
+        <g class="half">
+          <rect/>
+          <g class="quadrant">
+            <use href="#point" data-point="19"/>
+            <use href="#point" data-point="20"/>
+            <use href="#point" data-point="21"/>
+            <use href="#point" data-point="22"/>
+            <use href="#point" data-point="23"/>
+            <use href="#point" data-point="24"/>
+          </g>
+          <g class="quadrant">
+            <use href="#point" data-point="1"/>
+            <use href="#point" data-point="2"/>
+            <use href="#point" data-point="3"/>
+            <use href="#point" data-point="4"/>
+            <use href="#point" data-point="5"/>
+            <use href="#point" data-point="6"/>
+          </g>
         </g>
       </g>
-      <g class="half" transform="translate(310 30)">
-        <rect width="240" height="420"/>
-        <g class="quadrant">
-          <use href="#point" data-point="19"/>
-          <use href="#point" data-point="20" transform="translate(40)"/>
-          <use href="#point" data-point="21" transform="translate(80)"/>
-          <use href="#point" data-point="22" transform="translate(120)"/>
-          <use href="#point" data-point="23" transform="translate(160)"/>
-          <use href="#point" data-point="24" transform="translate(200)"/>
-        </g>
-        <g class="quadrant" transform="translate(0 420) rotate(180 120 0)">
-          <use href="#point" data-point="1"/>
-          <use href="#point" data-point="2" transform="translate(40)"/>
-          <use href="#point" data-point="3" transform="translate(80)"/>
-          <use href="#point" data-point="4" transform="translate(120)"/>
-          <use href="#point" data-point="5" transform="translate(160)"/>
-          <use href="#point" data-point="6" transform="translate(200)"/>
-        </g>
-      </g>
-      <use href="#hold" y="77.5"/>
-      <use href="#hold" y="287.5"/>
+      <use href="#hold"/>
+      <use href="#hold"/>
 
-      <foreignObject width="100" height="40" x="100" y="220">
+      <foreignObject transform="translate(20 30)">
         <button id="undo" type="button">Undo</button>
       </foreignObject>
 
-      <foreignObject width="100" height="40" x="380" y="220">
+      <foreignObject transform="translate(20 30)">
         <button id="roll-dice" type="button">Roll Dice</button>
       </foreignObject>
 
       <g id="dice" transform="translate(385, 220)"/>
 
       <g id="checkers" transform="translate(20 30)">
-        <use data-player="2" data-point="1" data-point-stack-index="0" href="#checker" style="translate: 490px 380px;"/>
-        <use data-player="2" data-point="1" data-point-stack-index="1" href="#checker" style="translate: 490px 340px;"/>
-        <use data-player="1" data-point="6" data-point-stack-index="0" href="#checker" style="translate: 290px 380px;"/>
-        <use data-player="1" data-point="6" data-point-stack-index="1" href="#checker" style="translate: 290px 340px;"/>
-        <use data-player="1" data-point="6" data-point-stack-index="2" href="#checker" style="translate: 290px 300px;"/>
-        <use data-player="1" data-point="6" data-point-stack-index="3" href="#checker" style="translate: 290px 260px;"/>
-        <use data-player="1" data-point="6" data-point-stack-index="4" href="#checker" style="translate: 290px 220px;"/>
-        <use data-player="1" data-point="8" data-point-stack-index="0" href="#checker" style="translate: 160px 380px;"/>
-        <use data-player="1" data-point="8" data-point-stack-index="1" href="#checker" style="translate: 160px 340px;"/>
-        <use data-player="1" data-point="8" data-point-stack-index="2" href="#checker" style="translate: 160px 300px;"/>
-        <use data-player="2" data-point="12" data-point-stack-index="0" href="#checker" style="translate: 0 380px;"/>
-        <use data-player="2" data-point="12" data-point-stack-index="1" href="#checker" style="translate: 0 340px;"/>
-        <use data-player="2" data-point="12" data-point-stack-index="2" href="#checker" style="translate: 0 300px;"/>
-        <use data-player="2" data-point="12" data-point-stack-index="3" href="#checker" style="translate: 0 260px;"/>
-        <use data-player="2" data-point="12" data-point-stack-index="4" href="#checker" style="translate: 0 220px;"/>
-        <use data-player="1" data-point="13" data-point-stack-index="0" href="#checker"/>
-        <use data-player="1" data-point="13" data-point-stack-index="1" href="#checker" style="translate: 0 40px;"/>
-        <use data-player="1" data-point="13" data-point-stack-index="2" href="#checker" style="translate: 0 80px;"/>
-        <use data-player="1" data-point="13" data-point-stack-index="3" href="#checker" style="translate: 0 120px;"/>
-        <use data-player="1" data-point="13" data-point-stack-index="4" href="#checker" style="translate: 0 160px;"/>
-        <use data-player="2" data-point="17" data-point-stack-index="0" href="#checker" style="translate: 160px;"/>
-        <use data-player="2" data-point="17" data-point-stack-index="1" href="#checker" style="translate: 160px 40px;"/>
-        <use data-player="2" data-point="17" data-point-stack-index="2" href="#checker" style="translate: 160px 80px;"/>
-        <use data-player="2" data-point="19" data-point-stack-index="0" href="#checker" style="translate: 290px;"/>
-        <use data-player="2" data-point="19" data-point-stack-index="1" href="#checker" style="translate: 290px 40px;"/>
-        <use data-player="2" data-point="19" data-point-stack-index="2" href="#checker" style="translate: 290px 80px;"/>
-        <use data-player="2" data-point="19" data-point-stack-index="3" href="#checker" style="translate: 290px 120px;"/>
-        <use data-player="2" data-point="19" data-point-stack-index="4" href="#checker" style="translate: 290px 160px;"/>
-        <use data-player="1" data-point="24" data-point-stack-index="0" href="#checker" style="translate: 490px;"/>
-        <use data-player="1" data-point="24" data-point-stack-index="1" href="#checker" style="translate: 490px 40px;"/>
+        <use data-player="2" data-point="1" data-point-stack-index="0" href="#checker" style="--point: 1; --point-stack-index: 0;"/>
+        <use data-player="2" data-point="1" data-point-stack-index="1" href="#checker" style="--point: 1; --point-stack-index: 1;"/>
+        <use data-player="1" data-point="6" data-point-stack-index="0" href="#checker" style="--point: 6; --point-stack-index: 0;"/>
+        <use data-player="1" data-point="6" data-point-stack-index="1" href="#checker" style="--point: 6; --point-stack-index: 1;"/>
+        <use data-player="1" data-point="6" data-point-stack-index="2" href="#checker" style="--point: 6; --point-stack-index: 2;"/>
+        <use data-player="1" data-point="6" data-point-stack-index="3" href="#checker" style="--point: 6; --point-stack-index: 3;"/>
+        <use data-player="1" data-point="6" data-point-stack-index="4" href="#checker" style="--point: 6; --point-stack-index: 4;"/>
+        <use data-player="1" data-point="8" data-point-stack-index="0" href="#checker" style="--point: 8; --point-stack-index: 0;"/>
+        <use data-player="1" data-point="8" data-point-stack-index="1" href="#checker" style="--point: 8; --point-stack-index: 1;"/>
+        <use data-player="1" data-point="8" data-point-stack-index="2" href="#checker" style="--point: 8; --point-stack-index: 2;"/>
+        <use data-player="2" data-point="12" data-point-stack-index="0" href="#checker" style="--point: 12; --point-stack-index: 0;"/>
+        <use data-player="2" data-point="12" data-point-stack-index="1" href="#checker" style="--point: 12; --point-stack-index: 1;"/>
+        <use data-player="2" data-point="12" data-point-stack-index="2" href="#checker" style="--point: 12; --point-stack-index: 2;"/>
+        <use data-player="2" data-point="12" data-point-stack-index="3" href="#checker" style="--point: 12; --point-stack-index: 3;"/>
+        <use data-player="2" data-point="12" data-point-stack-index="4" href="#checker" style="--point: 12; --point-stack-index: 4;"/>
+        <use data-player="1" data-point="13" data-point-stack-index="0" href="#checker" style="--point: 13; --point-stack-index: 0;"/>
+        <use data-player="1" data-point="13" data-point-stack-index="1" href="#checker" style="--point: 13; --point-stack-index: 1;"/>
+        <use data-player="1" data-point="13" data-point-stack-index="2" href="#checker" style="--point: 13; --point-stack-index: 2;"/>
+        <use data-player="1" data-point="13" data-point-stack-index="3" href="#checker" style="--point: 13; --point-stack-index: 3;"/>
+        <use data-player="1" data-point="13" data-point-stack-index="4" href="#checker" style="--point: 13; --point-stack-index: 4;"/>
+        <use data-player="2" data-point="17" data-point-stack-index="0" href="#checker" style="--point: 17; --point-stack-index: 0;"/>
+        <use data-player="2" data-point="17" data-point-stack-index="1" href="#checker" style="--point: 17; --point-stack-index: 1;"/>
+        <use data-player="2" data-point="17" data-point-stack-index="2" href="#checker" style="--point: 17; --point-stack-index: 2;"/>
+        <use data-player="2" data-point="19" data-point-stack-index="0" href="#checker" style="--point: 19; --point-stack-index: 0;"/>
+        <use data-player="2" data-point="19" data-point-stack-index="1" href="#checker" style="--point: 19; --point-stack-index: 1;"/>
+        <use data-player="2" data-point="19" data-point-stack-index="2" href="#checker" style="--point: 19; --point-stack-index: 2;"/>
+        <use data-player="2" data-point="19" data-point-stack-index="3" href="#checker" style="--point: 19; --point-stack-index: 3;"/>
+        <use data-player="2" data-point="19" data-point-stack-index="4" href="#checker" style="--point: 19; --point-stack-index: 4;"/>
+        <use data-player="1" data-point="24" data-point-stack-index="0" href="#checker" style="--point: 24; --point-stack-index: 0;"/>
+        <use data-player="1" data-point="24" data-point-stack-index="1" href="#checker" style="--point: 24; --point-stack-index: 1;"/>
       </g>
 
-      <g id="drop-points" transform="translate(40 16)"/>
+      <g id="drop-points"/>
     </svg>
   </body>
 </html>

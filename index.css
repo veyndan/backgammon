@@ -1,6 +1,18 @@
 :root {
 	color-scheme: light dark;
 	--background-hsl: 216 7% 14%;
+	--bar-width: 50px;
+	--checker-radius: 20px;
+	--checker-diameter: calc(var(--checker-radius) * 2);
+	--checker-thickness: 5px;
+	--checkers-per-player: 15;
+	--half-width: calc(var(--point-width) * 6);
+	--half-height: calc(var(--point-height) * 2 + 100px);
+	--hold-width: var(--checker-diameter);
+	--point-min: 1;
+	--point-max: 24;
+	--point-width: var(--checker-diameter);
+	--point-height: calc(var(--checker-diameter) * 4);
 }
 
 *, ::before, ::after {
@@ -22,9 +34,35 @@ svg {
 	touch-action: none;
 }
 
+#checker {
+	cx: var(--checker-radius);
+	cy: var(--checker-radius);
+	r: var(--checker-radius);
+}
+
+#hold {
+	translate: calc(var(--half-width) * 2 + var(--bar-width) + var(--hold-width) / 2 + 5px);
+	width: var(--hold-width);
+	height: calc(var(--checkers-per-player) * var(--checker-thickness));
+}
+
 .half {
 	fill: hsl(29 86% 72%);
 	clip-path: fill-box inset(0 round 4px);
+}
+
+.half > rect {
+	width: var(--half-width);
+	height: var(--half-height);
+}
+
+.half .quadrant:last-of-type {
+	translate: 0 var(--half-height);
+	rotate: x .5turn;
+}
+
+.half:last-of-type {
+	translate: calc(var(--half-width) + var(--bar-width));
 }
 
 use[href="#point"]:nth-child(even) {
@@ -38,14 +76,56 @@ use[href="#point"]:nth-child(odd) {
 use[href="#point"] {
 	fill: var(--fill-color);
 	stroke: var(--fill-color);
+	translate: calc(var(--point-width) * (var(--child-index) - 1));
+}
+
+use[href="#point"]:nth-child(0) {
+	--child-index: 0;
+}
+
+use[href="#point"]:nth-child(1) {
+	--child-index: 1;
+}
+
+use[href="#point"]:nth-child(2) {
+	--child-index: 2;
+}
+
+use[href="#point"]:nth-child(3) {
+	--child-index: 3;
+}
+
+use[href="#point"]:nth-child(4) {
+	--child-index: 4;
+}
+
+use[href="#point"]:nth-child(5) {
+	--child-index: 5;
+}
+
+use[href="#point"]:nth-child(6) {
+	--child-index: 6;
+}
+
+#drop-points {
+	translate: var(--checker-diameter) 16px;
 }
 
 use[href="#hold"] {
 	background: hsl(216 7% 20%);
 }
 
+use[href="#hold"]:first-of-type {
+	y: calc(.25 * var(--half-height));
+}
+
+use[href="#hold"]:last-of-type {
+	y: calc(.75 * var(--half-height));
+}
+
 use[href="#checker"] {
 	transition: translate .3s;
+	translate: calc(((var(--half-width) * 2 - (round(down, var(--point), 13) / 13) * var(--half-width) * 2) + (round(down, abs(calc((var(--point-max) + var(--point-min)) / 2) - var(--point)), 6) / 6) * var(--bar-width)) - (rem(var(--point), 13) * var(--checker-diameter)) + ((round(down, var(--point), 13) / 13) * 2 * (rem(var(--point), 13) * var(--checker-diameter)))) calc(var(--half-height) - var(--checker-diameter) - ((round(down, var(--point), 13) / 13) * (var(--half-height) - var(--checker-diameter))) + -1 * var(--point-stack-index) * var(--checker-diameter) + (round(down, var(--point), 13) / 13) * 2 * var(--point-stack-index) * var(--checker-diameter));
 }
 
 use[href="#checker"][data-movable="true"]:hover {
@@ -71,7 +151,24 @@ use[href="#checker"][data-player="2"] {
 }
 
 .die-pip {
+	r: 4px;
 	fill: white;
+}
+
+foreignObject {
+	--width: 100px;
+	--height: 40px;
+	width: var(--width);
+	height: var(--height);
+	y: calc(var(--half-height) / 2 - var(--height) / 2);
+}
+
+foreignObject:first-of-type {
+	x: calc(var(--half-width) * .5 - var(--width) / 2);
+}
+
+foreignObject:last-of-type {
+	x: calc(var(--half-width) * 1.5 + var(--bar-width) - var(--width) / 2);
 }
 
 #undo,

@@ -70,6 +70,7 @@ class CheckerElement {
 	 */
 	set point(value) {
 		this.target.dataset[`point`] = `${value}`
+		this.target.style.setProperty(`--point`, `${value}`);
 	}
 
 	/**
@@ -84,6 +85,7 @@ class CheckerElement {
 	 */
 	set pointStackIndex(value) {
 		this.target.dataset[`pointStackIndex`] = `${value}`
+		this.target.style.setProperty(`--point-stack-index`, `${value}`);
 	}
 
 	/**
@@ -171,19 +173,14 @@ const pointTranslation = (point, containerHeight, destinationPointStackIndex = 0
 const checkersObserver = new MutationObserver(mutations => {
 	mutations.forEach(mutation => {
 		const checkerElement = new CheckerElement(mutation.target);
-		if (checkerElement.point === Number(mutation.oldValue)) {
-			// Move the checker to its original position.
-			checkerElement.target.style.translate = pointTranslation(checkerElement.point, 380, checkerElement.pointStackIndex);
-		} else {
+		if (checkerElement.point !== Number(mutation.oldValue)) {
 			checkerElement.pointStackIndex = document.querySelectorAll(`use[href="#checker"][data-point="${(checkerElement.point)}"]`).length - 1;
-			checkerElement.target.style.translate = pointTranslation(checkerElement.point, 380, checkerElement.pointStackIndex);
 			// When moving a checker that isn't on the top of the stack, reposition the checkers such that there is no longer a gap.
 			Array.from(document.querySelectorAll(`use[href="#checker"][data-point="${mutation.oldValue}"]`))
 				.map(target => new CheckerElement(target))
 				.sort((a, b) => a.pointStackIndex - b.pointStackIndex)
 				.forEach((checkerElement, index) => {
 					checkerElement.pointStackIndex = index;
-					checkerElement.target.style.translate = pointTranslation(checkerElement.point, 380, index);
 				});
 		}
 		updateMovabilityOfCheckers();
@@ -393,6 +390,7 @@ svgElement.addEventListener('pointerdown', event => {
 		}
 		document.getElementById(`drop-points`).replaceChildren();
 		checkerElement.target.classList.remove(`dragging`);
+		checkerElement.target.style.translate = null;
 		svgElement.removeEventListener(`pointermove`, drag);
 		svgElement.removeEventListener('pointerup', endDrag);
 		svgElement.removeEventListener('pointerleave', endDrag);
@@ -407,8 +405,8 @@ svgElement.addEventListener('pointerdown', event => {
 				.map(target => new CheckerElement(target));
 			const destinationPointGapInStackIndex = checkersOnDestinationPoint.findIndex((checkerOnPoint, index) => checkerOnPoint.pointStackIndex !== index);
 			checkerElement.pointStackIndex = (destinationPointGapInStackIndex !== -1) ? destinationPointGapInStackIndex : checkersOnDestinationPoint.length - 1;
-			checkerElement.target.style.translate = pointTranslation(checkerElement.point, 380, checkerElement.pointStackIndex);
 			checkerElement.target.classList.remove(`dragging`);
+			checkerElement.target.style.translate = null;
 			document.getElementById(`drop-points`).replaceChildren();
 			svgElement.removeEventListener(`pointermove`, drag);
 			svgElement.removeEventListener('pointerup', endDrag);
