@@ -401,10 +401,6 @@ svgElement.addEventListener('pointerdown', event => {
 	const keydownEventListener = (event) => {
 		if (event.key === `Escape`) {
 			event.preventDefault();
-			const checkersOnDestinationPoint = Array.from(document.querySelectorAll(`use[href="#checker"][data-point="${(checkerElement.point)}"]`))
-				.map(target => new CheckerElement(target));
-			const destinationPointGapInStackIndex = checkersOnDestinationPoint.findIndex((checkerOnPoint, index) => checkerOnPoint.pointStackIndex !== index);
-			checkerElement.pointStackIndex = (destinationPointGapInStackIndex !== -1) ? destinationPointGapInStackIndex : checkersOnDestinationPoint.length - 1;
 			checkerElement.target.classList.remove(`dragging`);
 			checkerElement.target.style.translate = null;
 			document.getElementById(`drop-points`).replaceChildren();
