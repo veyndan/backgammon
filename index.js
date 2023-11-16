@@ -291,6 +291,8 @@ checkersElement.addEventListener('pointerdown', event => {
 	const checkerElement = new CheckerElement(event.target);
 	if (!checkerElement.movable) return;
 
+	checkerElement.target.setPointerCapture(event.pointerId);
+
 	const boundaryX1 = 0;
 	const boundaryX2 = checkersElement.getBBox().width;
 	const boundaryY1 = 0;
@@ -401,10 +403,10 @@ checkersElement.addEventListener('pointerdown', event => {
 		document.getElementById(`drop-points`).replaceChildren();
 		checkerElement.target.classList.remove(`dragging`);
 		checkerElement.target.style.translate = null;
-		svgElement.removeEventListener(`pointermove`, drag);
-		svgElement.removeEventListener('pointerup', endDrag);
-		svgElement.removeEventListener('pointerleave', endDrag);
-		svgElement.removeEventListener('pointercancel', endDrag);
+		checkerElement.target.removeEventListener(`pointermove`, drag);
+		checkerElement.target.removeEventListener('pointerup', endDrag);
+		checkerElement.target.removeEventListener('pointerleave', endDrag);
+		checkerElement.target.removeEventListener('pointercancel', endDrag);
 		removeEventListener(`keydown`, keydownEventListener);
 	};
 
@@ -414,16 +416,16 @@ checkersElement.addEventListener('pointerdown', event => {
 			checkerElement.target.classList.remove(`dragging`);
 			checkerElement.target.style.translate = null;
 			document.getElementById(`drop-points`).replaceChildren();
-			svgElement.removeEventListener(`pointermove`, drag);
-			svgElement.removeEventListener('pointerup', endDrag);
-			svgElement.removeEventListener('pointerleave', endDrag);
-			svgElement.removeEventListener('pointercancel', endDrag);
+			checkerElement.target.removeEventListener(`pointermove`, drag);
+			checkerElement.target.removeEventListener('pointerup', endDrag);
+			checkerElement.target.removeEventListener('pointerleave', endDrag);
+			checkerElement.target.removeEventListener('pointercancel', endDrag);
 			removeEventListener(`keydown`, keydownEventListener);
 		}
 	};
 	addEventListener(`keydown`, keydownEventListener);
-	svgElement.addEventListener('pointermove', drag);
-	svgElement.addEventListener('pointerup', endDrag);
-	svgElement.addEventListener('pointerleave', endDrag);
-	svgElement.addEventListener('pointercancel', endDrag);
+	checkerElement.target.addEventListener('pointermove', drag);
+	checkerElement.target.addEventListener('pointerup', endDrag);
+	checkerElement.target.addEventListener('pointerleave', endDrag);
+	checkerElement.target.addEventListener('pointercancel', endDrag);
 });
