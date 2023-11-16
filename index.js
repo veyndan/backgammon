@@ -261,7 +261,13 @@ function updateMovabilityOfCheckers() {
 	}
 }
 
+let ignoreCheckerClicks = false;
+
 checkersElement.addEventListener(`click`, event => {
+	if (ignoreCheckerClicks) {
+		ignoreCheckerClicks = false;
+		return;
+	}
 	const checkerElement = new CheckerElement(event.target);
 	if (!checkerElement.movable) return;
 	const dieElement = new DieElement(document.querySelector(`#dice :not([data-played="true"])`));
@@ -269,6 +275,17 @@ checkersElement.addEventListener(`click`, event => {
 	document.getElementById(`undo`).style.display = `unset`;
 	checkerElement.point = new Checker(checkerElement.player, checkerElement.point).moveBy(dieElement.value).point;
 	checkerElement.touchedAccordingToId = dieElement.id;
+});
+checkersElement.addEventListener(`pointerover`, event => {
+	if (event.target.nextSibling !== null) {
+		/**
+		 * Making the checker the last sibling checker means that the selected checker can draw over all other
+		 * checkers.
+		 *
+		 * Invoked before drag logic for proper event propagation after this point.
+		 */
+		checkersElement.appendChild(event.target);
+	}
 });
 checkersElement.addEventListener('pointerdown', event => {
 	const checkerElement = new CheckerElement(event.target);
@@ -308,14 +325,7 @@ checkersElement.addEventListener('pointerdown', event => {
 	// END Confine
 
 	const drag = event => {
-		/**
-		 * Making the checker the last sibling checker means that the selected checker can draw over all other
-		 * checkers.
-		 *
-		 * Invoked on drag so that the click event continues to be observable.
-		 */
-		checkerElement.target.parentElement.appendChild(checkerElement.target);
-
+		ignoreCheckerClicks = true;
 		checkerElement.target.classList.add(`dragging`);
 		event.preventDefault();
 
