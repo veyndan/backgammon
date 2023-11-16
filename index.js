@@ -261,7 +261,7 @@ function updateMovabilityOfCheckers() {
 	}
 }
 
-svgElement.addEventListener(`click`, event => {
+checkersElement.addEventListener(`click`, event => {
 	const checkerElement = new CheckerElement(event.target);
 	if (!checkerElement.movable) return;
 	const dieElement = new DieElement(document.querySelector(`#dice :not([data-played="true"])`));
@@ -270,7 +270,7 @@ svgElement.addEventListener(`click`, event => {
 	checkerElement.point = new Checker(checkerElement.player, checkerElement.point).moveBy(dieElement.value).point;
 	checkerElement.touchedAccordingToId = dieElement.id;
 });
-svgElement.addEventListener('pointerdown', event => {
+checkersElement.addEventListener('pointerdown', event => {
 	const checkerElement = new CheckerElement(event.target);
 	if (!checkerElement.movable) return;
 
