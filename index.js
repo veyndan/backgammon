@@ -133,6 +133,13 @@ class DieElement {
 	}
 
 	/**
+	 * @return {boolean}
+	 */
+	get played() {
+		return this.target.dataset[`played`] === String(true);
+	}
+
+	/**
 	 * @param {boolean} value
 	 */
 	set played(value) {
@@ -196,12 +203,32 @@ checkersObserver.observe(
 	},
 );
 
+const diceObserver = new MutationObserver(mutations => {
+	mutations.forEach(mutation => {
+		const dieElement = new DieElement(mutation.target)
+		if (dieElement.played) {
+			document.getElementById(`undo`).style.display = `unset`;
+		} else {
+			const playedDieElements = Array.from(document.querySelectorAll(`#dice [data-played="true"]`))
+				.map(target => new DieElement(target));
+			if (playedDieElements.length === 0) {
+				document.getElementById(`undo`).style.display = `none`;
+			}
+		}
+	});
+});
+
+diceObserver.observe(
+	document.getElementById(`dice`),
+	{
+		attributeFilter: [`data-played`],
+		subtree: true,
+	},
+);
+
 document.getElementById(`undo`).addEventListener(`click`, () => {
 	const playedDieElements = Array.from(document.querySelectorAll(`#dice [data-played="true"]`))
 		.map(target => new DieElement(target));
-	if (playedDieElements.length === 1) {
-		document.getElementById(`undo`).style.display = `none`;
-	}
 	const lastPlayedDieElement = playedDieElements.pop();
 	const lastMovedCheckerElement = new CheckerElement(document.querySelector(`#checkers > [data-touched-according-to-die${(lastPlayedDieElement.id)}="true"]`));
 	lastMovedCheckerElement.point = new Checker(lastMovedCheckerElement.player, lastMovedCheckerElement.point).moveBy(-lastPlayedDieElement.value).point;
@@ -272,7 +299,6 @@ checkersElement.addEventListener(`click`, event => {
 	if (!checkerElement.movable) return;
 	const dieElement = new DieElement(document.querySelector(`#dice :not([data-played="true"])`));
 	dieElement.played = true;
-	document.getElementById(`undo`).style.display = `unset`;
 	checkerElement.point = new Checker(checkerElement.player, checkerElement.point).moveBy(dieElement.value).point;
 	checkerElement.touchedAccordingToId = dieElement.id;
 });
@@ -392,7 +418,6 @@ checkersElement.addEventListener('pointerdown', event => {
 		const point = pointFromCoordinates(coord);
 		if (permissibleDestinationPoint === point) {
 			dieElement.played = true;
-			document.getElementById(`undo`).style.display = `unset`;
 			checkerElement.point = point;
 			checkerElement.touchedAccordingToId = dieElement.id;
 		} else {
