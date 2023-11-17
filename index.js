@@ -208,11 +208,20 @@ const diceObserver = new MutationObserver(mutations => {
 		const dieElement = new DieElement(mutation.target)
 		if (dieElement.played) {
 			document.getElementById(`undo`).style.display = `unset`;
+			const unplayedDieElements = Array.from(document.querySelectorAll(`#dice :not([data-played="true"])`))
+				.map(target => new DieElement(target));
+			if (unplayedDieElements.length === 0) {
+				document.getElementById(`dice`).style.display = `none`;
+				document.getElementById(`confirm`).style.display = `unset`;
+			}
 		} else {
 			const playedDieElements = Array.from(document.querySelectorAll(`#dice [data-played="true"]`))
 				.map(target => new DieElement(target));
 			if (playedDieElements.length === 0) {
 				document.getElementById(`undo`).style.display = `none`;
+			} else {
+				document.getElementById(`dice`).style.display = `unset`;
+				document.getElementById(`confirm`).style.display = `none`;
 			}
 		}
 	});

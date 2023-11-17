@@ -191,6 +191,7 @@ foreignObject {
 	}
 }
 
+#confirm,
 #undo,
 #roll-dice {
 	width: 100%;
@@ -203,6 +204,7 @@ foreignObject {
 	border-radius: 4px;
 }
 
+#confirm,
 #undo {
 	display: none;
 }
