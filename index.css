@@ -6,6 +6,8 @@
 	--checker-diameter: calc(var(--checker-radius) * 2);
 	--checker-thickness: 5px;
 	--checkers-per-player: 15;
+	--die-side-length: 40px;
+	--die-gap: 10px;
 	--half-width: calc(var(--point-width) * 6);
 	--half-height: calc(var(--point-height) * 2 + 100px);
 	--hold-width: var(--checker-diameter);
@@ -170,9 +172,38 @@ use[href="#checker"] {
 	}
 }
 
+#die-face-background {
+	width: var(--die-side-length);
+	height: var(--die-side-length);
+}
+
 .die-pip {
 	r: 4px;
 	fill: white;
+
+	&.x0 {
+		cx: calc(var(--die-side-length) * .25);
+	}
+
+	&.x1 {
+		cx: calc(var(--die-side-length) * .5);
+	}
+
+	&.x2 {
+		cx: calc(var(--die-side-length) * .75);
+	}
+
+	&.y0 {
+		cy: calc(var(--die-side-length) * .25);
+	}
+
+	&.y1 {
+		cy: calc(var(--die-side-length) * .5);
+	}
+
+	&.y2 {
+		cy: calc(var(--die-side-length) * .75);
+	}
 }
 
 foreignObject {
@@ -189,6 +220,12 @@ foreignObject {
 	&:last-of-type {
 		x: calc(var(--half-width) * 1.5 + var(--bar-width) - var(--width) / 2);
 	}
+}
+
+#dice {
+	--width: calc(2 * var(--die-side-length) + var(--die-gap));
+	--height: var(--die-side-length);
+	translate: calc(var(--half-width) * 1.5 + var(--bar-width) - var(--width) / 2) calc(var(--half-height) / 2 - var(--height) / 2);
 }
 
 #confirm,
@@ -216,11 +253,11 @@ foreignObject {
 	}
 
 	:nth-child(2):last-child {
-		translate: 50px;
+		translate: calc(var(--die-side-length) + var(--die-gap));
 	}
 
 	:nth-child(1):nth-last-child(4) {
-		translate: -50px;
+		translate: calc(-1 * (var(--die-side-length) + var(--die-gap)));
 	}
 
 	:nth-child(2):nth-last-child(3) {
@@ -228,11 +265,11 @@ foreignObject {
 	}
 
 	:nth-child(3):nth-last-child(2) {
-		translate: 50px;
+		translate: calc(var(--die-side-length) + var(--die-gap));
 	}
 
 	:nth-child(4):nth-last-child(1) {
-		translate: 100px;
+		translate: calc(2 * (var(--die-side-length) + var(--die-gap)));
 	}
 
 	:nth-child(3):nth-last-child(2),
