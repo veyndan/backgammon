@@ -86,6 +86,8 @@ class CheckerElement {
 	set pointStackIndex(value) {
 		this.target.dataset[`pointStackIndex`] = `${value}`
 		this.target.style.setProperty(`--point-stack-index`, `${value}`);
+
+		this.target.querySelector(`text`).textContent = value > 4 ? `${value + 1}` : null;
 	}
 
 	/**
@@ -168,9 +170,9 @@ const checkersObserver = new MutationObserver(mutations => {
 	mutations.forEach(mutation => {
 		const checkerElement = new CheckerElement(mutation.target);
 		if (checkerElement.point !== Number(mutation.oldValue)) {
-			checkerElement.pointStackIndex = document.querySelectorAll(`use[href="#checker"][data-point="${(checkerElement.point)}"]`).length - 1;
+			checkerElement.pointStackIndex = document.querySelectorAll(`#checkers > [data-point="${(checkerElement.point)}"]`).length - 1;
 			// When moving a checker that isn't on the top of the stack, reposition the checkers such that there is no longer a gap.
-			Array.from(document.querySelectorAll(`use[href="#checker"][data-point="${mutation.oldValue}"]`))
+			Array.from(document.querySelectorAll(`#checkers > [data-point="${mutation.oldValue}"]`))
 				.map(target => new CheckerElement(target))
 				.sort((a, b) => a.pointStackIndex - b.pointStackIndex)
 				.forEach((checkerElement, index) => {
@@ -221,6 +223,17 @@ diceObserver.observe(
 		subtree: true,
 	},
 );
+
+document.getElementById(`undo`).addEventListener(`pointerover`, () => {
+	const playedDieElements = Array.from(document.querySelectorAll(`#dice [data-played="true"]`))
+		.map(target => new DieElement(target));
+	const lastPlayedDieElement = playedDieElements.pop();
+	const lastMovedCheckerElement = new CheckerElement(document.querySelector(`#checkers > [data-touched-according-to-die${(lastPlayedDieElement.id)}="true"]`));
+	// When reverting onto a stack of 5 or more checkers, make sure the latest one is on top for correct numbering purposes.
+	if (lastMovedCheckerElement.target.nextSibling !== null) {
+		checkersElement.appendChild(lastMovedCheckerElement.target);
+	}
+});
 
 document.getElementById(`undo`).addEventListener(`click`, () => {
 	const playedDieElements = Array.from(document.querySelectorAll(`#dice [data-played="true"]`))
@@ -274,7 +287,7 @@ function updateMovabilityOfCheckers() {
 		const dieElement = new DieElement(dieElementTarget);
 		checkerElements.forEach(checkerElement => {
 			const potentialDestinationPoint = new Checker(checkerElement.player, checkerElement.point).moveBy(dieElement.value).point;
-			const potentialDestinationCheckers = document.querySelectorAll(`use[href="#checker"][data-point="${potentialDestinationPoint}"]`)
+			const potentialDestinationCheckers = document.querySelectorAll(`#checkers > [data-point="${potentialDestinationPoint}"]`)
 			checkerElement.movable = potentialDestinationPoint >= 1 && potentialDestinationPoint <= 24 && (potentialDestinationCheckers.length <= 1 || new CheckerElement(potentialDestinationCheckers[0]).player === checkerElement.player);
 		});
 	} else {
@@ -291,7 +304,7 @@ checkersElement.addEventListener(`click`, event => {
 		ignoreCheckerClicks = false;
 		return;
 	}
-	const checkerElement = new CheckerElement(event.target);
+	const checkerElement = new CheckerElement(event.target.closest(`#checkers > *`));
 	if (!checkerElement.movable) return;
 	const dieElement = new DieElement(document.querySelector(`#dice :not([data-played="true"])`));
 	dieElement.played = true;
@@ -299,18 +312,19 @@ checkersElement.addEventListener(`click`, event => {
 	checkerElement.touchedAccordingToId = dieElement.id;
 });
 checkersElement.addEventListener(`pointerover`, event => {
-	if (event.target.nextSibling !== null) {
+	const checkerElementTarget = event.target.closest(`#checkers > *`);
+	if (checkerElementTarget.nextSibling !== null) {
 		/**
 		 * Making the checker the last sibling checker means that the selected checker can draw over all other
 		 * checkers.
 		 *
 		 * Invoked before drag logic for proper event propagation after this point.
 		 */
-		checkersElement.appendChild(event.target);
+		checkersElement.appendChild(checkerElementTarget);
 	}
 });
 checkersElement.addEventListener('pointerdown', event => {
-	const checkerElement = new CheckerElement(event.target);
+	const checkerElement = new CheckerElement(event.target.closest(`#checkers > *`));
 	if (!checkerElement.movable) return;
 
 	checkerElement.target.setPointerCapture(event.pointerId);
@@ -373,7 +387,7 @@ checkersElement.addEventListener('pointerdown', event => {
 		const dy = Math.clamp(coordinates.y - offset.y, minY, maxY);
 		let point = null;
 		const halfBBox = document.querySelector(`.half`).getBBox();
-		const checkerDiameter = document.querySelector(`use[href="#checker"]`).getBBox().width;
+		const checkerDiameter = document.querySelector(`#checkers > *`).getBBox().width;
 		const pointHeight = document.querySelector(`use[href="#point"]`).getBBox().height;
 		const barWidth = 50;
 		let additionalPoints;

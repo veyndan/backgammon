@@ -13,10 +13,7 @@
         <!-- The point should have dimensions 1:4, so exactly 4 stacked checkers can fill a point -->
         <polyline id="point" points="2,0 20,158 38,0" stroke-width="4" stroke-linejoin="round" stroke-linecap="square"/>
         <circle id="drop-point" r="6" fill="darkorange"/>
-        <g id="checker">
-          <circle/>
-          <text x="20" y="20" text-anchor="middle" dominant-baseline="central"></text>
-        </g>
+        <circle id="checker-background"/>
         <rect id="hold" rx="4"/>
         <rect id="die-face-background" rx="4" fill="firebrick"/>
         <g id="die-face-pip-1">
@@ -117,36 +114,126 @@
       </g>
 
       <g id="checkers" transform="translate(20 30)">
-        <use data-player="2" data-point="1" data-point-stack-index="0" href="#checker" style="--point: 1; --point-stack-index: 0;"/>
-        <use data-player="2" data-point="1" data-point-stack-index="1" href="#checker" style="--point: 1; --point-stack-index: 1;"/>
-        <use data-player="1" data-point="6" data-point-stack-index="0" href="#checker" style="--point: 6; --point-stack-index: 0;"/>
-        <use data-player="1" data-point="6" data-point-stack-index="1" href="#checker" style="--point: 6; --point-stack-index: 1;"/>
-        <use data-player="1" data-point="6" data-point-stack-index="2" href="#checker" style="--point: 6; --point-stack-index: 2;"/>
-        <use data-player="1" data-point="6" data-point-stack-index="3" href="#checker" style="--point: 6; --point-stack-index: 3;"/>
-        <use data-player="1" data-point="6" data-point-stack-index="4" href="#checker" style="--point: 6; --point-stack-index: 4;"/>
-        <use data-player="1" data-point="8" data-point-stack-index="0" href="#checker" style="--point: 8; --point-stack-index: 0;"/>
-        <use data-player="1" data-point="8" data-point-stack-index="1" href="#checker" style="--point: 8; --point-stack-index: 1;"/>
-        <use data-player="1" data-point="8" data-point-stack-index="2" href="#checker" style="--point: 8; --point-stack-index: 2;"/>
-        <use data-player="2" data-point="12" data-point-stack-index="0" href="#checker" style="--point: 12; --point-stack-index: 0;"/>
-        <use data-player="2" data-point="12" data-point-stack-index="1" href="#checker" style="--point: 12; --point-stack-index: 1;"/>
-        <use data-player="2" data-point="12" data-point-stack-index="2" href="#checker" style="--point: 12; --point-stack-index: 2;"/>
-        <use data-player="2" data-point="12" data-point-stack-index="3" href="#checker" style="--point: 12; --point-stack-index: 3;"/>
-        <use data-player="2" data-point="12" data-point-stack-index="4" href="#checker" style="--point: 12; --point-stack-index: 4;"/>
-        <use data-player="1" data-point="13" data-point-stack-index="0" href="#checker" style="--point: 13; --point-stack-index: 0;"/>
-        <use data-player="1" data-point="13" data-point-stack-index="1" href="#checker" style="--point: 13; --point-stack-index: 1;"/>
-        <use data-player="1" data-point="13" data-point-stack-index="2" href="#checker" style="--point: 13; --point-stack-index: 2;"/>
-        <use data-player="1" data-point="13" data-point-stack-index="3" href="#checker" style="--point: 13; --point-stack-index: 3;"/>
-        <use data-player="1" data-point="13" data-point-stack-index="4" href="#checker" style="--point: 13; --point-stack-index: 4;"/>
-        <use data-player="2" data-point="17" data-point-stack-index="0" href="#checker" style="--point: 17; --point-stack-index: 0;"/>
-        <use data-player="2" data-point="17" data-point-stack-index="1" href="#checker" style="--point: 17; --point-stack-index: 1;"/>
-        <use data-player="2" data-point="17" data-point-stack-index="2" href="#checker" style="--point: 17; --point-stack-index: 2;"/>
-        <use data-player="2" data-point="19" data-point-stack-index="0" href="#checker" style="--point: 19; --point-stack-index: 0;"/>
-        <use data-player="2" data-point="19" data-point-stack-index="1" href="#checker" style="--point: 19; --point-stack-index: 1;"/>
-        <use data-player="2" data-point="19" data-point-stack-index="2" href="#checker" style="--point: 19; --point-stack-index: 2;"/>
-        <use data-player="2" data-point="19" data-point-stack-index="3" href="#checker" style="--point: 19; --point-stack-index: 3;"/>
-        <use data-player="2" data-point="19" data-point-stack-index="4" href="#checker" style="--point: 19; --point-stack-index: 4;"/>
-        <use data-player="1" data-point="24" data-point-stack-index="0" href="#checker" style="--point: 24; --point-stack-index: 0;"/>
-        <use data-player="1" data-point="24" data-point-stack-index="1" href="#checker" style="--point: 24; --point-stack-index: 1;"/>
+        <g data-player="2" data-point="1" data-point-stack-index="0" style="--point: 1; --point-stack-index: 0;">
+          <use href="#checker-background"/>
+          <text x="20" y="20"></text>
+        </g>
+        <g data-player="2" data-point="1" data-point-stack-index="1" style="--point: 1; --point-stack-index: 1;">
+          <use href="#checker-background"/>
+          <text x="20" y="20"></text>
+        </g>
+        <g data-player="1" data-point="6" data-point-stack-index="0" style="--point: 6; --point-stack-index: 0;">
+          <use href="#checker-background"/>
+          <text x="20" y="20"></text>
+        </g>
+        <g data-player="1" data-point="6" data-point-stack-index="1" style="--point: 6; --point-stack-index: 1;">
+          <use href="#checker-background"/>
+          <text x="20" y="20"></text>
+        </g>
+        <g data-player="1" data-point="6" data-point-stack-index="2" style="--point: 6; --point-stack-index: 2;">
+          <use href="#checker-background"/>
+          <text x="20" y="20"></text>
+        </g>
+        <g data-player="1" data-point="6" data-point-stack-index="3" style="--point: 6; --point-stack-index: 3;">
+          <use href="#checker-background"/>
+          <text x="20" y="20"></text>
+        </g>
+        <g data-player="1" data-point="6" data-point-stack-index="4" style="--point: 6; --point-stack-index: 4;">
+          <use href="#checker-background"/>
+          <text x="20" y="20"></text>
+        </g>
+        <g data-player="1" data-point="8" data-point-stack-index="0" style="--point: 8; --point-stack-index: 0;">
+          <use href="#checker-background"/>
+          <text x="20" y="20"></text>
+        </g>
+        <g data-player="1" data-point="8" data-point-stack-index="1" style="--point: 8; --point-stack-index: 1;">
+          <use href="#checker-background"/>
+          <text x="20" y="20"></text>
+        </g>
+        <g data-player="1" data-point="8" data-point-stack-index="2" style="--point: 8; --point-stack-index: 2;">
+          <use href="#checker-background"/>
+          <text x="20" y="20"></text>
+        </g>
+        <g data-player="2" data-point="12" data-point-stack-index="0" style="--point: 12; --point-stack-index: 0;">
+          <use href="#checker-background"/>
+          <text x="20" y="20"></text>
+        </g>
+        <g data-player="2" data-point="12" data-point-stack-index="1" style="--point: 12; --point-stack-index: 1;">
+          <use href="#checker-background"/>
+          <text x="20" y="20"></text>
+        </g>
+        <g data-player="2" data-point="12" data-point-stack-index="2" style="--point: 12; --point-stack-index: 2;">
+          <use href="#checker-background"/>
+          <text x="20" y="20"></text>
+        </g>
+        <g data-player="2" data-point="12" data-point-stack-index="3" style="--point: 12; --point-stack-index: 3;">
+          <use href="#checker-background"/>
+          <text x="20" y="20"></text>
+        </g>
+        <g data-player="2" data-point="12" data-point-stack-index="4" style="--point: 12; --point-stack-index: 4;">
+          <use href="#checker-background"/>
+          <text x="20" y="20"></text>
+        </g>
+        <g data-player="1" data-point="13" data-point-stack-index="0" style="--point: 13; --point-stack-index: 0;">
+          <use href="#checker-background"/>
+          <text x="20" y="20"></text>
+        </g>
+        <g data-player="1" data-point="13" data-point-stack-index="1" style="--point: 13; --point-stack-index: 1;">
+          <use href="#checker-background"/>
+          <text x="20" y="20"></text>
+        </g>
+        <g data-player="1" data-point="13" data-point-stack-index="2" style="--point: 13; --point-stack-index: 2;">
+          <use href="#checker-background"/>
+          <text x="20" y="20"></text>
+        </g>
+        <g data-player="1" data-point="13" data-point-stack-index="3" style="--point: 13; --point-stack-index: 3;">
+          <use href="#checker-background"/>
+          <text x="20" y="20"></text>
+        </g>
+        <g data-player="1" data-point="13" data-point-stack-index="4" style="--point: 13; --point-stack-index: 4;">
+          <use href="#checker-background"/>
+          <text x="20" y="20"></text>
+        </g>
+        <g data-player="2" data-point="17" data-point-stack-index="0" style="--point: 17; --point-stack-index: 0;">
+          <use href="#checker-background"/>
+          <text x="20" y="20"></text>
+        </g>
+        <g data-player="2" data-point="17" data-point-stack-index="1" style="--point: 17; --point-stack-index: 1;">
+          <use href="#checker-background"/>
+          <text x="20" y="20"></text>
+        </g>
+        <g data-player="2" data-point="17" data-point-stack-index="2" style="--point: 17; --point-stack-index: 2;">
+          <use href="#checker-background"/>
+          <text x="20" y="20"></text>
+        </g>
+        <g data-player="2" data-point="19" data-point-stack-index="0" style="--point: 19; --point-stack-index: 0;">
+          <use href="#checker-background"/>
+          <text x="20" y="20"></text>
+        </g>
+        <g data-player="2" data-point="19" data-point-stack-index="1" style="--point: 19; --point-stack-index: 1;">
+          <use href="#checker-background"/>
+          <text x="20" y="20"></text>
+        </g>
+        <g data-player="2" data-point="19" data-point-stack-index="2" style="--point: 19; --point-stack-index: 2;">
+          <use href="#checker-background"/>
+          <text x="20" y="20"></text>
+        </g>
+        <g data-player="2" data-point="19" data-point-stack-index="3" style="--point: 19; --point-stack-index: 3;">
+          <use href="#checker-background"/>
+          <text x="20" y="20"></text>
+        </g>
+        <g data-player="2" data-point="19" data-point-stack-index="4" style="--point: 19; --point-stack-index: 4;">
+          <use href="#checker-background"/>
+          <text x="20" y="20"></text>
+        </g>
+        <g data-player="1" data-point="24" data-point-stack-index="0" style="--point: 24; --point-stack-index: 0;">
+          <use href="#checker-background"/>
+          <text x="20" y="20"></text>
+        </g>
+        <g data-player="1" data-point="24" data-point-stack-index="1" style="--point: 24; --point-stack-index: 1;">
+          <use href="#checker-background"/>
+          <text x="20" y="20"></text>
+        </g>
       </g>
 
       <g id="drop-points"/>

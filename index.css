@@ -42,19 +42,10 @@ svg {
 	touch-action: none;
 }
 
-#checker {
-	& > circle {
-		cx: var(--checker-radius);
-		cy: var(--checker-radius);
-		r: var(--checker-radius);
-	}
-
-	& > text {
-		fill: currentColor;
-		font-weight: bold;
-		font-size: 18px;
-		user-select: none;
-	}
+#checker-background {
+	cx: var(--checker-radius);
+	cy: var(--checker-radius);
+	r: var(--checker-radius);
 }
 
 #hold {
@@ -130,7 +121,7 @@ use[href="#point"] {
 
 /*noinspection CssInvalidFunction*/
 use[href="#drop-point"],
-use[href="#checker"] {
+#checkers > * {
 	/* Returns 1 if the --point is in [1,12], else 0. */
 	--is-bottom-point: calc(1 - var(--is-top-point));
 	/* Returns 1 if the --point is in [13,24], else 0. */
@@ -167,13 +158,13 @@ use[href="#hold"] {
 }
 
 /*noinspection CssInvalidFunction*/
-use[href="#checker"] {
+#checkers > * {
 	transition: translate .3s;
 	translate:
 		var(--translate-x)
 		calc(
-			var(--is-top-point) * (var(--checker-diameter) * var(--point-stack-index))
-			+ var(--is-bottom-point) * (var(--half-height) - var(--checker-diameter) * var(--point-stack-index) - var(--checker-diameter))
+			var(--is-top-point) * (var(--checker-diameter) * min(var(--point-stack-index), 4))
+			+ var(--is-bottom-point) * (var(--half-height) - var(--checker-diameter) * min(var(--point-stack-index), 4) - var(--checker-diameter))
 		);
 
 	&[data-movable="true"] {
@@ -200,6 +191,15 @@ use[href="#checker"] {
 	&[data-player="2"] {
 		fill: var(--player-2-checker-background);
 		color: var(--player-2-checker-text-color);
+	}
+
+	& > text {
+		fill: currentColor;
+		font-weight: bold;
+		font-size: 18px;
+		user-select: none;
+		dominant-baseline: central;
+		text-anchor: middle;
 	}
 }
 
