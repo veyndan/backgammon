@@ -372,32 +372,31 @@ checkersElement.addEventListener('pointerdown', event => {
 		const dx = Math.clamp(coordinates.x - offset.x, minX, maxX);
 		const dy = Math.clamp(coordinates.y - offset.y, minY, maxY);
 		let point = null;
-		const halfBoardWidth = 240;
-		const halfBoardHeight = 420;
-		const checkerDiameter = 40;
-		const pointHeight = 158;
+		const halfBBox = document.querySelector(`.half`).getBBox();
+		const checkerDiameter = document.querySelector(`use[href="#checker"]`).getBBox().width;
+		const pointHeight = document.querySelector(`use[href="#point"]`).getBBox().height;
 		const barWidth = 50;
 		let additionalPoints;
 		let multiplier;
 		if (dy <= pointHeight) {
 			additionalPoints = 12;
 			multiplier = 1;
-		} else if (dy >= (halfBoardHeight - checkerDiameter - pointHeight)) {
+		} else if (dy >= (halfBBox.height - checkerDiameter - pointHeight)) {
 			additionalPoints = 13;
 			multiplier = -1;
 		} else {
 			additionalPoints = null;
 		}
 		if (additionalPoints !== null) {
-			if (dx <= halfBoardWidth - (checkerDiameter / 2)) {
+			if (dx <= halfBBox.width - (checkerDiameter / 2)) {
 				point = multiplier * Math.round(dx / checkerDiameter + 1) + additionalPoints;
-			} else if (dx >= halfBoardWidth && dx <= (halfBoardWidth + barWidth - checkerDiameter)) {
+			} else if (dx >= halfBBox.width && dx <= (halfBBox.width + barWidth - checkerDiameter)) {
 				point = null
-			} else if (dx < halfBoardWidth) {
+			} else if (dx < halfBBox.width) {
 				// If most of the checker is on the bar, but some of it is on a point in the left half of the board,
 				// just put it on the point on the left half.
 				point = additionalPoints + multiplier * 6;
-			} else if (dx < halfBoardWidth + barWidth - (checkerDiameter / 2)) {
+			} else if (dx < halfBBox.width + barWidth - (checkerDiameter / 2)) {
 				// If most of the checker is on the bar, but some of it is on a point in the right half of the board,
 				// just put it on the point on the right half.
 				point = additionalPoints + multiplier * 7;
