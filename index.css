@@ -9,7 +9,7 @@
 	--die-side-length: 40px;
 	--die-gap: 10px;
 	--half-width: calc(var(--point-width) * 6);
-	--half-height: calc(var(--point-height) * 2 + var(--checker-diameter) * 2 + var(--die-side-length) - 20px);
+	--half-height: calc(var(--point-height) * 2 + var(--checker-diameter) * 2 + var(--die-side-length) + 30px);
 	--hold-width: var(--checker-diameter);
 	--point-count: 24;
 	--point-per-side: calc(var(--point-count) / 2);
