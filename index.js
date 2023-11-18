@@ -164,19 +164,6 @@ class DieElement {
 const svgElement = document.getElementsByTagName(`svg`)[0];
 const checkersElement = document.getElementById('checkers');
 
-/**
- * @param {number} point
- * @param {number} containerHeight
- * @param {number} destinationPointStackIndex
- * @return {string}
- */
-const pointTranslation = (point, containerHeight, destinationPointStackIndex = 0) => {
-	const checkerDiameter = 40;
-	const barWidth = 50;
-	const containerWidth = 490;
-	return `${(point <= 12 ? -1 : 1) * (((point - 1) % 12 * checkerDiameter) + ((point - 1) % 12 >= 6 ? barWidth : 0)) + (point <= 12 ? containerWidth : 0)}px ${point <= 12 ? (containerHeight - destinationPointStackIndex * checkerDiameter) : (destinationPointStackIndex * checkerDiameter)}px`;
-};
-
 const checkersObserver = new MutationObserver(mutations => {
 	mutations.forEach(mutation => {
 		const checkerElement = new CheckerElement(mutation.target);
@@ -376,7 +363,8 @@ checkersElement.addEventListener('pointerdown', event => {
 		const point = new Checker(checkerElement.player, checkerElement.point).moveBy(dieElement.value).point;
 		const dropPointElement = document.createElementNS(`http://www.w3.org/2000/svg`, `use`);
 		dropPointElement.setAttribute(`href`, `#drop-point`);
-		dropPointElement.style.translate = pointTranslation(point, 446);
+		dropPointElement.dataset[`point`] = `${point}`
+		dropPointElement.style.setProperty(`--point`, `${point}`);
 		document.getElementById(`drop-points`).append(dropPointElement);
 	};
 
