@@ -11,6 +11,10 @@
 	--half-width: calc(var(--point-width) * 6);
 	--half-height: calc(var(--point-height) * 2 + var(--checker-diameter) * 2 + var(--die-side-length) + 30px);
 	--hold-width: var(--checker-diameter);
+	--player-1-checker-background: black;
+	--player-1-checker-text-color: var(--player-2-checker-background);
+	--player-2-checker-background: white;
+	--player-2-checker-text-color: var(--player-1-checker-background);
 	--point-count: 24;
 	--point-per-side: calc(var(--point-count) / 2);
 	--point-min: 1;
@@ -39,9 +43,18 @@ svg {
 }
 
 #checker {
-	cx: var(--checker-radius);
-	cy: var(--checker-radius);
-	r: var(--checker-radius);
+	& > circle {
+		cx: var(--checker-radius);
+		cy: var(--checker-radius);
+		r: var(--checker-radius);
+	}
+
+	& > text {
+		fill: currentColor;
+		font-weight: bold;
+		font-size: 18px;
+		user-select: none;
+	}
 }
 
 #hold {
@@ -180,11 +193,13 @@ use[href="#checker"] {
 	}
 
 	&[data-player="1"] {
-		fill: black;
+		fill: var(--player-1-checker-background);
+		color: var(--player-1-checker-text-color);
 	}
 
 	&[data-player="2"] {
-		fill: white;
+		fill: var(--player-2-checker-background);
+		color: var(--player-2-checker-text-color);
 	}
 }
 
