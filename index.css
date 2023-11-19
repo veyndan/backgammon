@@ -167,7 +167,7 @@ use[href="#hold"] {
 			+ var(--is-bottom-point) * (var(--half-height) - var(--checker-diameter) * min(var(--point-stack-index), 4) - var(--checker-diameter))
 		);
 
-	&[data-movable="true"] {
+	&[data-permissible-destination-points]:not([data-permissible-destination-points="[]"]) {
 		&:hover {
 			cursor: pointer;
 		}
@@ -179,7 +179,7 @@ use[href="#hold"] {
 		}
 	}
 
-	&[data-movable="false"]:hover {
+	&[data-permissible-destination-points="[]"]:hover {
 		cursor: not-allowed;
 	}
 
@@ -318,6 +318,6 @@ foreignObject {
 	}
 }
 
-.die[data-played="true"] {
+.die[data-played-at] {
 	opacity: .5;
 }

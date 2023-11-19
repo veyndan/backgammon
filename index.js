@@ -38,17 +38,17 @@ class CheckerElement {
 	}
 
 	/**
-	 * @return {boolean}
+	 * @return {number[]}
 	 */
-	get movable() {
-		return this.target.dataset[`movable`] === String(true);
+	get permissibleDestinationPoints() {
+		return JSON.parse(this.target.dataset[`permissibleDestinationPoints`] ?? "[]");
 	}
 
 	/**
-	 * @param {boolean} value
+	 * @param {number[]} value
 	 */
-	set movable(value) {
-		this.target.dataset[`movable`] = String(value);
+	set permissibleDestinationPoints(value) {
+		this.target.dataset[`permissibleDestinationPoints`] = JSON.stringify(value);
 	}
 
 	/**
@@ -135,17 +135,26 @@ class DieElement {
 	}
 
 	/**
-	 * @return {boolean}
+	 * @return {(number|undefined)}
 	 */
-	get played() {
-		return this.target.dataset[`played`] === String(true);
+	get playedAt() {
+		const playedAtDataAttribute = this.target.dataset[`playedAt`];
+		if (playedAtDataAttribute !== undefined) {
+			return Number(playedAtDataAttribute);
+		} else {
+			return undefined;
+		}
 	}
 
 	/**
-	 * @param {boolean} value
+	 * @param {(number|undefined)} value
 	 */
-	set played(value) {
-		this.target.dataset[`played`] = String(value);
+	set playedAt(value) {
+		if (value !== undefined) {
+			this.target.dataset[`playedAt`] = String(value);
+		} else {
+			delete this.target.dataset[`playedAt`];
+		}
 	}
 
 	/**
@@ -195,16 +204,16 @@ checkersObserver.observe(
 const diceObserver = new MutationObserver(mutations => {
 	mutations.forEach(mutation => {
 		const dieElement = new DieElement(mutation.target)
-		if (dieElement.played) {
+		if (dieElement.playedAt !== undefined) {
 			document.getElementById(`undo`).style.display = `unset`;
-			const unplayedDieElements = Array.from(document.querySelectorAll(`#dice :not([data-played="true"])`))
+			const unplayedDieElements = Array.from(document.querySelectorAll(`#dice :not([data-played-at])`))
 				.map(target => new DieElement(target));
 			if (unplayedDieElements.length === 0) {
 				document.getElementById(`dice`).style.display = `none`;
 				document.getElementById(`confirm`).style.display = `unset`;
 			}
 		} else {
-			const playedDieElements = Array.from(document.querySelectorAll(`#dice [data-played="true"]`))
+			const playedDieElements = Array.from(document.querySelectorAll(`#dice [data-played-at]`))
 				.map(target => new DieElement(target));
 			if (playedDieElements.length === 0) {
 				document.getElementById(`undo`).style.display = `none`;
@@ -219,15 +228,15 @@ const diceObserver = new MutationObserver(mutations => {
 diceObserver.observe(
 	document.getElementById(`dice`),
 	{
-		attributeFilter: [`data-played`],
+		attributeFilter: [`data-played-at`],
 		subtree: true,
 	},
 );
 
 document.getElementById(`undo`).addEventListener(`pointerover`, () => {
-	const playedDieElements = Array.from(document.querySelectorAll(`#dice [data-played="true"]`))
-		.map(target => new DieElement(target));
-	const lastPlayedDieElement = playedDieElements.pop();
+	const lastPlayedDieElement = Array.from(document.querySelectorAll(`#dice [data-played-at]`))
+		.map(target => new DieElement(target))
+		.reduce((mostRecentlyPlayedDieElement, dieElement) => mostRecentlyPlayedDieElement.playedAt > dieElement.playedAt ? mostRecentlyPlayedDieElement : dieElement);
 	const lastMovedCheckerElement = new CheckerElement(document.querySelector(`#checkers > [data-touched-according-to-die${(lastPlayedDieElement.id)}="true"]`));
 	// When reverting onto a stack of 5 or more checkers, make sure the latest one is on top for correct numbering purposes.
 	if (lastMovedCheckerElement.target.nextSibling !== null) {
@@ -236,13 +245,13 @@ document.getElementById(`undo`).addEventListener(`pointerover`, () => {
 });
 
 document.getElementById(`undo`).addEventListener(`click`, () => {
-	const playedDieElements = Array.from(document.querySelectorAll(`#dice [data-played="true"]`))
-		.map(target => new DieElement(target));
-	const lastPlayedDieElement = playedDieElements.pop();
+	const lastPlayedDieElement = Array.from(document.querySelectorAll(`#dice [data-played-at]`))
+		.map(target => new DieElement(target))
+		.reduce((mostRecentlyPlayedDieElement, dieElement) => mostRecentlyPlayedDieElement.playedAt > dieElement.playedAt ? mostRecentlyPlayedDieElement : dieElement);
 	const lastMovedCheckerElement = new CheckerElement(document.querySelector(`#checkers > [data-touched-according-to-die${(lastPlayedDieElement.id)}="true"]`));
 	lastMovedCheckerElement.point = new Checker(lastMovedCheckerElement.player, lastMovedCheckerElement.point).moveBy(-lastPlayedDieElement.value).point;
 	lastMovedCheckerElement.deleteTouchedAccordingToId(lastPlayedDieElement.id);
-	lastPlayedDieElement.played = false;
+	lastPlayedDieElement.playedAt = undefined;
 });
 
 document.getElementById(`roll-dice`).addEventListener(`click`, event => {
@@ -280,21 +289,19 @@ document.getElementById(`roll-dice`).addEventListener(`click`, event => {
 });
 
 function updateMovabilityOfCheckers() {
-	const dieElementTarget = document.querySelector(`#dice :not([data-played="true"])`);
-	const checkerElements = Array.from(document.getElementById(`checkers`).children)
-		.map(value => new CheckerElement(value));
-	if (dieElementTarget !== null) {
-		const dieElement = new DieElement(dieElementTarget);
-		checkerElements.forEach(checkerElement => {
-			const potentialDestinationPoint = new Checker(checkerElement.player, checkerElement.point).moveBy(dieElement.value).point;
-			const potentialDestinationCheckers = document.querySelectorAll(`#checkers > [data-point="${potentialDestinationPoint}"]`)
-			checkerElement.movable = potentialDestinationPoint >= 1 && potentialDestinationPoint <= 24 && (potentialDestinationCheckers.length <= 1 || new CheckerElement(potentialDestinationCheckers[0]).player === checkerElement.player);
+	const dieElements = Array.from(document.querySelectorAll(`#dice :not([data-played-at])`))
+		.map(target => new DieElement(target));
+	Array.from(document.getElementById(`checkers`).children)
+		.map(value => new CheckerElement(value))
+		.forEach(checkerElement => {
+			checkerElement.permissibleDestinationPoints = dieElements
+				.map(dieElement => new Checker(checkerElement.player, checkerElement.point).moveBy(dieElement.value).point)
+				.filter(potentialDestinationPoint => potentialDestinationPoint >= 1 && potentialDestinationPoint <= 24)
+				.filter(potentialDestinationPoint => {
+					const potentialDestinationCheckers = document.querySelectorAll(`#checkers > [data-point="${potentialDestinationPoint}"]`);
+					return potentialDestinationCheckers.length <= 1 || new CheckerElement(potentialDestinationCheckers[0]).player === checkerElement.player;
+				});
 		});
-	} else {
-		checkerElements.forEach(checkerElement => {
-			checkerElement.movable = false;
-		});
-	}
 }
 
 let ignoreCheckerClicks = false;
@@ -305,9 +312,11 @@ checkersElement.addEventListener(`click`, event => {
 		return;
 	}
 	const checkerElement = new CheckerElement(event.target.closest(`#checkers > *`));
-	if (!checkerElement.movable) return;
-	const dieElement = new DieElement(document.querySelector(`#dice :not([data-played="true"])`));
-	dieElement.played = true;
+	if (checkerElement.permissibleDestinationPoints.length === 0) return;
+	const dieElement = Array.from(document.querySelectorAll(`#dice :not([data-played-at])`))
+		.map(target => new DieElement(target))
+		.find(dieElement => checkerElement.permissibleDestinationPoints.includes(new Checker(checkerElement.player, checkerElement.point).moveBy(dieElement.value).point));
+	dieElement.playedAt = Date.now();
 	checkerElement.point = new Checker(checkerElement.player, checkerElement.point).moveBy(dieElement.value).point;
 	checkerElement.touchedAccordingToId = dieElement.id;
 });
@@ -325,7 +334,7 @@ checkersElement.addEventListener(`pointerover`, event => {
 });
 checkersElement.addEventListener('pointerdown', event => {
 	const checkerElement = new CheckerElement(event.target.closest(`#checkers > *`));
-	if (!checkerElement.movable) return;
+	if (checkerElement.permissibleDestinationPoints.length === 0) return;
 
 	checkerElement.target.setPointerCapture(event.pointerId);
 
@@ -373,13 +382,14 @@ checkersElement.addEventListener('pointerdown', event => {
 
 		checkerElement.target.style.translate = `${dx}px ${dy}px`;
 
-		const dieElement = new DieElement(document.querySelector(`#dice :not([data-played="true"])`));
-		const point = new Checker(checkerElement.player, checkerElement.point).moveBy(dieElement.value).point;
-		const dropPointElement = document.createElementNS(`http://www.w3.org/2000/svg`, `use`);
-		dropPointElement.setAttribute(`href`, `#drop-point`);
-		dropPointElement.dataset[`point`] = `${point}`
-		dropPointElement.style.setProperty(`--point`, `${point}`);
-		document.getElementById(`drop-points`).append(dropPointElement);
+		checkerElement.permissibleDestinationPoints
+			.forEach(permissibleDestinationPoint => {
+				const dropPointElement = document.createElementNS(`http://www.w3.org/2000/svg`, `use`);
+				dropPointElement.setAttribute(`href`, `#drop-point`);
+				dropPointElement.dataset[`point`] = `${permissibleDestinationPoint}`
+				dropPointElement.style.setProperty(`--point`, `${permissibleDestinationPoint}`);
+				document.getElementById(`drop-points`).append(dropPointElement);
+			});
 	};
 
 	const pointFromCoordinates = (coordinates) => {
@@ -422,12 +432,16 @@ checkersElement.addEventListener('pointerdown', event => {
 	};
 
 	const endDrag = (event) => {
-		const dieElement = new DieElement(document.querySelector(`#dice :not([data-played="true"])`));
-		const permissibleDestinationPoint = new Checker(checkerElement.player, checkerElement.point).moveBy(dieElement.value).point;
 		const coord = getPointerPosition(event);
 		const point = pointFromCoordinates(coord);
-		if (permissibleDestinationPoint === point) {
-			dieElement.played = true;
+		const dieElement = Array.from(document.querySelectorAll(`#dice :not([data-played-at])`))
+			.map(target => new DieElement(target))
+			.find(unplayedDieElement => {
+				const potentialDestinationPoint = new Checker(checkerElement.player, checkerElement.point).moveBy(unplayedDieElement.value).point;
+				return checkerElement.permissibleDestinationPoints.includes(potentialDestinationPoint) && potentialDestinationPoint === point;
+			});
+		if (dieElement !== undefined) {
+			dieElement.playedAt = Date.now();
 			checkerElement.point = point;
 			checkerElement.touchedAccordingToId = dieElement.id;
 		} else {
