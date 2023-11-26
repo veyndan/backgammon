@@ -342,13 +342,13 @@ checkersElement.addEventListener('pointerdown', event => {
 
 	const getPointerPosition = event => {
 		const CTM = svgElement.getScreenCTM();
-		return {
-			x: (event.clientX - CTM.e) / CTM.a,
-			y: (event.clientY - CTM.f) / CTM.d,
-		};
+		return new DOMPointReadOnly(
+			(event.clientX - CTM.e) / CTM.a,
+			(event.clientY - CTM.f) / CTM.d,
+		);
 	};
 
-	const offset = getPointerPosition(event);
+	const offset = DOMPoint.fromPoint(getPointerPosition(event));
 
 	// Replace string parsing with CSS Typed Object Model API when it's available on Firefox.
 	//  https://developer.mozilla.org/en-US/docs/Web/API/CSS_Typed_OM_API#browser_compatibility
