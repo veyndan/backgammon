@@ -338,10 +338,7 @@ checkersElement.addEventListener('pointerdown', event => {
 
 	checkerElement.target.setPointerCapture(event.pointerId);
 
-	const boundaryX1 = 0;
-	const boundaryX2 = checkersElement.getBBox().width;
-	const boundaryY1 = 0;
-	const boundaryY2 = checkersElement.getBBox().height;
+	const boundary = checkersElement.getBBox();
 
 	const getPointerPosition = event => {
 		const CTM = svgElement.getScreenCTM();
@@ -365,10 +362,10 @@ checkersElement.addEventListener('pointerdown', event => {
 
 	// BEGIN Confine
 	const bbox = checkerElement.target.getBBox();
-	const minX = boundaryX1 - bbox.x;
-	const maxX = boundaryX2 - bbox.x - bbox.width;
-	const minY = boundaryY1 - bbox.y;
-	const maxY = boundaryY2 - bbox.y - bbox.height;
+	const minX = boundary.x - bbox.x;
+	const maxX = boundary.x + boundary.width - bbox.x - bbox.width;
+	const minY = boundary.y - bbox.y;
+	const maxY = boundary.y + boundary.height - bbox.y - bbox.height;
 	// END Confine
 
 	const drag = event => {
