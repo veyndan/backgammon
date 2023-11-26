@@ -91,17 +91,17 @@ class CheckerElement {
 	}
 
 	/**
-	 * @param {string} value
+	 * @return {number[]}
 	 */
-	set touchedAccordingToId(value) {
-		this.target.dataset[`touchedAccordingToDie${value}`] = String(true);
+	get touchedAccordingToDiceValues() {
+		return JSON.parse(this.target.dataset[`touchedAccordingToDiceValues`] ?? `[]`);
 	}
 
 	/**
-	 * @param {string} value
+	 * @param {number[]} value
 	 */
-	deleteTouchedAccordingToId(value) {
-		delete this.target.dataset[`touchedAccordingToDie${value}`];
+	set touchedAccordingToDiceValues(value) {
+		this.target.dataset[`touchedAccordingToDiceValues`] = JSON.stringify(value);
 	}
 }
 
@@ -237,7 +237,9 @@ document.getElementById(`undo`).addEventListener(`pointerover`, () => {
 	const lastPlayedDieElement = Array.from(document.querySelectorAll(`#dice [data-played-at]`))
 		.map(target => new DieElement(target))
 		.reduce((mostRecentlyPlayedDieElement, dieElement) => mostRecentlyPlayedDieElement.playedAt > dieElement.playedAt ? mostRecentlyPlayedDieElement : dieElement);
-	const lastMovedCheckerElement = new CheckerElement(document.querySelector(`#checkers > [data-touched-according-to-die${(lastPlayedDieElement.id)}="true"]`));
+	const lastMovedCheckerElement = Array.from(document.querySelectorAll(`#checkers > *`))
+		.map(target => new CheckerElement(target))
+		.find(checkerElement => checkerElement.touchedAccordingToDiceValues.indexOf(lastPlayedDieElement.value) !== -1);
 	// When reverting onto a stack of 5 or more checkers, make sure the latest one is on top for correct numbering purposes.
 	if (lastMovedCheckerElement.target.nextSibling !== null) {
 		checkersElement.appendChild(lastMovedCheckerElement.target);
@@ -248,9 +250,11 @@ document.getElementById(`undo`).addEventListener(`click`, () => {
 	const lastPlayedDieElement = Array.from(document.querySelectorAll(`#dice [data-played-at]`))
 		.map(target => new DieElement(target))
 		.reduce((mostRecentlyPlayedDieElement, dieElement) => mostRecentlyPlayedDieElement.playedAt > dieElement.playedAt ? mostRecentlyPlayedDieElement : dieElement);
-	const lastMovedCheckerElement = new CheckerElement(document.querySelector(`#checkers > [data-touched-according-to-die${(lastPlayedDieElement.id)}="true"]`));
+	const lastMovedCheckerElement = Array.from(document.querySelectorAll(`#checkers > *`))
+		.map(target => new CheckerElement(target))
+		.find(checkerElement => checkerElement.touchedAccordingToDiceValues.indexOf(lastPlayedDieElement.value) !== -1);
 	lastMovedCheckerElement.point = new Checker(lastMovedCheckerElement.player, lastMovedCheckerElement.point).moveBy(-lastPlayedDieElement.value).point;
-	lastMovedCheckerElement.deleteTouchedAccordingToId(lastPlayedDieElement.id);
+	lastMovedCheckerElement.touchedAccordingToDiceValues = lastMovedCheckerElement.touchedAccordingToDiceValues.slice(0, -1);
 	lastPlayedDieElement.playedAt = undefined;
 });
 
@@ -318,7 +322,7 @@ checkersElement.addEventListener(`click`, event => {
 		.find(dieElement => checkerElement.permissibleDestinationPoints.includes(new Checker(checkerElement.player, checkerElement.point).moveBy(dieElement.value).point));
 	dieElement.playedAt = Date.now();
 	checkerElement.point = new Checker(checkerElement.player, checkerElement.point).moveBy(dieElement.value).point;
-	checkerElement.touchedAccordingToId = dieElement.id;
+	checkerElement.touchedAccordingToDiceValues = checkerElement.touchedAccordingToDiceValues.concat(dieElement.value);
 });
 checkersElement.addEventListener(`pointerover`, event => {
 	const checkerElementTarget = event.target.closest(`#checkers > *`);
@@ -438,7 +442,7 @@ checkersElement.addEventListener('pointerdown', event => {
 		if (dieElement !== undefined) {
 			dieElement.playedAt = Date.now();
 			checkerElement.point = point;
-			checkerElement.touchedAccordingToId = dieElement.id;
+			checkerElement.touchedAccordingToDiceValues = checkerElement.touchedAccordingToDiceValues.concat(dieElement.value);
 		} else {
 			// Triggers movement back to point of origin.
 			// noinspection SillyAssignmentJS
