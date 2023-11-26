@@ -38,17 +38,17 @@ class CheckerElement {
 	}
 
 	/**
-	 * @return {number[]}
+	 * @return {Set<number>}
 	 */
 	get permissibleDestinationPoints() {
-		return JSON.parse(this.target.dataset[`permissibleDestinationPoints`] ?? "[]");
+		return new Set(JSON.parse(this.target.dataset[`permissibleDestinationPoints`] ?? "[]"));
 	}
 
 	/**
-	 * @param {number[]} value
+	 * @param {Set<number>} value
 	 */
 	set permissibleDestinationPoints(value) {
-		this.target.dataset[`permissibleDestinationPoints`] = JSON.stringify(value);
+		this.target.dataset[`permissibleDestinationPoints`] = JSON.stringify(Array.from(value));
 	}
 
 	/**
@@ -289,13 +289,15 @@ function updateMovabilityOfCheckers() {
 	Array.from(document.getElementById(`checkers`).children)
 		.map(value => new CheckerElement(value))
 		.forEach(checkerElement => {
-			checkerElement.permissibleDestinationPoints = dieElements
-				.map(dieElement => new Checker(checkerElement.player, checkerElement.point).moveBy(dieElement.value).point)
-				.filter(potentialDestinationPoint => potentialDestinationPoint >= 1 && potentialDestinationPoint <= 24)
-				.filter(potentialDestinationPoint => {
-					const potentialDestinationCheckers = document.querySelectorAll(`#checkers > [data-point="${potentialDestinationPoint}"]`);
-					return potentialDestinationCheckers.length <= 1 || new CheckerElement(potentialDestinationCheckers[0]).player === checkerElement.player;
-				});
+			checkerElement.permissibleDestinationPoints = new Set(
+				dieElements
+					.map(dieElement => new Checker(checkerElement.player, checkerElement.point).moveBy(dieElement.value).point)
+					.filter(potentialDestinationPoint => potentialDestinationPoint >= 1 && potentialDestinationPoint <= 24)
+					.filter(potentialDestinationPoint => {
+						const potentialDestinationCheckers = document.querySelectorAll(`#checkers > [data-point="${potentialDestinationPoint}"]`);
+						return potentialDestinationCheckers.length <= 1 || new CheckerElement(potentialDestinationCheckers[0]).player === checkerElement.player;
+					})
+			);
 		});
 }
 
@@ -307,10 +309,10 @@ checkersElement.addEventListener(`click`, event => {
 		return;
 	}
 	const checkerElement = new CheckerElement(event.target.closest(`#checkers > *`));
-	if (checkerElement.permissibleDestinationPoints.length === 0) return;
+	if (checkerElement.permissibleDestinationPoints.size === 0) return;
 	const dieElement = Array.from(document.querySelectorAll(`#dice :not([data-played-at])`))
 		.map(target => new DieElement(target))
-		.find(dieElement => checkerElement.permissibleDestinationPoints.includes(new Checker(checkerElement.player, checkerElement.point).moveBy(dieElement.value).point));
+		.find(dieElement => checkerElement.permissibleDestinationPoints.has(new Checker(checkerElement.player, checkerElement.point).moveBy(dieElement.value).point));
 	dieElement.playedAt = Date.now();
 	checkerElement.point = new Checker(checkerElement.player, checkerElement.point).moveBy(dieElement.value).point;
 	checkerElement.touchedAccordingToDiceValues = checkerElement.touchedAccordingToDiceValues.concat(dieElement.value);
@@ -329,7 +331,7 @@ checkersElement.addEventListener(`pointerover`, event => {
 });
 checkersElement.addEventListener('pointerdown', event => {
 	const checkerElement = new CheckerElement(event.target.closest(`#checkers > *`));
-	if (checkerElement.permissibleDestinationPoints.length === 0) return;
+	if (checkerElement.permissibleDestinationPoints.size === 0) return;
 
 	checkerElement.target.setPointerCapture(event.pointerId);
 
@@ -428,7 +430,7 @@ checkersElement.addEventListener('pointerdown', event => {
 			.map(target => new DieElement(target))
 			.find(unplayedDieElement => {
 				const potentialDestinationPoint = new Checker(checkerElement.player, checkerElement.point).moveBy(unplayedDieElement.value).point;
-				return checkerElement.permissibleDestinationPoints.includes(potentialDestinationPoint) && potentialDestinationPoint === point;
+				return checkerElement.permissibleDestinationPoints.has(potentialDestinationPoint) && potentialDestinationPoint === point;
 			});
 		if (dieElement !== undefined) {
 			dieElement.playedAt = Date.now();
