@@ -342,10 +342,8 @@ checkersElement.addEventListener('pointerdown', event => {
 
 	const getPointerPosition = event => {
 		const CTM = svgElement.getScreenCTM();
-		return new DOMPointReadOnly(
-			(event.clientX - CTM.e) / CTM.a,
-			(event.clientY - CTM.f) / CTM.d,
-		);
+		const clientPoint = new DOMPointReadOnly(event.clientX, event.clientY);
+		return clientPoint.matrixTransform(CTM.inverse());
 	};
 
 	const offset = DOMPoint.fromPoint(getPointerPosition(event));
