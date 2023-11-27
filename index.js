@@ -363,16 +363,10 @@ checkersElement.addEventListener('pointerdown', event => {
 	const maxY = boundary.y + boundary.height - bbox.y - bbox.height;
 	// END Confine
 
-	const drag = event => {
+	const initializeDrag = () => {
 		ignoreCheckerClicks = true;
 		checkerElement.target.classList.add(`dragging`);
 		event.preventDefault();
-
-		const coord = getPointerPosition(event);
-		const dx = Math.clamp(coord.x - offset.x, minX, maxX);
-		const dy = Math.clamp(coord.y - offset.y, minY, maxY);
-
-		checkerElement.target.style.translate = `${dx}px ${dy}px`;
 
 		checkerElement.permissibleDestinationPoints
 			.forEach(permissibleDestinationPoint => {
@@ -382,6 +376,16 @@ checkersElement.addEventListener('pointerdown', event => {
 				dropPointElement.style.setProperty(`--point`, `${permissibleDestinationPoint}`);
 				document.getElementById(`drop-points`).append(dropPointElement);
 			});
+	};
+
+	const drag = event => {
+		event.preventDefault();
+
+		const coord = getPointerPosition(event);
+		const dx = Math.clamp(coord.x - offset.x, minX, maxX);
+		const dy = Math.clamp(coord.y - offset.y, minY, maxY);
+
+		checkerElement.target.style.translate = `${dx}px ${dy}px`;
 	};
 
 	const pointFromCoordinates = (coordinates) => {
@@ -444,6 +448,7 @@ checkersElement.addEventListener('pointerdown', event => {
 		document.getElementById(`drop-points`).replaceChildren();
 		checkerElement.target.classList.remove(`dragging`);
 		checkerElement.target.style.translate = null;
+		checkerElement.target.removeEventListener(`pointermove`, initializeDrag);
 		checkerElement.target.removeEventListener(`pointermove`, drag);
 		checkerElement.target.removeEventListener('pointerup', endDrag);
 		checkerElement.target.removeEventListener('pointerleave', endDrag);
@@ -457,6 +462,7 @@ checkersElement.addEventListener('pointerdown', event => {
 			checkerElement.target.classList.remove(`dragging`);
 			checkerElement.target.style.translate = null;
 			document.getElementById(`drop-points`).replaceChildren();
+			checkerElement.target.removeEventListener(`pointermove`, initializeDrag);
 			checkerElement.target.removeEventListener(`pointermove`, drag);
 			checkerElement.target.removeEventListener('pointerup', endDrag);
 			checkerElement.target.removeEventListener('pointerleave', endDrag);
@@ -465,6 +471,7 @@ checkersElement.addEventListener('pointerdown', event => {
 		}
 	};
 	addEventListener(`keydown`, keydownEventListener);
+	checkerElement.target.addEventListener('pointermove', initializeDrag, {once: true});
 	checkerElement.target.addEventListener('pointermove', drag);
 	checkerElement.target.addEventListener('pointerup', endDrag);
 	checkerElement.target.addEventListener('pointerleave', endDrag);
