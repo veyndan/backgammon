@@ -91,6 +91,14 @@ class CheckerElement {
 	}
 
 	/**
+	 * @param {number} value
+	 */
+	set pointStackCount(value) {
+		this.target.dataset[`pointStackCount`] = `${value}`
+		this.target.style.setProperty(`--point-stack-count`, `${value}`);
+	}
+
+	/**
 	 * @return {number[]}
 	 */
 	get touchedAccordingToDiceValues() {
@@ -171,12 +179,18 @@ const checkersObserver = new MutationObserver(mutations => {
 		const checkerElement = new CheckerElement(mutation.target);
 		if (checkerElement.point !== Number(mutation.oldValue)) {
 			checkerElement.pointStackIndex = document.querySelectorAll(`#checkers > [data-point="${(checkerElement.point)}"]`).length - 1;
+			Array.from(document.querySelectorAll(`#checkers > [data-point="${(checkerElement.point)}"]`))
+				.map(target => new CheckerElement(target))
+				.forEach((checkerElement, _, checkerElements) => {
+					checkerElement.pointStackCount = checkerElements.length;
+				});
 			// When moving a checker that isn't on the top of the stack, reposition the checkers such that there is no longer a gap.
 			Array.from(document.querySelectorAll(`#checkers > [data-point="${mutation.oldValue}"]`))
 				.map(target => new CheckerElement(target))
 				.sort((a, b) => a.pointStackIndex - b.pointStackIndex)
-				.forEach((checkerElement, index) => {
+				.forEach((checkerElement, index, checkerElements) => {
 					checkerElement.pointStackIndex = index;
+					checkerElement.pointStackCount = checkerElements.length;
 				});
 		}
 		updateMovabilityOfCheckers();
@@ -223,19 +237,6 @@ diceObserver.observe(
 		subtree: true,
 	},
 );
-
-document.getElementById(`undo`).addEventListener(`pointerover`, () => {
-	const lastPlayedDieElement = Array.from(document.querySelectorAll(`#dice [data-played-at]`))
-		.map(target => new DieElement(target))
-		.reduce((mostRecentlyPlayedDieElement, dieElement) => mostRecentlyPlayedDieElement.playedAt > dieElement.playedAt ? mostRecentlyPlayedDieElement : dieElement);
-	const lastMovedCheckerElement = Array.from(document.querySelectorAll(`#checkers > *`))
-		.map(target => new CheckerElement(target))
-		.find(checkerElement => checkerElement.touchedAccordingToDiceValues.indexOf(lastPlayedDieElement.value) !== -1);
-	// When reverting onto a stack of 5 or more checkers, make sure the latest one is on top for correct numbering purposes.
-	if (lastMovedCheckerElement.target.nextSibling !== null) {
-		checkersElement.appendChild(lastMovedCheckerElement.target);
-	}
-});
 
 document.getElementById(`undo`).addEventListener(`click`, () => {
 	const lastPlayedDieElement = Array.from(document.querySelectorAll(`#dice [data-played-at]`))
