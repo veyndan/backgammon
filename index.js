@@ -280,7 +280,7 @@ function updateMovabilityOfCheckers() {
 			checkerElement.permissibleDestinationPoints = new Set(
 				dieElements
 					.map(dieElement => new Checker(checkerElement.player, checkerElement.point).moveBy(dieElement.value).point)
-					.filter(potentialDestinationPoint => potentialDestinationPoint.value >= 1 && potentialDestinationPoint.value <= 24)
+					.filter(potentialDestinationPoint => potentialDestinationPoint.value >= Point.MIN.value && potentialDestinationPoint.value <= Point.MAX.value)
 					.filter(potentialDestinationPoint => {
 						const potentialDestinationCheckers = document.querySelectorAll(`#checkers > [data-point="${potentialDestinationPoint.value}"]`);
 						return potentialDestinationCheckers.length <= 1 || new CheckerElement(potentialDestinationCheckers[0]).player === checkerElement.player;
