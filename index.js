@@ -7,6 +7,7 @@
  * @return {number}
  */
 import Checker from "./checker.js";
+import Point from "./point.js";
 
 Math.clamp = function (x, lower, upper) {
 	return Math.min(Math.max(x, lower), upper);
@@ -21,17 +22,20 @@ class CheckerElement {
 	}
 
 	/**
-	 * @return {Set<number>}
+	 * @return {Set<Point>}
 	 */
 	get permissibleDestinationPoints() {
-		return new Set(JSON.parse(this.target.dataset[`permissibleDestinationPoints`] ?? "[]"));
+		return new Set(
+			JSON.parse(this.target.dataset[`permissibleDestinationPoints`] ?? "[]")
+				.map(value => new Point(value)),
+		);
 	}
 
 	/**
-	 * @param {Set<number>} value
+	 * @param {Set<Point>} value
 	 */
 	set permissibleDestinationPoints(value) {
-		this.target.dataset[`permissibleDestinationPoints`] = JSON.stringify(Array.from(value));
+		this.target.dataset[`permissibleDestinationPoints`] = JSON.stringify(Array.from(value).map(point => point.value));
 	}
 
 	/**
@@ -42,18 +46,18 @@ class CheckerElement {
 	}
 
 	/**
-	 * @return {number}
+	 * @return {Point}
 	 */
 	get point() {
-		return Number(this.target.dataset[`point`]);
+		return new Point(Number(this.target.dataset[`point`]));
 	}
 
 	/**
-	 * @param {number} value
+	 * @param {Point} value
 	 */
 	set point(value) {
-		this.target.dataset[`point`] = `${value}`
-		this.target.style.setProperty(`--point`, `${value}`);
+		this.target.dataset[`point`] = `${value.value}`
+		this.target.style.setProperty(`--point`, `${value.value}`);
 	}
 
 	/**
@@ -160,9 +164,9 @@ const checkersElement = document.getElementById('checkers');
 const checkersObserver = new MutationObserver(mutations => {
 	mutations.forEach(mutation => {
 		const checkerElement = new CheckerElement(mutation.target);
-		if (checkerElement.point !== Number(mutation.oldValue)) {
-			checkerElement.pointStackIndex = document.querySelectorAll(`#checkers > [data-point="${(checkerElement.point)}"]`).length - 1;
-			Array.from(document.querySelectorAll(`#checkers > [data-point="${(checkerElement.point)}"]`))
+		if (checkerElement.point.value !== Number(mutation.oldValue)) {
+			checkerElement.pointStackIndex = document.querySelectorAll(`#checkers > [data-point="${(checkerElement.point.value)}"]`).length - 1;
+			Array.from(document.querySelectorAll(`#checkers > [data-point="${(checkerElement.point.value)}"]`))
 				.map(target => new CheckerElement(target))
 				.forEach((checkerElement, _, checkerElements) => {
 					checkerElement.pointStackCount = checkerElements.length;
@@ -276,11 +280,11 @@ function updateMovabilityOfCheckers() {
 			checkerElement.permissibleDestinationPoints = new Set(
 				dieElements
 					.map(dieElement => new Checker(checkerElement.player, checkerElement.point).moveBy(dieElement.value).point)
-					.filter(potentialDestinationPoint => potentialDestinationPoint >= 1 && potentialDestinationPoint <= 24)
+					.filter(potentialDestinationPoint => potentialDestinationPoint.value >= 1 && potentialDestinationPoint.value <= 24)
 					.filter(potentialDestinationPoint => {
-						const potentialDestinationCheckers = document.querySelectorAll(`#checkers > [data-point="${potentialDestinationPoint}"]`);
+						const potentialDestinationCheckers = document.querySelectorAll(`#checkers > [data-point="${potentialDestinationPoint.value}"]`);
 						return potentialDestinationCheckers.length <= 1 || new CheckerElement(potentialDestinationCheckers[0]).player === checkerElement.player;
-					})
+					}),
 			);
 		});
 }
@@ -296,7 +300,11 @@ checkersElement.addEventListener(`click`, event => {
 	if (checkerElement.permissibleDestinationPoints.size === 0) return;
 	const dieElement = Array.from(document.querySelectorAll(`#dice :not([data-played-at])`))
 		.map(target => new DieElement(target))
-		.find(dieElement => checkerElement.permissibleDestinationPoints.has(new Checker(checkerElement.player, checkerElement.point).moveBy(dieElement.value).point));
+		.find(dieElement =>
+			Array.from(checkerElement.permissibleDestinationPoints)
+				.map(permissibleDestinationPoint => permissibleDestinationPoint.value)
+				.includes(new Checker(checkerElement.player, checkerElement.point).moveBy(dieElement.value).point.value),
+		);
 	dieElement.playedAt = Date.now();
 	checkerElement.point = new Checker(checkerElement.player, checkerElement.point).moveBy(dieElement.value).point;
 	checkerElement.touchedAccordingToDiceValues = checkerElement.touchedAccordingToDiceValues.concat(dieElement.value);
@@ -356,8 +364,8 @@ checkersElement.addEventListener('pointerdown', event => {
 			.forEach(permissibleDestinationPoint => {
 				const dropPointElement = document.createElementNS(`http://www.w3.org/2000/svg`, `use`);
 				dropPointElement.setAttribute(`href`, `#drop-point`);
-				dropPointElement.dataset[`point`] = `${permissibleDestinationPoint}`
-				dropPointElement.style.setProperty(`--point`, `${permissibleDestinationPoint}`);
+				dropPointElement.dataset[`point`] = `${permissibleDestinationPoint.value}`
+				dropPointElement.style.setProperty(`--point`, `${permissibleDestinationPoint.value}`);
 				document.getElementById(`drop-points`).append(dropPointElement);
 			});
 	};
@@ -393,19 +401,19 @@ checkersElement.addEventListener('pointerdown', event => {
 		}
 		if (additionalPoints !== null) {
 			if (dx <= halfBBox.width - (checkerDiameter / 2)) {
-				point = multiplier * Math.round(dx / checkerDiameter + 1) + additionalPoints;
+				point = new Point(multiplier * Math.round(dx / checkerDiameter + 1) + additionalPoints);
 			} else if (dx >= halfBBox.width && dx <= (halfBBox.width + barWidth - checkerDiameter)) {
 				point = null
 			} else if (dx < halfBBox.width) {
 				// If most of the checker is on the bar, but some of it is on a point in the left half of the board,
 				// just put it on the point on the left half.
-				point = additionalPoints + multiplier * 6;
+				point = new Point(additionalPoints + multiplier * 6);
 			} else if (dx < halfBBox.width + barWidth - (checkerDiameter / 2)) {
 				// If most of the checker is on the bar, but some of it is on a point in the right half of the board,
 				// just put it on the point on the right half.
-				point = additionalPoints + multiplier * 7;
+				point = new Point(additionalPoints + multiplier * 7);
 			} else {
-				point = multiplier * Math.round((dx - barWidth) / checkerDiameter + 1) + additionalPoints;
+				point = new Point(multiplier * Math.round((dx - barWidth) / checkerDiameter + 1) + additionalPoints);
 			}
 		}
 		return point;
@@ -418,7 +426,7 @@ checkersElement.addEventListener('pointerdown', event => {
 			.map(target => new DieElement(target))
 			.find(unplayedDieElement => {
 				const potentialDestinationPoint = new Checker(checkerElement.player, checkerElement.point).moveBy(unplayedDieElement.value).point;
-				return checkerElement.permissibleDestinationPoints.has(potentialDestinationPoint) && potentialDestinationPoint === point;
+				return Array.from(checkerElement.permissibleDestinationPoints).map(permissibleDestinationPoint => permissibleDestinationPoint.value).includes(potentialDestinationPoint.value) && point !== null && potentialDestinationPoint.value === point.value;
 			});
 		if (dieElement !== undefined) {
 			dieElement.playedAt = Date.now();

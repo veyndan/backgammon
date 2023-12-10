@@ -1,7 +1,9 @@
+import Point from "./point.js";
+
 export default class Checker {
 	/**
 	 * @param {string} player
-	 * @param {number} point
+	 * @param {Point} point
 	 */
 	constructor(player, point) {
 		this.player = player;
@@ -13,6 +15,6 @@ export default class Checker {
 	 * @return {Checker}
 	 */
 	moveBy(offset) {
-		return new Checker(this.player, this.point + (this.player === `1` ? -offset : offset));
+		return new Checker(this.player, new Point(this.point.value + (this.player === `1` ? -offset : offset)));
 	}
 }
