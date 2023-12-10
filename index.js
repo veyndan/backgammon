@@ -279,8 +279,9 @@ function updateMovabilityOfCheckers() {
 		.forEach(checkerElement => {
 			checkerElement.permissibleDestinationPoints = new Set(
 				dieElements
-					.map(dieElement => new Checker(checkerElement.player, checkerElement.point).moveBy(dieElement.value).point)
-					.filter(potentialDestinationPoint => potentialDestinationPoint.value >= Point.MIN.value && potentialDestinationPoint.value <= Point.MAX.value)
+					.map(dieElement => new Checker(checkerElement.player, checkerElement.point).moveBy(dieElement.value))
+					.filter(potentialCheckerMovement => potentialCheckerMovement !== null)
+					.map(potentialCheckerMovement => potentialCheckerMovement.point)
 					.filter(potentialDestinationPoint => {
 						const potentialDestinationCheckers = document.querySelectorAll(`#checkers > [data-point="${potentialDestinationPoint.value}"]`);
 						return potentialDestinationCheckers.length <= 1 || new CheckerElement(potentialDestinationCheckers[0]).player === checkerElement.player;
@@ -302,8 +303,10 @@ checkersElement.addEventListener(`click`, event => {
 		.map(target => new DieElement(target))
 		.find(dieElement =>
 			Array.from(checkerElement.permissibleDestinationPoints)
-				.map(permissibleDestinationPoint => permissibleDestinationPoint.value)
-				.includes(new Checker(checkerElement.player, checkerElement.point).moveBy(dieElement.value).point.value),
+				.some(permissibleDestinationPoint => {
+					const potentialDestinationChecker = new Checker(checkerElement.player, checkerElement.point).moveBy(dieElement.value);
+					return potentialDestinationChecker !== null && potentialDestinationChecker.point.value === permissibleDestinationPoint.value;
+				}),
 		);
 	dieElement.playedAt = Date.now();
 	checkerElement.point = new Checker(checkerElement.player, checkerElement.point).moveBy(dieElement.value).point;
@@ -425,8 +428,8 @@ checkersElement.addEventListener('pointerdown', event => {
 		const dieElement = Array.from(document.querySelectorAll(`#dice :not([data-played-at])`))
 			.map(target => new DieElement(target))
 			.find(unplayedDieElement => {
-				const potentialDestinationPoint = new Checker(checkerElement.player, checkerElement.point).moveBy(unplayedDieElement.value).point;
-				return Array.from(checkerElement.permissibleDestinationPoints).map(permissibleDestinationPoint => permissibleDestinationPoint.value).includes(potentialDestinationPoint.value) && point !== null && potentialDestinationPoint.value === point.value;
+				const potentialDestinationChecker = new Checker(checkerElement.player, checkerElement.point).moveBy(unplayedDieElement.value);
+				return potentialDestinationChecker !== null && Array.from(checkerElement.permissibleDestinationPoints).map(permissibleDestinationPoint => permissibleDestinationPoint.value).includes(potentialDestinationChecker.point.value) && point !== null && potentialDestinationChecker.point.value === point.value;
 			});
 		if (dieElement !== undefined) {
 			dieElement.playedAt = Date.now();

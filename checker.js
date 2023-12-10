@@ -12,9 +12,14 @@ export default class Checker {
 
 	/**
 	 * @param {number} offset
-	 * @return {Checker}
+	 * @return {?Checker}
 	 */
 	moveBy(offset) {
-		return new Checker(this.player, new Point(this.point.value + (this.player === `1` ? -offset : offset)));
+		const potentialPoint = this.point.value + (this.player === `1` ? -offset : offset);
+		if (potentialPoint < Point.MIN.value || potentialPoint > Point.MAX.value) {
+			return null;
+		} else {
+			return new Checker(this.player, new Point(potentialPoint));
+		}
 	}
 }
