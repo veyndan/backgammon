@@ -8,6 +8,7 @@
  */
 import Checker from "./checker.js";
 import Point from "./point.js";
+import Player from "./player.js";
 
 Math.clamp = function (x, lower, upper) {
 	return Math.min(Math.max(x, lower), upper);
@@ -39,10 +40,10 @@ class CheckerElement {
 	}
 
 	/**
-	 * @return {string}
+	 * @return {Player}
 	 */
 	get player() {
-		return this.target.dataset[`player`];
+		return new Player(this.target.dataset[`player`]);
 	}
 
 	/**
@@ -284,7 +285,7 @@ function updateMovabilityOfCheckers() {
 					.map(potentialCheckerMovement => potentialCheckerMovement.point)
 					.filter(potentialDestinationPoint => {
 						const potentialDestinationCheckers = document.querySelectorAll(`#checkers > [data-point="${potentialDestinationPoint.value}"]`);
-						return potentialDestinationCheckers.length <= 1 || new CheckerElement(potentialDestinationCheckers[0]).player === checkerElement.player;
+						return potentialDestinationCheckers.length <= 1 || new CheckerElement(potentialDestinationCheckers[0]).player.value === checkerElement.player.value;
 					}),
 			);
 		});

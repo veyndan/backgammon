@@ -1,8 +1,9 @@
 import Point from "./point.js";
+import Player from "./player.js";
 
 export default class Checker {
 	/**
-	 * @param {string} player
+	 * @param {Player} player
 	 * @param {Point} point
 	 */
 	constructor(player, point) {
@@ -15,7 +16,7 @@ export default class Checker {
 	 * @return {?Checker}
 	 */
 	moveBy(offset) {
-		const potentialPoint = this.point.value + (this.player === `1` ? -offset : offset);
+		const potentialPoint = this.point.value + (this.player.value === Player.One.value ? -offset : offset);
 		if (potentialPoint < Point.MIN.value || potentialPoint > Point.MAX.value) {
 			return null;
 		} else {
