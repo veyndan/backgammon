@@ -6,28 +6,11 @@
  * @param {number} upper
  * @return {number}
  */
+import Checker from "./checker.js";
+
 Math.clamp = function (x, lower, upper) {
 	return Math.min(Math.max(x, lower), upper);
 };
-
-class Checker {
-	/**
-	 * @param {string} player
-	 * @param {number} point
-	 */
-	constructor(player, point) {
-		this.player = player;
-		this.point = point;
-	}
-
-	/**
-	 * @param {number} offset
-	 * @return {Checker}
-	 */
-	moveBy(offset) {
-		return new Checker(this.player, this.point + (this.player === `1` ? -offset : offset))
-	}
-}
 
 class CheckerElement {
 	/**
