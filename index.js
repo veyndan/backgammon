@@ -423,6 +423,8 @@ checkersElement.addEventListener('pointerdown', event => {
 		return point;
 	};
 
+	const abortController = new AbortController();
+
 	const endDrag = (event) => {
 		const coord = getPointerPosition(event);
 		const point = pointFromCoordinates(coord);
@@ -444,12 +446,7 @@ checkersElement.addEventListener('pointerdown', event => {
 		document.getElementById(`drop-points`).replaceChildren();
 		checkerElement.target.classList.remove(`dragging`);
 		checkerElement.target.style.translate = null;
-		checkerElement.target.removeEventListener(`pointermove`, initializeDrag);
-		checkerElement.target.removeEventListener(`pointermove`, drag);
-		checkerElement.target.removeEventListener('pointerup', endDrag);
-		checkerElement.target.removeEventListener('pointerleave', endDrag);
-		checkerElement.target.removeEventListener('pointercancel', endDrag);
-		removeEventListener(`keydown`, keydownEventListener);
+		abortController.abort();
 	};
 
 	const keydownEventListener = (event) => {
@@ -458,18 +455,13 @@ checkersElement.addEventListener('pointerdown', event => {
 			checkerElement.target.classList.remove(`dragging`);
 			checkerElement.target.style.translate = null;
 			document.getElementById(`drop-points`).replaceChildren();
-			checkerElement.target.removeEventListener(`pointermove`, initializeDrag);
-			checkerElement.target.removeEventListener(`pointermove`, drag);
-			checkerElement.target.removeEventListener('pointerup', endDrag);
-			checkerElement.target.removeEventListener('pointerleave', endDrag);
-			checkerElement.target.removeEventListener('pointercancel', endDrag);
-			removeEventListener(`keydown`, keydownEventListener);
+			abortController.abort();
 		}
 	};
-	addEventListener(`keydown`, keydownEventListener);
-	checkerElement.target.addEventListener('pointermove', initializeDrag, {once: true});
-	checkerElement.target.addEventListener('pointermove', drag);
-	checkerElement.target.addEventListener('pointerup', endDrag);
-	checkerElement.target.addEventListener('pointerleave', endDrag);
-	checkerElement.target.addEventListener('pointercancel', endDrag);
+	addEventListener(`keydown`, keydownEventListener, {signal: abortController.signal});
+	checkerElement.target.addEventListener('pointermove', initializeDrag, {once: true, signal: abortController.signal});
+	checkerElement.target.addEventListener('pointermove', drag, {signal: abortController.signal});
+	checkerElement.target.addEventListener('pointerup', endDrag, {signal: abortController.signal});
+	checkerElement.target.addEventListener('pointerleave', endDrag, {signal: abortController.signal});
+	checkerElement.target.addEventListener('pointercancel', endDrag, {signal: abortController.signal});
 });
