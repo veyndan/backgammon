@@ -79,6 +79,13 @@ class CheckerElement {
 	}
 
 	/**
+	 * @return {number}
+	 */
+	get pointStackCount() {
+		return Number(this.target.dataset[`pointStackCount`]);
+	}
+
+	/**
 	 * @param {number} value
 	 */
 	set pointStackCount(value) {
@@ -232,6 +239,7 @@ document.getElementById(`undo`).addEventListener(`click`, () => {
 		.reduce((mostRecentlyPlayedDieElement, dieElement) => mostRecentlyPlayedDieElement.playedAt > dieElement.playedAt ? mostRecentlyPlayedDieElement : dieElement);
 	const lastMovedCheckerElement = Array.from(document.querySelectorAll(`#checkers > *`))
 		.map(target => new CheckerElement(target))
+		.filter(checkerElement => checkerElement.pointStackIndex === checkerElement.pointStackCount - 1)
 		.find(checkerElement => checkerElement.touchedAccordingToDiceValues.indexOf(lastPlayedDieElement.value) !== -1);
 	lastMovedCheckerElement.point = new Checker(lastMovedCheckerElement.player, lastMovedCheckerElement.point).moveBy(-lastPlayedDieElement.value).point;
 	lastMovedCheckerElement.touchedAccordingToDiceValues = lastMovedCheckerElement.touchedAccordingToDiceValues.slice(0, -1);
