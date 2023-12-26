@@ -203,23 +203,23 @@ checkersObserver.observe(
 
 const diceObserver = new MutationObserver(mutations => {
 	mutations.forEach(mutation => {
+		document.getElementById(`confirm`).style.display = `unset`;
+		document.getElementById(`undo`).style.display = `unset`;
 		const dieElement = new DieElement(mutation.target)
 		if (dieElement.playedAt !== undefined) {
-			document.getElementById(`undo`).style.display = `unset`;
+			document.getElementById(`undo`).disabled = false;
 			const unplayedDieElements = Array.from(document.querySelectorAll(`#dice :not([data-played-at])`))
 				.map(target => new DieElement(target));
 			if (unplayedDieElements.length === 0) {
-				document.getElementById(`dice`).style.display = `none`;
-				document.getElementById(`confirm`).style.display = `unset`;
+				document.getElementById(`confirm`).disabled = false;
 			}
 		} else {
 			const playedDieElements = Array.from(document.querySelectorAll(`#dice [data-played-at]`))
 				.map(target => new DieElement(target));
 			if (playedDieElements.length === 0) {
-				document.getElementById(`undo`).style.display = `none`;
+				document.getElementById(`undo`).disabled = true;
 			} else {
-				document.getElementById(`dice`).style.display = `unset`;
-				document.getElementById(`confirm`).style.display = `none`;
+				document.getElementById(`confirm`).disabled = true;
 			}
 		}
 	});
@@ -248,6 +248,11 @@ document.getElementById(`undo`).addEventListener(`click`, () => {
 
 document.getElementById(`roll-dice`).addEventListener(`click`, event => {
 	event.currentTarget.style.display = `none`;
+
+	document.getElementById(`confirm`).style.display = `unset`;
+	document.getElementById(`confirm`).disabled = true;
+	document.getElementById(`undo`).style.display = `unset`;
+	document.getElementById(`undo`).disabled = true;
 
 	/**
 	 * @param {number} limit
