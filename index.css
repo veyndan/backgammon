@@ -300,6 +300,13 @@ foreignObject {
 	padding-inline: 20px;
 	border: none;
 	border-radius: 4px;
+	--alpha: 1;
+	background: hsl(var(--background-hsl) / var(--alpha));
+	color: hsl(0 0% 100% / var(--alpha));
+
+	&:disabled {
+		--alpha: .5;
+	}
 }
 
 #confirm,
