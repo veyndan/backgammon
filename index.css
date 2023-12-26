@@ -291,6 +291,10 @@ foreignObject {
 	translate: calc(var(--half-width) * 1.5 + var(--bar-width) - var(--width) / 2) calc(var(--half-height) / 2 - var(--height) / 2);
 }
 
+#confirm {
+	--background-hsl: 149 83% 28%;
+}
+
 #confirm,
 #undo,
 #roll-dice {
