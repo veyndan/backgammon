@@ -474,7 +474,7 @@ checkersElement.addEventListener('pointerdown', event => {
 
 	checkerElement.target.setPointerCapture(event.pointerId);
 
-	const boundary = checkersElement.getBBox();
+	const boundary = new DOMRect(0, 0, document.querySelector(`.half`).getBBox().width * 2 + 50, document.querySelector(`.half`).getBBox().height);
 
 	const getPointerPosition = event => {
 		const CTM = svgElement.getScreenCTM();
