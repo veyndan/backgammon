@@ -242,7 +242,12 @@ const checkersObserver = new MutationObserver(mutations => {
 		const checkerElement = new CheckerElement(mutation.target);
 		if (checkerElement.position instanceof Point) {
 			if (checkerElement.position.value !== Number(mutation.oldValue)) {
-				checkerElement.pointStackIndex = document.querySelectorAll(`#checkers > [data-point="${(checkerElement.position.value)}"]`).length - 1;
+				const opponentCheckerOnPointElement = document.querySelector(`#checkers > [data-point="${(checkerElement.position.value)}"]:not([data-player="${checkerElement.player.value}"])`);
+				if (opponentCheckerOnPointElement !== null) {
+					const opponentCheckerOnPointCheckerElement = new CheckerElement(opponentCheckerOnPointElement);
+					opponentCheckerOnPointCheckerElement.position = new Bar();
+				}
+				checkerElement.pointStackIndex = document.querySelectorAll(`#checkers > [data-point="${(checkerElement.position.value)}"][data-player="${checkerElement.player.value}"]`).length - 1;
 				Array.from(document.querySelectorAll(`#checkers > [data-point="${(checkerElement.position.value)}"]`))
 					.map(target => new CheckerElement(target))
 					.forEach((checkerElement, _, checkerElements) => {
