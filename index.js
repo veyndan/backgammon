@@ -14,6 +14,31 @@ Math.clamp = function (x, lower, upper) {
 	return Math.min(Math.max(x, lower), upper);
 };
 
+class Move {
+	/**
+	 * @param {Player} player
+	 * @param {Position} from
+	 * @param {Position} to
+	 */
+	constructor(player, from, to) {
+		this.player = player;
+		this.from = from;
+		this.to = to;
+	}
+}
+
+class Touch {
+	/**
+	 * @param {Move[]} moves
+	 */
+	constructor(moves) {
+		this.moves = moves;
+	}
+}
+
+/**
+ * @type {Touch[]}
+ */
 const touches = [];
 
 class CheckerElement {
@@ -298,22 +323,22 @@ diceObserver.observe(
 
 document.getElementById(`undo`).addEventListener(`click`, () => {
 	const lastTouch = touches.pop();
-	lastTouch[`moves`].forEach(move => {
+	lastTouch.moves.forEach(move => {
 		/** @type {CheckerElement} */
 		let lastMovedCheckerElement;
-		switch (move[`to`].constructor) {
+		switch (move.to.constructor) {
 			case Point:
-				lastMovedCheckerElement = Array.from(document.querySelectorAll(`#checkers > [data-point="${move[`to`].value}"]`))
+				lastMovedCheckerElement = Array.from(document.querySelectorAll(`#checkers > [data-point="${move.to.value}"]`))
 					.map(target => new CheckerElement(target))
 					.find(checkerElement => checkerElement.pointStackIndex === checkerElement.pointStackCount - 1);
 				break;
 			case Bar:
-				lastMovedCheckerElement = new CheckerElement(document.querySelector(`#checkers > [data-player="${move[`player`].value}"][data-hit]`));
+				lastMovedCheckerElement = new CheckerElement(document.querySelector(`#checkers > [data-player="${move.player.value}"][data-hit]`));
 				break;
 			default:
 				throw Error();
 		}
-		lastMovedCheckerElement.position = move[`from`];
+		lastMovedCheckerElement.position = move.from;
 	});
 	const lastPlayedDieElement = Array.from(document.querySelectorAll(`#dice [data-played-at]`))
 		.map(target => new DieElement(target))
@@ -410,30 +435,16 @@ checkersElement.addEventListener(`click`, event => {
 	const oldPosition = checkerElement.position;
 	checkerElement.position = new Checker(checkerElement.player, checkerElement.position).moveBy(dieElement.value).position;
 	const moves = [
-		{
-			player: checkerElement.player,
-			from: oldPosition,
-			to: checkerElement.position,
-		},
+		new Move(checkerElement.player, oldPosition, checkerElement.position),
 	];
 	const opponentCheckerOnPointElement = document.querySelector(`#checkers > [data-point="${(checkerElement.position.value)}"]:not([data-player="${checkerElement.player.value}"])`);
 	if (opponentCheckerOnPointElement !== null) {
 		const opponentCheckerOnPointCheckerElement = new CheckerElement(opponentCheckerOnPointElement);
 		const oldOpponentPosition = opponentCheckerOnPointCheckerElement.position;
 		opponentCheckerOnPointCheckerElement.position = new Bar();
-		moves.push(
-			{
-				player: opponentCheckerOnPointCheckerElement.player,
-				from: oldOpponentPosition,
-				to: opponentCheckerOnPointCheckerElement.position,
-			},
-		);
+		moves.push(new Move(opponentCheckerOnPointCheckerElement.player, oldOpponentPosition, opponentCheckerOnPointCheckerElement.position));
 	}
-	touches.push(
-		{
-			moves: moves,
-		},
-	);
+	touches.push(new Touch(moves));
 });
 checkersElement.addEventListener(`pointerover`, event => {
 	const checkerElementTarget = event.target.closest(`#checkers > *`);
@@ -566,30 +577,16 @@ checkersElement.addEventListener('pointerdown', event => {
 			const oldPosition = checkerElement.position;
 			checkerElement.position = point;
 			const moves = [
-				{
-					player: checkerElement.player,
-					from: oldPosition,
-					to: checkerElement.position,
-				},
+				new Move(checkerElement.player, oldPosition, checkerElement.position),
 			];
 			const opponentCheckerOnPointElement = document.querySelector(`#checkers > [data-point="${(point.value)}"]:not([data-player="${checkerElement.player.value}"])`);
 			if (opponentCheckerOnPointElement !== null) {
 				const opponentCheckerOnPointCheckerElement = new CheckerElement(opponentCheckerOnPointElement);
 				const oldOpponentPosition = opponentCheckerOnPointCheckerElement.position;
 				opponentCheckerOnPointCheckerElement.position = new Bar();
-				moves.push(
-					{
-						player: opponentCheckerOnPointCheckerElement.player,
-						from: oldOpponentPosition,
-						to: opponentCheckerOnPointCheckerElement.position,
-					},
-				);
+				moves.push(new Move(opponentCheckerOnPointCheckerElement.player, oldOpponentPosition, opponentCheckerOnPointCheckerElement.position));
 			}
-			touches.push(
-				{
-					moves: moves,
-				},
-			);
+			touches.push(new Touch(moves));
 		}
 		document.getElementById(`drop-points`).replaceChildren();
 		checkerElement.target.classList.remove(`dragging`);
