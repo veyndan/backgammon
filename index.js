@@ -546,10 +546,6 @@ checkersElement.addEventListener('pointerdown', event => {
 			dieElement.playedAt = Date.now();
 			checkerElement.position = point;
 			checkerElement.touchedAccordingToDiceValues = checkerElement.touchedAccordingToDiceValues.concat(dieElement.value);
-		} else {
-			// Triggers movement back to point of origin.
-			// noinspection SillyAssignmentJS
-			checkerElement.position = checkerElement.position;
 		}
 		document.getElementById(`drop-points`).replaceChildren();
 		checkerElement.target.classList.remove(`dragging`);
