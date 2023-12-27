@@ -133,13 +133,9 @@ class CheckerElement {
 		if (value !== null) {
 			this.target.dataset[`pointStackIndex`] = `${value}`
 			this.target.style.setProperty(`--point-stack-index`, `${value}`);
-
-			this.target.querySelector(`text`).textContent = value > 4 ? `${value + 1}` : null;
 		} else {
 			delete this.target.dataset[`pointStackIndex`];
 			this.target.style.removeProperty(`--point-stack-index`);
-
-			this.target.querySelector(`text`).textContent = null;
 		}
 	}
 
@@ -157,9 +153,13 @@ class CheckerElement {
 		if (value !== null) {
 			this.target.dataset[`pointStackCount`] = `${value}`
 			this.target.style.setProperty(`--point-stack-count`, `${value}`);
+
+			this.target.querySelector(`text`).textContent = value > 5 && this.pointStackIndex === value - 1 ? `${this.pointStackIndex + 1}` : null;
 		} else {
 			delete this.target.dataset[`pointStackCount`];
 			this.target.style.removeProperty(`--point-stack-count`);
+
+			this.target.querySelector(`text`).textContent = null;
 		}
 	}
 }
