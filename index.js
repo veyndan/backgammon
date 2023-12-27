@@ -36,7 +36,7 @@ class Touch {
 	}
 }
 
-const player = Player.One;
+let player = Player.One;
 
 /**
  * @type {Touch[]}
@@ -322,6 +322,14 @@ diceObserver.observe(
 		subtree: true,
 	},
 );
+
+document.getElementById(`confirm`).addEventListener(`click`, () => {
+	document.querySelector(`#dice`).replaceChildren();
+	document.getElementById(`roll-dice`).style.display = `unset`;
+	document.getElementById(`confirm`).style.display = `none`;
+	document.getElementById(`undo`).style.display = `none`;
+	player = player.value === Player.One.value ? Player.Two : Player.One;
+});
 
 document.getElementById(`undo`).addEventListener(`click`, () => {
 	const lastTouch = touches.pop();
