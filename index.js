@@ -7,7 +7,7 @@
  * @return {number}
  */
 import Checker from "./checker.js";
-import Point from "./point.js";
+import {Bar, Point} from "./position.js";
 import Player from "./player.js";
 
 Math.clamp = function (x, lower, upper) {
@@ -47,18 +47,74 @@ class CheckerElement {
 	}
 
 	/**
-	 * @return {Point}
+	 * @return {Position}
 	 */
-	get point() {
-		return new Point(Number(this.target.dataset[`point`]));
+	get position() {
+		if (this.#isHit) {
+			return new Bar();
+		} else if (this.#point !== null) {
+			return this.#point;
+		} else {
+			throw Error();
+		}
 	}
 
 	/**
-	 * @param {Point} value
+	 * @param {Position} value
 	 */
-	set point(value) {
-		this.target.dataset[`point`] = `${value.value}`
-		this.target.style.setProperty(`--point`, `${value.value}`);
+	set position(value) {
+		if (value instanceof Point) {
+			this.#point = value;
+			this.#isHit = false;
+		} else if (value instanceof Bar) {
+			this.#point = null;
+			this.#isHit = true;
+		} else {
+			throw Error();
+		}
+	}
+
+	/**
+	 * @return {boolean}
+	 */
+	get #isHit() {
+		return `hit` in this.target.dataset;
+	}
+
+	/**
+	 * @param {boolean} value
+	 */
+	set #isHit(value) {
+		if (value) {
+			this.target.dataset[`hit`] = ``;
+		} else {
+			delete this.target.dataset[`hit`];
+		}
+	}
+
+	/**
+	 * @return {?Point}
+	 */
+	get #point() {
+		if (`point` in this.target.dataset) {
+			return new Point(Number(this.target.dataset[`point`]));
+		} else {
+			return null;
+		}
+
+	}
+
+	/**
+	 * @param {?Point} value
+	 */
+	set #point(value) {
+		if (value !== null) {
+			this.target.dataset[`point`] = `${value.value}`
+			this.target.style.setProperty(`--point`, `${value.value}`);
+		} else {
+			delete this.target.dataset[`point`];
+			this.target.style.removeProperty(`--point`);
+		}
 	}
 
 	/**
@@ -69,13 +125,20 @@ class CheckerElement {
 	}
 
 	/**
-	 * @param {number} value
+	 * @param {?number} value
 	 */
 	set pointStackIndex(value) {
-		this.target.dataset[`pointStackIndex`] = `${value}`
-		this.target.style.setProperty(`--point-stack-index`, `${value}`);
+		if (value !== null) {
+			this.target.dataset[`pointStackIndex`] = `${value}`
+			this.target.style.setProperty(`--point-stack-index`, `${value}`);
 
-		this.target.querySelector(`text`).textContent = value > 4 ? `${value + 1}` : null;
+			this.target.querySelector(`text`).textContent = value > 4 ? `${value + 1}` : null;
+		} else {
+			delete this.target.dataset[`pointStackIndex`];
+			this.target.style.removeProperty(`--point-stack-index`);
+
+			this.target.querySelector(`text`).textContent = null;
+		}
 	}
 
 	/**
@@ -86,11 +149,16 @@ class CheckerElement {
 	}
 
 	/**
-	 * @param {number} value
+	 * @param {?number} value
 	 */
 	set pointStackCount(value) {
-		this.target.dataset[`pointStackCount`] = `${value}`
-		this.target.style.setProperty(`--point-stack-count`, `${value}`);
+		if (value !== null) {
+			this.target.dataset[`pointStackCount`] = `${value}`
+			this.target.style.setProperty(`--point-stack-count`, `${value}`);
+		} else {
+			delete this.target.dataset[`pointStackCount`];
+			this.target.style.removeProperty(`--point-stack-count`);
+		}
 	}
 
 	/**
@@ -172,21 +240,28 @@ const checkersElement = document.getElementById('checkers');
 const checkersObserver = new MutationObserver(mutations => {
 	mutations.forEach(mutation => {
 		const checkerElement = new CheckerElement(mutation.target);
-		if (checkerElement.point.value !== Number(mutation.oldValue)) {
-			checkerElement.pointStackIndex = document.querySelectorAll(`#checkers > [data-point="${(checkerElement.point.value)}"]`).length - 1;
-			Array.from(document.querySelectorAll(`#checkers > [data-point="${(checkerElement.point.value)}"]`))
-				.map(target => new CheckerElement(target))
-				.forEach((checkerElement, _, checkerElements) => {
-					checkerElement.pointStackCount = checkerElements.length;
-				});
-			// When moving a checker that isn't on the top of the stack, reposition the checkers such that there is no longer a gap.
-			Array.from(document.querySelectorAll(`#checkers > [data-point="${mutation.oldValue}"]`))
-				.map(target => new CheckerElement(target))
-				.sort((a, b) => a.pointStackIndex - b.pointStackIndex)
-				.forEach((checkerElement, index, checkerElements) => {
-					checkerElement.pointStackIndex = index;
-					checkerElement.pointStackCount = checkerElements.length;
-				});
+		if (checkerElement.position instanceof Point) {
+			if (checkerElement.position.value !== Number(mutation.oldValue)) {
+				checkerElement.pointStackIndex = document.querySelectorAll(`#checkers > [data-point="${(checkerElement.position.value)}"]`).length - 1;
+				Array.from(document.querySelectorAll(`#checkers > [data-point="${(checkerElement.position.value)}"]`))
+					.map(target => new CheckerElement(target))
+					.forEach((checkerElement, _, checkerElements) => {
+						checkerElement.pointStackCount = checkerElements.length;
+					});
+				// When moving a checker that isn't on the top of the stack, reposition the checkers such that there is no longer a gap.
+				Array.from(document.querySelectorAll(`#checkers > [data-point="${mutation.oldValue}"]`))
+					.map(target => new CheckerElement(target))
+					.sort((a, b) => a.pointStackIndex - b.pointStackIndex)
+					.forEach((checkerElement, index, checkerElements) => {
+						checkerElement.pointStackIndex = index;
+						checkerElement.pointStackCount = checkerElements.length;
+					});
+			}
+		} else if (checkerElement.position instanceof Bar) {
+			checkerElement.pointStackIndex = null;
+			checkerElement.pointStackCount = null;
+		} else {
+			throw Error();
 		}
 		updateMovabilityOfCheckers();
 	});
@@ -241,7 +316,8 @@ document.getElementById(`undo`).addEventListener(`click`, () => {
 		.map(target => new CheckerElement(target))
 		.filter(checkerElement => checkerElement.pointStackIndex === checkerElement.pointStackCount - 1)
 		.find(checkerElement => checkerElement.touchedAccordingToDiceValues.indexOf(lastPlayedDieElement.value) !== -1);
-	lastMovedCheckerElement.point = new Checker(lastMovedCheckerElement.player, lastMovedCheckerElement.point).moveBy(-lastPlayedDieElement.value).point;
+	const movedChecker = new Checker(lastMovedCheckerElement.player, lastMovedCheckerElement.position).moveBy(-lastPlayedDieElement.value);
+	lastMovedCheckerElement.position = movedChecker === null ? new Bar() : movedChecker.position;
 	lastMovedCheckerElement.touchedAccordingToDiceValues = lastMovedCheckerElement.touchedAccordingToDiceValues.slice(0, -1);
 	lastPlayedDieElement.playedAt = undefined;
 });
@@ -293,12 +369,16 @@ function updateMovabilityOfCheckers() {
 		.forEach(checkerElement => {
 			checkerElement.permissibleDestinationPoints = new Set(
 				dieElements
-					.map(dieElement => new Checker(checkerElement.player, checkerElement.point).moveBy(dieElement.value))
+					.map(dieElement => new Checker(checkerElement.player, checkerElement.position).moveBy(dieElement.value))
 					.filter(potentialCheckerMovement => potentialCheckerMovement !== null)
-					.map(potentialCheckerMovement => potentialCheckerMovement.point)
-					.filter(potentialDestinationPoint => {
-						const potentialDestinationCheckers = document.querySelectorAll(`#checkers > [data-point="${potentialDestinationPoint.value}"]`);
-						return potentialDestinationCheckers.length <= 1 || new CheckerElement(potentialDestinationCheckers[0]).player.value === checkerElement.player.value;
+					.map(potentialCheckerMovement => potentialCheckerMovement.position)
+					.filter(potentialDestinationPosition => {
+						if (potentialDestinationPosition instanceof Point) {
+							const potentialDestinationCheckers = document.querySelectorAll(`#checkers > [data-point="${potentialDestinationPosition.value}"]`);
+							return potentialDestinationCheckers.length <= 1 || new CheckerElement(potentialDestinationCheckers[0]).player.value === checkerElement.player.value;
+						} else {
+							throw Error();
+						}
 					}),
 			);
 		});
@@ -318,12 +398,17 @@ checkersElement.addEventListener(`click`, event => {
 		.find(dieElement =>
 			Array.from(checkerElement.permissibleDestinationPoints)
 				.some(permissibleDestinationPoint => {
-					const potentialDestinationChecker = new Checker(checkerElement.player, checkerElement.point).moveBy(dieElement.value);
-					return potentialDestinationChecker !== null && potentialDestinationChecker.point.value === permissibleDestinationPoint.value;
+					const potentialDestinationChecker = new Checker(checkerElement.player, checkerElement.position).moveBy(dieElement.value);
+					if (potentialDestinationChecker === null) return false;
+					if (potentialDestinationChecker.position instanceof Point) {
+						return potentialDestinationChecker.position.value === permissibleDestinationPoint.value;
+					} else {
+						throw Error();
+					}
 				}),
 		);
 	dieElement.playedAt = Date.now();
-	checkerElement.point = new Checker(checkerElement.player, checkerElement.point).moveBy(dieElement.value).point;
+	checkerElement.position = new Checker(checkerElement.player, checkerElement.position).moveBy(dieElement.value).position;
 	checkerElement.touchedAccordingToDiceValues = checkerElement.touchedAccordingToDiceValues.concat(dieElement.value);
 });
 checkersElement.addEventListener(`pointerover`, event => {
@@ -444,17 +529,22 @@ checkersElement.addEventListener('pointerdown', event => {
 		const dieElement = Array.from(document.querySelectorAll(`#dice :not([data-played-at])`))
 			.map(target => new DieElement(target))
 			.find(unplayedDieElement => {
-				const potentialDestinationChecker = new Checker(checkerElement.player, checkerElement.point).moveBy(unplayedDieElement.value);
-				return potentialDestinationChecker !== null && Array.from(checkerElement.permissibleDestinationPoints).map(permissibleDestinationPoint => permissibleDestinationPoint.value).includes(potentialDestinationChecker.point.value) && point !== null && potentialDestinationChecker.point.value === point.value;
+				const potentialDestinationChecker = new Checker(checkerElement.player, checkerElement.position).moveBy(unplayedDieElement.value);
+				if (potentialDestinationChecker === null) return false;
+				if (potentialDestinationChecker.position instanceof Point) {
+					return Array.from(checkerElement.permissibleDestinationPoints).map(permissibleDestinationPoint => permissibleDestinationPoint.value).includes(potentialDestinationChecker.position.value) && point !== null && potentialDestinationChecker.position.value === point.value;
+				} else {
+					throw Error();
+				}
 			});
 		if (dieElement !== undefined) {
 			dieElement.playedAt = Date.now();
-			checkerElement.point = point;
+			checkerElement.position = point;
 			checkerElement.touchedAccordingToDiceValues = checkerElement.touchedAccordingToDiceValues.concat(dieElement.value);
 		} else {
 			// Triggers movement back to point of origin.
 			// noinspection SillyAssignmentJS
-			checkerElement.point = checkerElement.point;
+			checkerElement.position = checkerElement.position;
 		}
 		document.getElementById(`drop-points`).replaceChildren();
 		checkerElement.target.classList.remove(`dragging`);

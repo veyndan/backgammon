@@ -129,7 +129,7 @@ use[href="#point"] {
 
 /*noinspection CssInvalidFunction*/
 use[href="#drop-point"],
-#checkers > * {
+#checkers > *:not([data-hit]) {
 	/* Returns 1 if the --point is in [1,12], else 0. */
 	--is-bottom-point: calc(1 - var(--is-top-point));
 	/* Returns 1 if the --point is in [13,24], else 0. */
@@ -168,28 +168,6 @@ use[href="#hold"] {
 /*noinspection CssInvalidFunction*/
 #checkers > * {
 	transition: translate .3s;
-	--top-point-translate-y: calc(var(--checker-diameter) * min(var(--point-stack-index), ((5 - 1) * var(--point-stack-index)) / max(var(--point-stack-count) - 1, 1)));
-	--bottom-point-translate-y: calc((var(--half-height) - var(--top-point-translate-y) - var(--checker-diameter)));
-	translate:
-		var(--translate-x)
-		calc(
-			var(--is-top-point) * var(--top-point-translate-y)
-			+ var(--is-bottom-point) * var(--bottom-point-translate-y)
-		);
-
-	--top-point-mask-position-vertical: calc(150% + -1 * round(down, calc(var(--point-stack-count) / 6), 1) * (1 - round(down, calc((var(--point-stack-index) + 1) / var(--point-stack-count)), 1)) * (105% - ((4 / max(var(--point-stack-count) - 1, 1)) * 100%)));
-	--bottom-point-mask-position-vertical: calc(100% - var(--top-point-mask-position-vertical));
-	mask-image:
-		radial-gradient(
-			black var(--checker-radius),
-			transparent var(--checker-radius)
-		),
-		radial-gradient(
-			circle at center calc(var(--is-top-point) * var(--top-point-mask-position-vertical) + var(--is-bottom-point) * var(--bottom-point-mask-position-vertical)),
-			black var(--checker-radius),
-			transparent var(--checker-radius)
-		);
-	mask-composite: subtract;
 
 	&[data-permissible-destination-points]:not([data-permissible-destination-points="[]"]) {
 		&:hover {
@@ -224,6 +202,43 @@ use[href="#hold"] {
 		user-select: none;
 		dominant-baseline: central;
 		text-anchor: middle;
+	}
+
+	&[data-hit] {
+		translate: calc(var(--half-width) + (var(--bar-width) - var(--checker-diameter)) / 2) var(--translate-y);
+
+		&[data-player="1"] {
+			--translate-y: calc(var(--checker-diameter) * 2.5);
+		}
+
+		&[data-player="2"] {
+			--translate-y: calc(var(--half-height) - var(--checker-diameter) * 3.5);
+		}
+	}
+
+	&:not([data-hit]) {
+		--top-point-translate-y: calc(var(--checker-diameter) * min(var(--point-stack-index), ((5 - 1) * var(--point-stack-index)) / max(var(--point-stack-count) - 1, 1)));
+		--bottom-point-translate-y: calc((var(--half-height) - var(--top-point-translate-y) - var(--checker-diameter)));
+		translate:
+			var(--translate-x)
+			calc(
+				var(--is-top-point) * var(--top-point-translate-y)
+				+ var(--is-bottom-point) * var(--bottom-point-translate-y)
+			);
+
+		--top-point-mask-position-vertical: calc(150% + -1 * round(down, calc(var(--point-stack-count) / 6), 1) * (1 - round(down, calc((var(--point-stack-index) + 1) / var(--point-stack-count)), 1)) * (105% - ((4 / max(var(--point-stack-count) - 1, 1)) * 100%)));
+		--bottom-point-mask-position-vertical: calc(100% - var(--top-point-mask-position-vertical));
+		mask-image:
+			radial-gradient(
+				black var(--checker-radius),
+				transparent var(--checker-radius)
+			),
+			radial-gradient(
+				circle at center calc(var(--is-top-point) * var(--top-point-mask-position-vertical) + var(--is-bottom-point) * var(--bottom-point-mask-position-vertical)),
+				black var(--checker-radius),
+				transparent var(--checker-radius)
+			);
+		mask-composite: subtract;
 	}
 }
 
