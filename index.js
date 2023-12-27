@@ -36,6 +36,8 @@ class Touch {
 	}
 }
 
+const player = Player.One;
+
 /**
  * @type {Touch[]}
  */
@@ -388,7 +390,7 @@ document.getElementById(`roll-dice`).addEventListener(`click`, event => {
 function updateMovabilityOfCheckers() {
 	const dieElements = Array.from(document.querySelectorAll(`#dice :not([data-played-at])`))
 		.map(target => new DieElement(target));
-	Array.from(document.getElementById(`checkers`).children)
+	Array.from(document.querySelectorAll(`#checkers > [data-player="${player.value}"]`))
 		.map(value => new CheckerElement(value))
 		.forEach(checkerElement => {
 			checkerElement.permissibleDestinationPoints = new Set(
