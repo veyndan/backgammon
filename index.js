@@ -18,7 +18,7 @@ const touches = [];
 
 class CheckerElement {
 	/**
-	 * @param {SVGUseElement} target
+	 * @param {SVGGElement} target
 	 */
 	constructor(target) {
 		this.target = target;
