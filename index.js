@@ -56,7 +56,7 @@ class CheckerElement {
 	 */
 	get permissibleDestinationPoints() {
 		return new Set(
-			JSON.parse(this.target.dataset[`permissibleDestinationPoints`] ?? "[]")
+			JSON.parse(this.target.dataset[`permissibleDestinationPoints`])
 				.map(value => new Point(value)),
 		);
 	}
@@ -457,7 +457,7 @@ checkersElement.addEventListener(`click`, event => {
 	touches.push(new Touch(moves));
 });
 checkersElement.addEventListener(`pointerover`, event => {
-	const checkerElementTarget = event.target.closest(`#checkers > [data-permissible-destination-points]:not([data-permissible-destination-points="[]"])`);
+	const checkerElementTarget = event.target.closest(`#checkers > :not([data-permissible-destination-points="[]"])`);
 	if (checkerElementTarget !== null && checkerElementTarget.nextSibling !== null) {
 		/**
 		 * Making the checker the last sibling checker means that the selected checker can draw over all other

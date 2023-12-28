@@ -169,7 +169,7 @@ use[href="#hold"] {
 #checkers > * {
 	transition: translate .3s;
 
-	&[data-permissible-destination-points]:not([data-permissible-destination-points="[]"]) {
+	&:not([data-permissible-destination-points="[]"]) {
 		&:hover {
 			cursor: pointer;
 		}
