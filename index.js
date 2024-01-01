@@ -398,24 +398,50 @@ document.getElementById(`roll-dice`).addEventListener(`click`, event => {
 function updateMovabilityOfCheckers() {
 	const dieElements = Array.from(document.querySelectorAll(`#dice :not([data-played-at])`))
 		.map(target => new DieElement(target));
-	Array.from(document.querySelectorAll(`#checkers > [data-player="${player.value}"]`))
-		.map(value => new CheckerElement(value))
-		.forEach(checkerElement => {
-			checkerElement.permissibleDestinationPoints = new Set(
-				dieElements
-					.map(dieElement => new Checker(checkerElement.player, checkerElement.position).moveBy(dieElement.value))
-					.filter(potentialCheckerMovement => potentialCheckerMovement !== null)
-					.map(potentialCheckerMovement => potentialCheckerMovement.position)
-					.filter(potentialDestinationPosition => {
-						if (potentialDestinationPosition instanceof Point) {
-							const potentialDestinationCheckers = document.querySelectorAll(`#checkers > [data-point="${potentialDestinationPosition.value}"]`);
-							return potentialDestinationCheckers.length <= 1 || new CheckerElement(potentialDestinationCheckers[0]).player.value === checkerElement.player.value;
-						} else {
-							throw Error();
-						}
-					}),
-			);
-		});
+	const checkerElements = Array.from(document.querySelectorAll(`#checkers > [data-player="${player.value}"]`))
+		.map(value => new CheckerElement(value));
+	const positionNameToCheckerElements = Object.groupBy(checkerElements, checkerElement => checkerElement.position.constructor.name);
+	if (Bar.name in positionNameToCheckerElements) {
+		positionNameToCheckerElements[Bar.name]
+			.forEach(checkerElement => {
+				checkerElement.permissibleDestinationPoints = new Set(
+					dieElements
+						.map(dieElement => new Checker(checkerElement.player, checkerElement.position).moveBy(dieElement.value))
+						.filter(potentialCheckerMovement => potentialCheckerMovement !== null)
+						.map(potentialCheckerMovement => potentialCheckerMovement.position)
+						.filter(potentialDestinationPosition => {
+							if (potentialDestinationPosition instanceof Point) {
+								const potentialDestinationCheckers = document.querySelectorAll(`#checkers > [data-point="${potentialDestinationPosition.value}"]`);
+								return potentialDestinationCheckers.length <= 1 || new CheckerElement(potentialDestinationCheckers[0]).player.value === checkerElement.player.value;
+							} else {
+								throw Error();
+							}
+						}),
+				);
+			});
+		(positionNameToCheckerElements[Point.name] ?? [])
+			.forEach(checkerElement => {
+				checkerElement.permissibleDestinationPoints = new Set();
+			});
+	} else {
+		(positionNameToCheckerElements[Point.name] ?? [])
+			.forEach(checkerElement => {
+				checkerElement.permissibleDestinationPoints = new Set(
+					dieElements
+						.map(dieElement => new Checker(checkerElement.player, checkerElement.position).moveBy(dieElement.value))
+						.filter(potentialCheckerMovement => potentialCheckerMovement !== null)
+						.map(potentialCheckerMovement => potentialCheckerMovement.position)
+						.filter(potentialDestinationPosition => {
+							if (potentialDestinationPosition instanceof Point) {
+								const potentialDestinationCheckers = document.querySelectorAll(`#checkers > [data-point="${potentialDestinationPosition.value}"]`);
+								return potentialDestinationCheckers.length <= 1 || new CheckerElement(potentialDestinationCheckers[0]).player.value === checkerElement.player.value;
+							} else {
+								throw Error();
+							}
+						}),
+				);
+			});
+	}
 }
 
 let ignoreCheckerClicks = false;
