@@ -1,3 +1,7 @@
+import Checker from "./checker.js";
+import {Bar, Point, Position} from "./position.js";
+import Player from "./player.js";
+
 /**
  * https://rwaldron.github.io/proposal-math-extensions/#sec-math.clamp
  *
@@ -6,10 +10,6 @@
  * @param {number} upper
  * @return {number}
  */
-import Checker from "./checker.js";
-import {Bar, Point, Position} from "./position.js";
-import Player from "./player.js";
-
 Math.clamp = function (x, lower, upper) {
 	return Math.min(Math.max(x, lower), upper);
 };
