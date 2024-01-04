@@ -1,4 +1,4 @@
-import {Bar, Point, Position} from "./position.js";
+import {Point, Position} from "./position.js";
 import Player from "./player.js";
 
 export default class Checker {
@@ -16,15 +16,15 @@ export default class Checker {
 	 * @return {?Checker}
 	 */
 	moveBy(offset) {
-		if (this.position instanceof Bar) {
-			return new Checker(this.player, new Point(this.player.value === Player.One.value ? Point.MAX.value - offset + 1 : offset));
-		} else {
+		if (this.position instanceof Point) {
 			const potentialPoint = this.position.value + (this.player.value === Player.One.value ? -offset : offset);
 			if (potentialPoint < Point.MIN.value || potentialPoint > Point.MAX.value) {
 				return null;
 			} else {
 				return new Checker(this.player, new Point(potentialPoint));
 			}
+		} else {
+			return new Checker(this.player, new Point(this.player.value === Player.One.value ? Point.MAX.value - offset + 1 : offset));
 		}
 	}
 }

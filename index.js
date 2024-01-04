@@ -10,6 +10,7 @@ import Player from "./player.js";
  * @param {number} upper
  * @return {number}
  */
+// @ts-ignore https://github.com/Microsoft/TypeScript/issues/7237
 Math.clamp = function (x, lower, upper) {
 	return Math.min(Math.max(x, lower), upper);
 };
@@ -64,7 +65,7 @@ class CheckerElement {
 	 */
 	get permissibleDestinationPoints() {
 		return new Set(
-			JSON.parse(this.target.dataset[`permissibleDestinationPoints`])
+			(/** @type {number[]} */ (JSON.parse(this.target.dataset[`permissibleDestinationPoints`])))
 				.map(value => new Point(value)),
 		);
 	}
@@ -259,23 +260,23 @@ class DieElement {
 
 const svgElement = document.getElementsByTagName(`svg`)[0];
 const checkersElement = document.getElementById('checkers');
-const confirmElement = document.getElementById(`confirm`);
-const rollDiceElement = document.getElementById(`roll-dice`);
-const undoElement = document.getElementById(`undo`);
+const confirmElement = /** @type {HTMLButtonElement} */ (document.getElementById(`confirm`));
+const rollDiceElement = /** @type {HTMLButtonElement} */ (document.getElementById(`roll-dice`));
+const undoElement = /** @type {HTMLButtonElement} */ (document.getElementById(`undo`));
 
 const checkersObserver = new MutationObserver(mutations => {
 	mutations.forEach(mutation => {
-		const checkerElement = new CheckerElement(mutation.target);
+		const checkerElement = new CheckerElement(/** @type {SVGGElement} */ (mutation.target));
 		if (checkerElement.position instanceof Point) {
 			if (checkerElement.position.value !== Number(mutation.oldValue)) {
 				checkerElement.pointStackIndex = document.querySelectorAll(`#checkers > [data-point="${(checkerElement.position.value)}"][data-player="${checkerElement.player.value}"]`).length - 1;
-				Array.from(document.querySelectorAll(`#checkers > [data-point="${(checkerElement.position.value)}"]`))
+				Array.from(/** @type {NodeListOf<SVGGElement>} */ (document.querySelectorAll(`#checkers > [data-point="${(checkerElement.position.value)}"]`)))
 					.map(target => new CheckerElement(target))
 					.forEach((checkerElement, _, checkerElements) => {
 						checkerElement.pointStackCount = checkerElements.length;
 					});
 				// When moving a checker that isn't on the top of the stack, reposition the checkers such that there is no longer a gap.
-				Array.from(document.querySelectorAll(`#checkers > [data-point="${mutation.oldValue}"]`))
+				Array.from(/** @type {NodeListOf<SVGGElement>} */ (document.querySelectorAll(`#checkers > [data-point="${mutation.oldValue}"]`)))
 					.map(target => new CheckerElement(target))
 					.sort((a, b) => a.pointStackIndex - b.pointStackIndex)
 					.forEach((checkerElement, index, checkerElements) => {
@@ -306,16 +307,16 @@ const diceObserver = new MutationObserver(mutations => {
 	mutations.forEach(mutation => {
 		confirmElement.style.display = `unset`;
 		undoElement.style.display = `unset`;
-		const dieElement = new DieElement(mutation.target)
+		const dieElement = new DieElement(/** @type {SVGUseElement} */ (mutation.target))
 		if (dieElement.playedAt !== undefined) {
 			undoElement.disabled = false;
-			const unplayedDieElements = Array.from(document.querySelectorAll(`#dice :not([data-played-at])`))
+			const unplayedDieElements = Array.from(/** @type {NodeListOf<SVGUseElement>} */ (document.querySelectorAll(`#dice :not([data-played-at])`)))
 				.map(target => new DieElement(target));
 			if (unplayedDieElements.length === 0) {
 				confirmElement.disabled = false;
 			}
 		} else {
-			const playedDieElements = Array.from(document.querySelectorAll(`#dice [data-played-at]`))
+			const playedDieElements = Array.from(/** @type {NodeListOf<SVGUseElement>} */ (document.querySelectorAll(`#dice [data-played-at]`)))
 				.map(target => new DieElement(target));
 			if (playedDieElements.length === 0) {
 				undoElement.disabled = true;
@@ -347,28 +348,25 @@ undoElement.addEventListener(`click`, () => {
 	lastTouch.moves.forEach(move => {
 		/** @type {CheckerElement} */
 		let lastMovedCheckerElement;
-		switch (move.to.constructor) {
-			case Point:
-				lastMovedCheckerElement = Array.from(document.querySelectorAll(`#checkers > [data-point="${move.to.value}"]`))
-					.map(target => new CheckerElement(target))
-					.find(checkerElement => checkerElement.pointStackIndex === checkerElement.pointStackCount - 1);
-				break;
-			case Bar:
-				lastMovedCheckerElement = new CheckerElement(document.querySelector(`#checkers > [data-player="${move.player.value}"][data-hit]`));
-				break;
-			default:
-				throw Error();
+		if (move.to instanceof Point) {
+			lastMovedCheckerElement = Array.from(/** @type {NodeListOf<SVGGElement>} */ (document.querySelectorAll(`#checkers > [data-point="${move.to.value}"]`)))
+				.map(target => new CheckerElement(target))
+				.find(checkerElement => checkerElement.pointStackIndex === checkerElement.pointStackCount - 1);
+		} else if (move.to instanceof Bar) {
+			lastMovedCheckerElement = new CheckerElement(document.querySelector(`#checkers > [data-player="${move.player.value}"][data-hit]`));
+		} else {
+			throw Error();
 		}
 		lastMovedCheckerElement.position = move.from;
 	});
-	const lastPlayedDieElement = Array.from(document.querySelectorAll(`#dice [data-played-at]`))
+	const lastPlayedDieElement = Array.from(/** @type {NodeListOf<SVGUseElement>} */ (document.querySelectorAll(`#dice [data-played-at]`)))
 		.map(target => new DieElement(target))
 		.reduce((mostRecentlyPlayedDieElement, dieElement) => mostRecentlyPlayedDieElement.playedAt > dieElement.playedAt ? mostRecentlyPlayedDieElement : dieElement);
 	lastPlayedDieElement.playedAt = undefined;
 });
 
-rollDiceElement.addEventListener(`click`, event => {
-	event.currentTarget.style.display = `none`;
+rollDiceElement.addEventListener(`click`, () => {
+	rollDiceElement.style.display = `none`;
 
 	confirmElement.style.display = `unset`;
 	confirmElement.disabled = true;
@@ -407,50 +405,57 @@ rollDiceElement.addEventListener(`click`, event => {
 });
 
 function updateMovabilityOfCheckers() {
-	const dieElements = Array.from(document.querySelectorAll(`#dice :not([data-played-at])`))
+	const dieElements = Array.from(/** @type {NodeListOf<SVGUseElement>} */ (document.querySelectorAll(`#dice :not([data-played-at])`)))
 		.map(target => new DieElement(target));
-	const checkerElements = Array.from(document.querySelectorAll(`#checkers > [data-player="${turn.player.value}"]`))
+	const checkerElements = Array.from(/** @type {NodeListOf<SVGGElement>} */ (document.querySelectorAll(`#checkers > [data-player="${turn.player.value}"]`)))
 		.map(value => new CheckerElement(value));
-	const positionNameToCheckerElements = Object.groupBy(checkerElements, checkerElement => checkerElement.position.constructor.name);
-	if (Bar.name in positionNameToCheckerElements) {
-		positionNameToCheckerElements[Bar.name]
+	// noinspection JSUnresolvedReference
+	/**
+	 * @type {Map<string, CheckerElement[]>}
+	 */
+		// @ts-ignore https://github.com/microsoft/TypeScript/issues/47171
+	const positionNameToCheckerElements = Map.groupBy(checkerElements, /** @param {CheckerElement} checkerElement */checkerElement => checkerElement.position.constructor.name);
+	if (positionNameToCheckerElements.has(Bar.name)) {
+		positionNameToCheckerElements.get(Bar.name)
 			.forEach(checkerElement => {
-				checkerElement.permissibleDestinationPoints = new Set(
+				checkerElement.permissibleDestinationPoints = /** @type {Set<Point>} */ (new Set(
 					dieElements
 						.map(dieElement => new Checker(checkerElement.player, checkerElement.position).moveBy(dieElement.value))
 						.filter(potentialCheckerMovement => potentialCheckerMovement !== null)
 						.map(potentialCheckerMovement => potentialCheckerMovement.position)
 						.filter(potentialDestinationPosition => {
 							if (potentialDestinationPosition instanceof Point) {
+								/** @type {NodeListOf<SVGGElement>} */
 								const potentialDestinationCheckers = document.querySelectorAll(`#checkers > [data-point="${potentialDestinationPosition.value}"]`);
 								return potentialDestinationCheckers.length <= 1 || new CheckerElement(potentialDestinationCheckers[0]).player.value === checkerElement.player.value;
 							} else {
 								throw Error();
 							}
 						}),
-				);
+				));
 			});
-		(positionNameToCheckerElements[Point.name] ?? [])
+		(positionNameToCheckerElements.get(Point.name) ?? [])
 			.forEach(checkerElement => {
 				checkerElement.permissibleDestinationPoints = new Set();
 			});
 	} else {
-		(positionNameToCheckerElements[Point.name] ?? [])
+		(positionNameToCheckerElements.get(Point.name) ?? [])
 			.forEach(checkerElement => {
-				checkerElement.permissibleDestinationPoints = new Set(
+				checkerElement.permissibleDestinationPoints = /** @type {Set<Point>} */ (new Set(
 					dieElements
 						.map(dieElement => new Checker(checkerElement.player, checkerElement.position).moveBy(dieElement.value))
 						.filter(potentialCheckerMovement => potentialCheckerMovement !== null)
 						.map(potentialCheckerMovement => potentialCheckerMovement.position)
 						.filter(potentialDestinationPosition => {
 							if (potentialDestinationPosition instanceof Point) {
+								/** @type {NodeListOf<SVGGElement>} */
 								const potentialDestinationCheckers = document.querySelectorAll(`#checkers > [data-point="${potentialDestinationPosition.value}"]`);
 								return potentialDestinationCheckers.length <= 1 || new CheckerElement(potentialDestinationCheckers[0]).player.value === checkerElement.player.value;
 							} else {
 								throw Error();
 							}
 						}),
-				);
+				));
 			});
 	}
 }
@@ -462,9 +467,9 @@ checkersElement.addEventListener(`click`, event => {
 		ignoreCheckerClicks = false;
 		return;
 	}
-	const checkerElement = new CheckerElement(event.target.closest(`#checkers > *`));
+	const checkerElement = new CheckerElement((/** @type {SVGUseElement} */ (event.target)).closest(`#checkers > *`));
 	if (checkerElement.permissibleDestinationPoints.size === 0) return;
-	const dieElement = Array.from(document.querySelectorAll(`#dice :not([data-played-at])`))
+	const dieElement = Array.from(/** @type {NodeListOf<SVGUseElement>} */ (document.querySelectorAll(`#dice :not([data-played-at])`)))
 		.map(target => new DieElement(target))
 		.find(dieElement =>
 			Array.from(checkerElement.permissibleDestinationPoints)
@@ -484,6 +489,9 @@ checkersElement.addEventListener(`click`, event => {
 	const moves = [
 		new Move(checkerElement.player, oldPosition, checkerElement.position),
 	];
+	// noinspection JSUnresolvedReference
+	/** @type {SVGGElement} */
+		// @ts-ignore
 	const opponentCheckerOnPointElement = document.querySelector(`#checkers > [data-point="${(checkerElement.position.value)}"]:not([data-player="${checkerElement.player.value}"])`);
 	if (opponentCheckerOnPointElement !== null) {
 		const opponentCheckerOnPointCheckerElement = new CheckerElement(opponentCheckerOnPointElement);
@@ -494,7 +502,7 @@ checkersElement.addEventListener(`click`, event => {
 	turn.touches.push(new Touch(moves));
 });
 checkersElement.addEventListener(`pointerover`, event => {
-	const checkerElementTarget = event.target.closest(`#checkers > :not([data-permissible-destination-points="[]"])`);
+	const checkerElementTarget = (/** @type {Element} */ (event.target)).closest(`#checkers > :not([data-permissible-destination-points="[]"])`);
 	if (checkerElementTarget !== null && checkerElementTarget.nextSibling !== null) {
 		/**
 		 * Making the checker the last sibling checker means that the selected checker can draw over all other
@@ -506,14 +514,14 @@ checkersElement.addEventListener(`pointerover`, event => {
 	}
 });
 checkersElement.addEventListener('pointerdown', event => {
-	const checkerElement = new CheckerElement(event.target.closest(`#checkers > *`));
+	const checkerElement = new CheckerElement((/** @type {Element} */ (event.target)).closest(`#checkers > *`));
 	if (checkerElement.permissibleDestinationPoints.size === 0) return;
 
 	checkerElement.target.setPointerCapture(event.pointerId);
 
-	const boundary = new DOMRect(0, 0, document.querySelector(`.half`).getBBox().width * 2 + 50, document.querySelector(`.half`).getBBox().height);
+	const boundary = new DOMRect(0, 0, (/** @type {SVGGElement} */ (document.querySelector(`.half`))).getBBox().width * 2 + 50, (/** @type {SVGGElement} */ (document.querySelector(`.half`))).getBBox().height);
 
-	const getPointerPosition = event => {
+	const getPointerPosition = (/** @type {PointerEvent} */ event) => {
 		const CTM = svgElement.getScreenCTM();
 		const clientPoint = new DOMPointReadOnly(event.clientX, event.clientY);
 		return clientPoint.matrixTransform(CTM.inverse());
@@ -554,23 +562,27 @@ checkersElement.addEventListener('pointerdown', event => {
 			});
 	};
 
-	const drag = event => {
+	const drag = (/** @type {PointerEvent} */ event) => {
 		event.preventDefault();
 
 		const coord = getPointerPosition(event);
+		// @ts-ignore
 		const dx = Math.clamp(coord.x - offset.x, minX, maxX);
+		// @ts-ignore
 		const dy = Math.clamp(coord.y - offset.y, minY, maxY);
 
 		checkerElement.target.style.translate = `${dx}px ${dy}px`;
 	};
 
-	const pointFromCoordinates = (coordinates) => {
+	const pointFromCoordinates = (/** @type {DOMPoint} */ coordinates) => {
+		// @ts-ignore
 		const dx = Math.clamp(coordinates.x - offset.x, minX, maxX);
+		// @ts-ignore
 		const dy = Math.clamp(coordinates.y - offset.y, minY, maxY);
 		let point = null;
-		const halfBBox = document.querySelector(`.half`).getBBox();
-		const checkerDiameter = document.querySelector(`#checkers > *`).getBBox().width;
-		const pointHeight = document.querySelector(`use[href="#point"]`).getBBox().height;
+		const halfBBox = /** @type {SVGGElement} */ (document.querySelector(`.half`)).getBBox();
+		const checkerDiameter = /** @type {SVGGElement} */ (document.querySelector(`#checkers > *`)).getBBox().width;
+		const pointHeight = /** @type {SVGUseElement} */ (document.querySelector(`use[href="#point"]`)).getBBox().height;
 		const barWidth = 50;
 		let additionalPoints;
 		let multiplier;
@@ -605,10 +617,10 @@ checkersElement.addEventListener('pointerdown', event => {
 
 	const abortController = new AbortController();
 
-	const endDrag = (event) => {
+	const endDrag = (/** @type {PointerEvent} */ event) => {
 		const coord = getPointerPosition(event);
 		const point = pointFromCoordinates(coord);
-		const dieElement = Array.from(document.querySelectorAll(`#dice :not([data-played-at])`))
+		const dieElement = Array.from(/** @type {NodeListOf<SVGUseElement>} */ (document.querySelectorAll(`#dice :not([data-played-at])`)))
 			.map(target => new DieElement(target))
 			.find(unplayedDieElement => {
 				const potentialDestinationChecker = new Checker(checkerElement.player, checkerElement.position).moveBy(unplayedDieElement.value);
@@ -626,6 +638,7 @@ checkersElement.addEventListener('pointerdown', event => {
 			const moves = [
 				new Move(checkerElement.player, oldPosition, checkerElement.position),
 			];
+			/** @type {SVGGElement} */
 			const opponentCheckerOnPointElement = document.querySelector(`#checkers > [data-point="${(point.value)}"]:not([data-player="${checkerElement.player.value}"])`);
 			if (opponentCheckerOnPointElement !== null) {
 				const opponentCheckerOnPointCheckerElement = new CheckerElement(opponentCheckerOnPointElement);
@@ -641,7 +654,7 @@ checkersElement.addEventListener('pointerdown', event => {
 		abortController.abort();
 	};
 
-	const keydownEventListener = (event) => {
+	const keydownEventListener = (/** @type {KeyboardEvent} */ event) => {
 		if (event.key === `Escape`) {
 			event.preventDefault();
 			checkerElement.target.classList.remove(`dragging`);
