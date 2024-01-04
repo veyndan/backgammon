@@ -259,6 +259,9 @@ class DieElement {
 
 const svgElement = document.getElementsByTagName(`svg`)[0];
 const checkersElement = document.getElementById('checkers');
+const confirmElement = document.getElementById(`confirm`);
+const rollDiceElement = document.getElementById(`roll-dice`);
+const undoElement = document.getElementById(`undo`);
 
 const checkersObserver = new MutationObserver(mutations => {
 	mutations.forEach(mutation => {
@@ -301,23 +304,23 @@ checkersObserver.observe(
 
 const diceObserver = new MutationObserver(mutations => {
 	mutations.forEach(mutation => {
-		document.getElementById(`confirm`).style.display = `unset`;
-		document.getElementById(`undo`).style.display = `unset`;
+		confirmElement.style.display = `unset`;
+		undoElement.style.display = `unset`;
 		const dieElement = new DieElement(mutation.target)
 		if (dieElement.playedAt !== undefined) {
-			document.getElementById(`undo`).disabled = false;
+			undoElement.disabled = false;
 			const unplayedDieElements = Array.from(document.querySelectorAll(`#dice :not([data-played-at])`))
 				.map(target => new DieElement(target));
 			if (unplayedDieElements.length === 0) {
-				document.getElementById(`confirm`).disabled = false;
+				confirmElement.disabled = false;
 			}
 		} else {
 			const playedDieElements = Array.from(document.querySelectorAll(`#dice [data-played-at]`))
 				.map(target => new DieElement(target));
 			if (playedDieElements.length === 0) {
-				document.getElementById(`undo`).disabled = true;
+				undoElement.disabled = true;
 			} else {
-				document.getElementById(`confirm`).disabled = true;
+				confirmElement.disabled = true;
 			}
 		}
 	});
@@ -331,15 +334,15 @@ diceObserver.observe(
 	},
 );
 
-document.getElementById(`confirm`).addEventListener(`click`, () => {
+confirmElement.addEventListener(`click`, () => {
 	document.querySelector(`#dice`).replaceChildren();
-	document.getElementById(`roll-dice`).style.display = `unset`;
-	document.getElementById(`confirm`).style.display = `none`;
-	document.getElementById(`undo`).style.display = `none`;
+	rollDiceElement.style.display = `unset`;
+	confirmElement.style.display = `none`;
+	undoElement.style.display = `none`;
 	turn = new Turn(turn.player.value === Player.One.value ? Player.Two : Player.One);
 });
 
-document.getElementById(`undo`).addEventListener(`click`, () => {
+undoElement.addEventListener(`click`, () => {
 	const lastTouch = turn.touches.pop();
 	lastTouch.moves.forEach(move => {
 		/** @type {CheckerElement} */
@@ -364,13 +367,13 @@ document.getElementById(`undo`).addEventListener(`click`, () => {
 	lastPlayedDieElement.playedAt = undefined;
 });
 
-document.getElementById(`roll-dice`).addEventListener(`click`, event => {
+rollDiceElement.addEventListener(`click`, event => {
 	event.currentTarget.style.display = `none`;
 
-	document.getElementById(`confirm`).style.display = `unset`;
-	document.getElementById(`confirm`).disabled = true;
-	document.getElementById(`undo`).style.display = `unset`;
-	document.getElementById(`undo`).disabled = true;
+	confirmElement.style.display = `unset`;
+	confirmElement.disabled = true;
+	undoElement.style.display = `unset`;
+	undoElement.disabled = true;
 
 	/**
 	 * @param {number} limit
