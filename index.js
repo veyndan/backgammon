@@ -261,7 +261,7 @@ class DieElement {
 const svgElement = document.getElementsByTagName(`svg`)[0];
 const checkersElement = document.getElementById('checkers');
 const confirmElement = /** @type {HTMLButtonElement} */ (document.getElementById(`confirm`));
-const diceElement = /** @type {SVGGElement} */ (document.querySelector(`#dice`));
+const diceElement = /** @type {SVGSVGElement} */ (document.querySelector(`#dice`));
 const rollDiceElement = /** @type {HTMLButtonElement} */ (document.getElementById(`roll-dice`));
 const undoElement = /** @type {HTMLButtonElement} */ (document.getElementById(`undo`));
 
@@ -337,11 +337,12 @@ diceObserver.observe(
 );
 
 confirmElement.addEventListener(`click`, () => {
-	diceElement.replaceChildren();
+	diceElement.style.display = `none`;
 	rollDiceElement.style.display = `unset`;
 	confirmElement.style.display = `none`;
 	undoElement.style.display = `none`;
 	turn = new Turn(turn.player.value === Player.One.value ? Player.Two : Player.One);
+	svgElement.dataset[`player`] = turn.player.value;
 });
 
 undoElement.addEventListener(`click`, () => {
@@ -368,7 +369,7 @@ undoElement.addEventListener(`click`, () => {
 
 rollDiceElement.addEventListener(`click`, () => {
 	rollDiceElement.style.display = `none`;
-
+	diceElement.style.display = `unset`;
 	confirmElement.style.display = `unset`;
 	confirmElement.disabled = true;
 	undoElement.style.display = `unset`;

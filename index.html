@@ -8,7 +8,7 @@
     <script src="index.js" type="module"></script>
   </head>
   <body>
-    <svg width='100%' height='100%' viewBox="0 0 600 530">
+    <svg width='100%' height='100%' viewBox="0 0 600 530" data-player="1" data-play-mode="opposite">
       <defs>
         <!-- The point should have dimensions 1:4, so exactly 4 stacked checkers can fill a point -->
         <polyline id="point" points="2,0 20,158 38,0" stroke-width="4" stroke-linejoin="round" stroke-linecap="square"/>
@@ -102,20 +102,16 @@
 
       <foreignObject transform="translate(20 30)">
         <div>
-          <button id="undo" type="button">Undo</button>
-          <button id="confirm" type="button">Confirm</button>
+          <div>
+            <button id="undo" type="button">Undo</button>
+            <button id="confirm" type="button">Confirm</button>
+          </div>
+          <div>
+            <button id="roll-dice" type="button">Roll Dice</button>
+            <svg id="dice"/>
+          </div>
         </div>
       </foreignObject>
-
-      <foreignObject transform="translate(20 30)">
-        <div>
-          <button id="roll-dice" type="button">Roll Dice</button>
-        </div>
-      </foreignObject>
-
-      <g transform="translate(20 30)">
-        <g id="dice"/>
-      </g>
 
       <g id="checkers" transform="translate(20 30)">
         <g data-player="2" data-point="1" data-point-stack-index="0" data-point-stack-count="2" data-permissible-destination-points="[]" style="--point: 1; --point-stack-index: 0; --point-stack-count: 2;">

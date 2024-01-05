@@ -45,9 +45,17 @@ button {
 	}
 }
 
-svg {
+body > svg {
 	background: hsl(var(--background-hsl));
 	touch-action: none;
+
+	&[data-player="2"][data-play-mode="opposite"] foreignObject > div {
+		rotate: .5turn;
+	}
+
+	&[data-player="2"][data-play-mode="side-by-side"] foreignObject > div {
+		flex-direction: row-reverse;
+	}
 }
 
 #checker-background {
@@ -278,32 +286,24 @@ use[href="#hold"] {
 
 foreignObject {
 	--height: 40px;
-	width: var(--half-width);
+	width: calc(var(--half-width) * 2 + var(--bar-width));
 	height: var(--height);
 	y: calc(var(--half-height) / 2 - var(--height) / 2);
-
-	&:first-of-type {
-		x: 0;
-	}
-
-	&:last-of-type {
-		x: calc(var(--half-width) + var(--bar-width));
-	}
 
 	& > div {
 		width: 100%;
 		height: 100%;
 		display: flex;
-		justify-content: center;
-		align-items: center;
-		gap: 8px;
-	}
-}
+		gap: var(--bar-width);
 
-#dice {
-	--width: calc(2 * var(--die-side-length) + var(--die-gap));
-	--height: var(--die-side-length);
-	translate: calc(var(--half-width) * 1.5 + var(--bar-width) - var(--width) / 2) calc(var(--half-height) / 2 - var(--height) / 2);
+		& > div {
+			width: 100%;
+			display: flex;
+			flex: 1;
+			justify-content: center;
+			gap: 8px;
+		}
+	}
 }
 
 #confirm {
@@ -329,6 +329,7 @@ foreignObject {
 }
 
 #confirm,
+#dice,
 #undo {
 	display: none;
 }
@@ -339,24 +340,28 @@ foreignObject {
 		transition: translate .4s;
 	}
 
+	:nth-child(1):nth-last-child(2) {
+		translate: calc(var(--half-width) / 2 - var(--die-side-length) - var(--die-gap) / 2);
+	}
+
 	:nth-child(2):last-child {
-		translate: calc(var(--die-side-length) + var(--die-gap));
+		translate: calc(var(--half-width) / 2 + var(--die-gap) / 2);
 	}
 
 	:nth-child(1):nth-last-child(4) {
-		translate: calc(-1 * (var(--die-side-length) + var(--die-gap)));
+		translate: calc(var(--half-width) / 2 - 2 * var(--die-side-length) - 3 * var(--die-gap) / 2);
 	}
 
 	:nth-child(2):nth-last-child(3) {
-		translate: 0;
+		translate: calc(var(--half-width) / 2 - var(--die-side-length) - var(--die-gap) / 2);
 	}
 
 	:nth-child(3):nth-last-child(2) {
-		translate: calc(var(--die-side-length) + var(--die-gap));
+		translate: calc(var(--half-width) / 2 + var(--die-gap) / 2);
 	}
 
 	:nth-child(4):nth-last-child(1) {
-		translate: calc(2 * (var(--die-side-length) + var(--die-gap)));
+		translate: calc(var(--half-width) / 2 + var(--die-side-length) + 3 * var(--die-gap) / 2);
 	}
 
 	:nth-child(3):nth-last-child(2),
