@@ -261,6 +261,7 @@ class DieElement {
 const svgElement = document.getElementsByTagName(`svg`)[0];
 const checkersElement = document.getElementById('checkers');
 const confirmElement = /** @type {HTMLButtonElement} */ (document.getElementById(`confirm`));
+const diceElement = /** @type {SVGGElement} */ (document.querySelector(`#dice`));
 const rollDiceElement = /** @type {HTMLButtonElement} */ (document.getElementById(`roll-dice`));
 const undoElement = /** @type {HTMLButtonElement} */ (document.getElementById(`undo`));
 
@@ -328,7 +329,7 @@ const diceObserver = new MutationObserver(mutations => {
 });
 
 diceObserver.observe(
-	document.getElementById(`dice`),
+	diceElement,
 	{
 		attributeFilter: [`data-played-at`],
 		subtree: true,
@@ -336,7 +337,7 @@ diceObserver.observe(
 );
 
 confirmElement.addEventListener(`click`, () => {
-	document.querySelector(`#dice`).replaceChildren();
+	diceElement.replaceChildren();
 	rollDiceElement.style.display = `unset`;
 	confirmElement.style.display = `none`;
 	undoElement.style.display = `none`;
@@ -377,7 +378,6 @@ rollDiceElement.addEventListener(`click`, () => {
 	 * @param {number} limit
 	 */
 	function repeatedlyRollDice(limit) {
-		const diceElement = document.querySelector(`#dice`);
 		diceElement.replaceChildren(DieElement.create().target, DieElement.create().target);
 		let count = 1;
 		const intervalID = setInterval(
