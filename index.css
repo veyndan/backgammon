@@ -11,10 +11,10 @@
 	--half-width: calc(var(--point-width) * 6);
 	--half-height: calc(var(--point-height) * 2 + var(--checker-diameter) * 2 + var(--die-side-length) + 30px);
 	--hold-width: var(--checker-diameter);
-	--player-1-checker-background: black;
-	--player-1-checker-text-color: var(--player-2-checker-background);
-	--player-2-checker-background: white;
-	--player-2-checker-text-color: var(--player-1-checker-background);
+	--player-1-checker-background-hsl: 0 0% 0%;
+	--player-1-checker-text-color-hsl: var(--player-2-checker-background-hsl);
+	--player-2-checker-background-hsl: 0 0% 100%;
+	--player-2-checker-text-color-hsl: var(--player-1-checker-background-hsl);
 	--point-count: 24;
 	--point-per-side: calc(var(--point-count) / 2);
 	--point-min: 1;
@@ -50,13 +50,13 @@ body > svg {
 	touch-action: none;
 
 	&[data-player="1"] {
-		--player-current-checker-background: var(--player-1-checker-background);
-		--player-current-checker-text-color: var(--player-1-checker-text-color);
+		--player-current-checker-background-hsl: var(--player-1-checker-background-hsl);
+		--player-current-checker-text-color-hsl: var(--player-1-checker-text-color-hsl);
 	}
 
 	&[data-player="2"] {
-		--player-current-checker-background: var(--player-2-checker-background);
-		--player-current-checker-text-color: var(--player-2-checker-text-color);
+		--player-current-checker-background-hsl: var(--player-2-checker-background-hsl);
+		--player-current-checker-text-color-hsl: var(--player-2-checker-text-color-hsl);
 	}
 
 	&[data-player="2"][data-play-mode="opposite"] foreignObject > div {
@@ -204,13 +204,13 @@ use[href="#hold"] {
 	}
 
 	&[data-player="1"] {
-		fill: var(--player-1-checker-background);
-		color: var(--player-1-checker-text-color);
+		fill: hsl(var(--player-1-checker-background-hsl));
+		color: hsl(var(--player-1-checker-text-color-hsl));
 	}
 
 	&[data-player="2"] {
-		fill: var(--player-2-checker-background);
-		color: var(--player-2-checker-text-color);
+		fill: hsl(var(--player-2-checker-background-hsl));
+		color: hsl(var(--player-2-checker-text-color-hsl));
 	}
 
 	& > text {
@@ -263,12 +263,12 @@ use[href="#hold"] {
 #die-face-background {
 	width: var(--die-side-length);
 	height: var(--die-side-length);
-	fill: var(--player-current-checker-background);
+	fill: hsl(var(--player-current-checker-background-hsl));
 }
 
 .die-pip {
 	r: 4px;
-	fill: var(--player-current-checker-text-color);
+	fill: hsl(var(--player-current-checker-text-color-hsl));
 
 	&.x0 {
 		cx: calc(var(--die-side-length) * .25);
@@ -319,6 +319,13 @@ foreignObject {
 
 #confirm {
 	--background-hsl: 149 83% 28%;
+	--color-hsl: 0 0% 100%;
+}
+
+#undo,
+#roll-dice {
+	--background-hsl: var(--player-current-checker-background-hsl);
+	--color-hsl: var(--player-current-checker-text-color-hsl);
 }
 
 #confirm,
@@ -332,7 +339,7 @@ foreignObject {
 	border-radius: 4px;
 	--alpha: 1;
 	background: hsl(var(--background-hsl) / var(--alpha));
-	color: hsl(0 0% 100% / var(--alpha));
+	color: hsl(var(--color-hsl) / var(--alpha));
 
 	&:disabled {
 		--alpha: .5;
