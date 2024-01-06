@@ -7,7 +7,7 @@
 	--checker-thickness: 5px;
 	--checkers-per-player: 15;
 	--die-side-length: 40px;
-	--die-gap: 10px;
+	--die-gap: 8px;
 	--half-width: calc(var(--point-width) * 6);
 	--half-height: calc(var(--point-height) * 2 + var(--checker-diameter) * 2 + var(--die-side-length) + 30px);
 	--hold-width: var(--checker-diameter);
