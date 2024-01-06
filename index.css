@@ -49,6 +49,16 @@ body > svg {
 	background: hsl(var(--background-hsl));
 	touch-action: none;
 
+	&[data-player="1"] {
+		--player-current-checker-background: var(--player-1-checker-background);
+		--player-current-checker-text-color: var(--player-1-checker-text-color);
+	}
+
+	&[data-player="2"] {
+		--player-current-checker-background: var(--player-2-checker-background);
+		--player-current-checker-text-color: var(--player-2-checker-text-color);
+	}
+
 	&[data-player="2"][data-play-mode="opposite"] foreignObject > div {
 		rotate: .5turn;
 	}
@@ -253,11 +263,12 @@ use[href="#hold"] {
 #die-face-background {
 	width: var(--die-side-length);
 	height: var(--die-side-length);
+	fill: var(--player-current-checker-background);
 }
 
 .die-pip {
 	r: 4px;
-	fill: white;
+	fill: var(--player-current-checker-text-color);
 
 	&.x0 {
 		cx: calc(var(--die-side-length) * .25);
