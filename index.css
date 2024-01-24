@@ -172,8 +172,6 @@ use[href="#drop-point"] {
 }
 
 use[href="#hold"] {
-	background: hsl(216 7% 20%);
-
 	&:first-of-type {
 		y: calc(.25 * var(--half-height));
 	}
