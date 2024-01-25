@@ -342,6 +342,10 @@ foreignObject {
 	&:disabled {
 		--alpha: .5;
 	}
+
+	&:hover:not(:disabled) {
+		--alpha: .85;
+	}
 }
 
 #confirm,
