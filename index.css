@@ -218,6 +218,11 @@ use[href="#hold"] {
 		user-select: none;
 		dominant-baseline: central;
 		text-anchor: middle;
+
+		/* Hide node from accessibility tree when empty. */
+		&:empty {
+			display: none;
+		}
 	}
 
 	&[data-hit] {
