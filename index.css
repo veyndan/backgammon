@@ -300,13 +300,11 @@ foreignObject {
 	y: calc(var(--half-height) / 2 - var(--height) / 2);
 
 	& > div {
-		width: 100%;
 		height: 100%;
 		display: flex;
 		gap: var(--bar-width);
 
 		& > div {
-			width: 100%;
 			display: flex;
 			flex: 1;
 			justify-content: center;
@@ -329,7 +327,6 @@ foreignObject {
 #confirm,
 #undo,
 #roll-dice {
-	height: 100%;
 	font-weight: bold;
 	font-size: 1rem;
 	padding-inline: 20px;
