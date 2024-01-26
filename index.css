@@ -11,6 +11,7 @@
 	--half-width: calc(var(--point-width) * 6);
 	--half-height: calc(var(--point-height) * 2 + var(--checker-diameter) * 2 + var(--die-side-length) + 30px);
 	--hold-width: var(--checker-diameter);
+	--hold-height: calc(var(--checkers-per-player) * var(--checker-thickness));
 	--player-1-checker-background-hsl: 0 0% 0%;
 	--player-1-checker-text-color-hsl: var(--player-2-checker-background-hsl);
 	--player-2-checker-background-hsl: 0 0% 100%;
@@ -28,13 +29,16 @@
 }
 
 html {
+	background: hsl(var(--background-hsl));
 	font: 16px/1.5 system-ui;
 }
 
 body {
 	display: flex;
+	justify-content: center;
 	margin: 0;
 	height: 100vb;
+	padding: 20px;
 }
 
 button {
@@ -46,7 +50,6 @@ button {
 }
 
 body > svg {
-	background: hsl(var(--background-hsl));
 	touch-action: none;
 
 	&[data-player="1"] {
@@ -75,9 +78,9 @@ body > svg {
 }
 
 #hold {
-	translate: calc(var(--half-width) * 2 + var(--bar-width) + var(--hold-width) / 2 + 5px);
+	translate: calc(var(--half-width) * 2 + var(--bar-width) + 5px);
 	width: var(--hold-width);
-	height: calc(var(--checkers-per-player) * var(--checker-thickness));
+	height: var(--hold-height);
 }
 
 .half {
@@ -142,7 +145,7 @@ use[href="#point"] {
 }
 
 #drop-points {
-	translate: var(--checker-diameter) 16px;
+	translate: var(--checker-radius) -14px;
 }
 
 /*noinspection CssInvalidFunction*/
@@ -173,11 +176,11 @@ use[href="#drop-point"] {
 
 use[href="#hold"] {
 	&:first-of-type {
-		y: calc(.25 * var(--half-height));
+		y: calc(.25 * var(--half-height) - var(--hold-height) / 2);
 	}
 
 	&:last-of-type {
-		y: calc(.75 * var(--half-height));
+		y: calc(.75 * var(--half-height) - var(--hold-height) / 2);
 	}
 }
 
