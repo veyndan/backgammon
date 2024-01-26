@@ -345,9 +345,7 @@ foreignObject {
 	}
 }
 
-#confirm,
-#dice,
-#undo {
+#dice {
 	display: none;
 }
 

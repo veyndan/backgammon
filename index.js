@@ -306,8 +306,8 @@ checkersObserver.observe(
 
 const diceObserver = new MutationObserver(mutations => {
 	mutations.forEach(mutation => {
-		confirmElement.style.display = `unset`;
-		undoElement.style.display = `unset`;
+		confirmElement.hidden = false;
+		undoElement.hidden = false;
 		const dieElement = new DieElement(/** @type {SVGUseElement} */ (mutation.target))
 		if (dieElement.playedAt !== undefined) {
 			undoElement.disabled = false;
@@ -338,9 +338,9 @@ diceObserver.observe(
 
 confirmElement.addEventListener(`click`, () => {
 	diceElement.style.display = `none`;
-	rollDiceElement.style.display = `unset`;
-	confirmElement.style.display = `none`;
-	undoElement.style.display = `none`;
+	rollDiceElement.hidden = false;
+	confirmElement.hidden = true;
+	undoElement.hidden = true;
 	turn = new Turn(turn.player.value === Player.One.value ? Player.Two : Player.One);
 	svgElement.dataset[`player`] = turn.player.value;
 });
@@ -368,11 +368,11 @@ undoElement.addEventListener(`click`, () => {
 });
 
 rollDiceElement.addEventListener(`click`, () => {
-	rollDiceElement.style.display = `none`;
+	rollDiceElement.hidden = true;
 	diceElement.style.display = `unset`;
-	confirmElement.style.display = `unset`;
+	confirmElement.hidden = false;
 	confirmElement.disabled = true;
-	undoElement.style.display = `unset`;
+	undoElement.hidden = false;
 	undoElement.disabled = true;
 
 	/**
