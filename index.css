@@ -31,14 +31,20 @@
 html {
 	background: hsl(var(--background-hsl));
 	font: 16px/1.5 system-ui;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	height: 100vb;
 }
 
 body {
+	width: 100vi;
+	max-height: 100vb;
 	display: flex;
 	justify-content: center;
+	gap: 1rem;
 	margin: 0;
-	height: 100vb;
-	padding: 20px;
+	padding: 1rem;
 }
 
 button {
@@ -49,8 +55,104 @@ button {
 	}
 }
 
+body > div {
+	display: flex;
+	writing-mode: sideways-lr;
+	justify-content: space-around;
+	gap: 2rem;
+
+	& > div {
+		display: grid;
+		gap: 0 .75rem;
+		color: white;
+
+		& > .name {
+			grid-area: name;
+			font-weight: bold;
+			font-size: 1.5rem;
+		}
+
+		& > .checker {
+			grid-area: checker;
+			align-self: center;
+		}
+
+		& > .pip {
+			grid-area: pip;
+			inline-size: 5rem;
+			display: grid;
+			grid-template-columns: 1fr max-content;
+			gap: .25rem;
+			padding: .5rem;
+			border-radius: .5rem;
+			font-weight: bold;
+			background: black;
+
+			& > span:first-of-type {
+				align-self: start;
+				line-height: 1;
+			}
+
+			& > a {
+				block-size: 1rem;
+				inline-size: 1rem;
+				align-self: start;
+				line-height: 1;
+				color: inherit;
+
+				&:hover {
+					opacity: .5;
+				}
+			}
+
+			& > a > svg {
+				width: 1rem;
+				height: 1rem;
+				fill: currentColor;
+				rotate: .75turn;
+			}
+
+			& > span:last-of-type {
+				grid-column: span 2;
+				line-height: 1;
+				color: hsl(29 86% 72%);
+				font-size: 2rem;
+			}
+		}
+
+		& > .points {
+			grid-area: points;
+			font-style: italic;
+			font-size: 1rem;
+
+			& > span {
+				font-weight: bold;
+
+				&:first-of-type {
+					color: hsl(29 86% 72%);
+					text-decoration: underline currentColor 3px;
+					text-underline-position: under;
+				}
+			}
+		}
+
+		&[data-player="1"] {
+			grid-template-areas:
+				"pip name checker"
+				"pip points points";
+		}
+
+		&[data-player="2"] {
+			grid-template-areas:
+				"name checker pip"
+				"points points pip";
+		}
+	}
+}
+
 body > svg {
 	touch-action: none;
+	max-width: 100vb;
 
 	&[data-player="1"] {
 		--player-current-checker-background-hsl: var(--player-1-checker-background-hsl);
