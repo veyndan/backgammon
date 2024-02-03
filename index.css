@@ -185,6 +185,22 @@ body > svg {
 	height: var(--hold-height);
 }
 
+#doubling-cube-face {
+	translate: calc(var(--half-width) * 2 + var(--bar-width) + 5px) calc(.5 * var(--half-height) - var(--die-side-length) / 2);
+
+	& > #die-face-background {
+		fill: firebrick;
+	}
+
+	& > text {
+		translate: calc(var(--die-side-length) / 2) 22px;
+		fill: white;
+		font: bold 24px sans-serif;
+		text-anchor: middle;
+		dominant-baseline: central;
+	}
+}
+
 .half {
 	fill: hsl(29 86% 72%);
 	clip-path: fill-box inset(0 round 4px);
