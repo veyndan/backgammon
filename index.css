@@ -61,7 +61,7 @@ body > div {
 	justify-content: space-around;
 	gap: 2rem;
 
-	& > div {
+	& > div[data-player] {
 		display: grid;
 		gap: 0 .75rem;
 		color: white;
@@ -146,6 +146,30 @@ body > div {
 			grid-template-areas:
 				"name checker pip"
 				"points points pip";
+		}
+	}
+
+	& > #timer {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		gap: .5rem;
+		margin-block: auto;
+		padding: .5rem;
+		border-radius: .5rem;
+		font-weight: bold;
+		background: black;
+		color: white;
+		line-height: 1;
+
+		& > .reserve-bank {
+			font-size: .9rem;
+		}
+
+		& > #move {
+			background: hsl(var(--background-hsl));
+			font-size: 1.5rem;
+			padding: .5rem .25rem;
 		}
 	}
 }
