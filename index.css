@@ -63,6 +63,7 @@ body > div {
 
 	& > div[data-player] {
 		display: grid;
+		flex-shrink: 0;
 		gap: 0 .75rem;
 		color: white;
 
