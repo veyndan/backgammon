@@ -444,6 +444,7 @@ foreignObject {
 	--color-hsl: 0 0% 100%;
 }
 
+#double,
 #undo,
 #roll-dice {
 	--background-hsl: var(--player-current-checker-background-hsl);
@@ -451,6 +452,7 @@ foreignObject {
 }
 
 #confirm,
+#double,
 #undo,
 #roll-dice {
 	font-weight: bold;

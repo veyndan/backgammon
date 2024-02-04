@@ -262,6 +262,7 @@ const svgElement = document.querySelector(`body > svg`);
 const checkersElement = document.getElementById('checkers');
 const confirmElement = /** @type {HTMLButtonElement} */ (document.getElementById(`confirm`));
 const diceElement = /** @type {SVGSVGElement} */ (document.querySelector(`#dice`));
+const doubleElement = /** @type {HTMLButtonElement} */ (document.getElementById(`double`));
 const rollDiceElement = /** @type {HTMLButtonElement} */ (document.getElementById(`roll-dice`));
 const undoElement = /** @type {HTMLButtonElement} */ (document.getElementById(`undo`));
 
@@ -338,6 +339,7 @@ diceObserver.observe(
 
 confirmElement.addEventListener(`click`, () => {
 	diceElement.style.display = `none`;
+	doubleElement.hidden = false;
 	rollDiceElement.hidden = false;
 	confirmElement.hidden = true;
 	undoElement.hidden = true;
@@ -368,6 +370,7 @@ undoElement.addEventListener(`click`, () => {
 });
 
 rollDiceElement.addEventListener(`click`, () => {
+	doubleElement.hidden = true;
 	rollDiceElement.hidden = true;
 	diceElement.style.display = `unset`;
 	confirmElement.hidden = false;
