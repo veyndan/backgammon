@@ -1,7 +1,7 @@
 {
 	"type": "module",
 	"engines": {
-		"node": "21.6.1"
+		"node": "21.6.2"
 	},
 	"scripts": {
 		"test": "npx tsc && node checker.test.js"
