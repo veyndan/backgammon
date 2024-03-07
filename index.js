@@ -413,12 +413,7 @@ function updateMovabilityOfCheckers() {
 		.map(target => new DieElement(target));
 	const checkerElements = Array.from(/** @type {NodeListOf<SVGGElement>} */ (document.querySelectorAll(`#checkers > [data-player="${turn.player.value}"]`)))
 		.map(value => new CheckerElement(value));
-	// noinspection JSUnresolvedReference
-	/**
-	 * @type {Map<string, CheckerElement[]>}
-	 */
-		// @ts-ignore https://github.com/microsoft/TypeScript/issues/47171
-	const positionNameToCheckerElements = Map.groupBy(checkerElements, /** @param {CheckerElement} checkerElement */checkerElement => checkerElement.position.constructor.name);
+	const positionNameToCheckerElements = Map.groupBy(checkerElements, checkerElement => checkerElement.position.constructor.name);
 	if (positionNameToCheckerElements.has(Bar.name)) {
 		positionNameToCheckerElements.get(Bar.name)
 			.forEach(checkerElement => {
