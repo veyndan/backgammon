@@ -261,6 +261,8 @@ class DieElement {
 const svgElement = /** @type {SVGSVGElement} */ (document.querySelector(`body > svg`));
 const checkersElement = document.getElementById('checkers');
 const confirmElement = /** @type {HTMLButtonElement} */ (document.getElementById(`confirm`));
+const diceContainerElement = /** @type {HTMLDivElement} */ (document.querySelector(`#dice-container`));
+const diceSwapElement = /** @type {SVGSVGElement} */ (document.querySelector(`#dice-swap`));
 const diceElement = /** @type {SVGSVGElement} */ (document.querySelector(`#dice`));
 const doubleElement = /** @type {HTMLButtonElement} */ (document.getElementById(`double`));
 const rollDiceElement = /** @type {HTMLButtonElement} */ (document.getElementById(`roll-dice`));
@@ -338,7 +340,7 @@ diceObserver.observe(
 );
 
 confirmElement.addEventListener(`click`, () => {
-	diceElement.style.display = `none`;
+	diceContainerElement.style.display = `none`;
 	doubleElement.hidden = false;
 	rollDiceElement.hidden = false;
 	confirmElement.hidden = true;
@@ -372,7 +374,9 @@ undoElement.addEventListener(`click`, () => {
 rollDiceElement.addEventListener(`click`, () => {
 	doubleElement.hidden = true;
 	rollDiceElement.hidden = true;
-	diceElement.style.display = `unset`;
+	diceContainerElement.style.display = `flex`;
+	diceContainerElement.style.cursor = `default`;
+	diceSwapElement.style.visibility = `hidden`;
 	confirmElement.hidden = false;
 	confirmElement.disabled = true;
 	undoElement.hidden = false;
@@ -397,6 +401,9 @@ rollDiceElement.addEventListener(`click`, () => {
 							() => diceElement.append(DieElement.create(firstDieElement.value).target, DieElement.create(firstDieElement.value).target),
 							200,
 						);
+					} else {
+						diceContainerElement.style.cursor = `pointer`;
+						diceSwapElement.style.visibility = `visible`;
 					}
 					updateMovabilityOfCheckers();
 				}
@@ -406,6 +413,11 @@ rollDiceElement.addEventListener(`click`, () => {
 	}
 
 	repeatedlyRollDice(5);
+});
+
+diceContainerElement.addEventListener(`click`, () => {
+	if (diceSwapElement.style.visibility === `hidden`) return;
+	diceElement.children[1].after(diceElement.children[0]);
 });
 
 function updateMovabilityOfCheckers() {

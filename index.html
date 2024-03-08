@@ -48,7 +48,7 @@
       </div>
     </div>
 
-    <svg viewBox="0 0 580 470" data-player="1" data-play-mode="opposite">
+    <svg viewBox="0 0 580 480" data-player="1" data-play-mode="opposite">
       <defs>
         <!-- The point should have dimensions 1:4, so exactly 4 stacked checkers can fill a point -->
         <polyline id="point" points="2,0 20,158 38,0" stroke-width="4" stroke-linejoin="round" stroke-linecap="square"/>
@@ -153,7 +153,10 @@
           </div>
           <div>
             <button id="roll-dice" type="button">Roll Dice</button>
-            <svg id="dice"/>
+            <div id="dice-container">
+              <svg id="dice-swap" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960"><path d="M280-160 80-360l200-200 56 57-103 103h287v80H233l103 103-56 57Zm400-240-56-57 103-103H440v-80h287L624-743l56-57 200 200-200 200Z"/></svg>
+              <svg id="dice"/>
+            </div>
           </div>
         </div>
       </foreignObject>

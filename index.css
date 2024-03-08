@@ -9,7 +9,7 @@
 	--die-side-length: 40px;
 	--die-gap: 8px;
 	--half-width: calc(var(--point-width) * 6);
-	--half-height: calc(var(--point-height) * 2 + var(--checker-diameter) * 2 + var(--die-side-length) + 30px);
+	--half-height: calc(var(--point-height) * 2 + var(--checker-diameter) * 2 + var(--die-side-length) + 40px);
 	--hold-width: var(--checker-diameter);
 	--hold-height: calc(var(--checkers-per-player) * var(--checker-thickness));
 	--player-1-checker-background-hsl: 0 0% 0%;
@@ -445,7 +445,7 @@ use[href="#hold"] {
 }
 
 foreignObject {
-	--height: 40px;
+	--height: 80px;
 	width: calc(var(--half-width) * 2 + var(--bar-width));
 	height: var(--height);
 	y: calc(var(--half-height) / 2 - var(--height) / 2);
@@ -458,6 +458,7 @@ foreignObject {
 		& > div {
 			display: flex;
 			flex: 1;
+			align-items: center;
 			justify-content: center;
 			gap: 8px;
 		}
@@ -480,6 +481,7 @@ foreignObject {
 #double,
 #undo,
 #roll-dice {
+	block-size: 40px;
 	font-weight: bold;
 	font-size: 1rem;
 	padding-inline: 20px;
@@ -498,11 +500,23 @@ foreignObject {
 	}
 }
 
-#dice {
+#dice-container {
 	display: none;
+	block-size: var(--height);
+	flex-direction: column;
+	align-items: center;
+}
+
+#dice-swap {
+	block-size: 12px;
+	margin-block: 4px;
 }
 
 #dice {
+	/* TODO Remove setting of full-width, as this causes the "click to swap dice" click zone to be too large. */
+	inline-size: 100%;
+	block-size: 56px;
+
 	:nth-child(1):nth-last-child(4),
 	:nth-child(2):nth-last-child(3) {
 		transition: translate .4s;
