@@ -15,6 +15,71 @@ Math.clamp = function (x, lower, upper) {
 	return Math.min(Math.max(x, lower), upper);
 };
 
+export class CheckerLegacy {
+	/**
+	 * @param {Player} player
+	 * @param {Position} position
+	 */
+	constructor(player, position) {
+		this.player = player;
+		this.position = position;
+	}
+
+	/**
+	 * @param {number} offset
+	 * @return {?CheckerLegacy}
+	 */
+	moveBy(offset) {
+		if (this.position instanceof Point) {
+			const potentialPoint = this.position.value + (this.player.value === Player.One.value ? -offset : offset);
+			if (potentialPoint < Point.MIN.value || potentialPoint > Point.MAX.value) {
+				return null;
+			} else {
+				return new CheckerLegacy(this.player, new Point(potentialPoint));
+			}
+		} else {
+			return new CheckerLegacy(this.player, new Point(this.player.value === Player.One.value ? Point.MAX.value - offset + 1 : offset));
+		}
+	}
+}
+
+class Board {
+	constructor() {
+		this.points = [
+			[new Checker(Player.Two), new Checker(Player.Two)],
+			[],
+			[],
+			[],
+			[],
+			[new Checker(Player.One), new Checker(Player.One), new Checker(Player.One), new Checker(Player.One), new Checker(Player.One)],
+			[],
+			[new Checker(Player.One), new Checker(Player.One), new Checker(Player.One)],
+			[],
+			[],
+			[],
+			[new Checker(Player.Two), new Checker(Player.Two), new Checker(Player.Two), new Checker(Player.Two), new Checker(Player.Two)],
+			[new Checker(Player.One), new Checker(Player.One), new Checker(Player.One), new Checker(Player.One), new Checker(Player.One)],
+			[],
+			[],
+			[],
+			[new Checker(Player.Two), new Checker(Player.Two), new Checker(Player.Two)],
+			[],
+			[new Checker(Player.Two), new Checker(Player.Two), new Checker(Player.Two), new Checker(Player.Two), new Checker(Player.Two)],
+			[],
+			[],
+			[],
+			[],
+			[new Checker(Player.One), new Checker(Player.One)],
+		];
+		this.bar = {
+			[Player.One.value]: 0,
+			[Player.Two.value]: 0,
+		};
+	}
+}
+
+const board = new Board();
+
 class Move {
 	/**
 	 * @param {Player} player
@@ -268,6 +333,31 @@ const doubleElement = /** @type {HTMLButtonElement} */ (document.getElementById(
 const rollDiceElement = /** @type {HTMLButtonElement} */ (document.getElementById(`roll-dice`));
 const undoElement = /** @type {HTMLButtonElement} */ (document.getElementById(`undo`));
 
+const checkerElements = board.points.flatMap((checkers, pointZeroBased) => {
+	const point = pointZeroBased + 1;
+	return checkers
+		.map((checker, pointStackIndex) => {
+			const gElement = document.createElementNS(`http://www.w3.org/2000/svg`, `g`);
+			gElement.dataset[`player`] = checker.player.value;
+			gElement.dataset[`point`] = `${point}`;
+			gElement.dataset[`pointStackIndex`] = `${pointStackIndex}`;
+			gElement.dataset[`pointStackCount`] = `${checkers.length}`;
+			gElement.dataset[`permissibleDestinationPoints`] = `[]`;
+			gElement.style.setProperty(`--point`, `${point}`);
+			gElement.style.setProperty(`--point-stack-index`, `${pointStackIndex}`);
+			gElement.style.setProperty(`--point-stack-count`, `${checkers.length}`);
+			const useElement = document.createElementNS(`http://www.w3.org/2000/svg`, `use`);
+			useElement.setAttribute(`href`, `#checker-background`);
+			const textElement = document.createElementNS(`http://www.w3.org/2000/svg`, `text`);
+			textElement.setAttribute(`x`, `20`);
+			textElement.setAttribute(`y`, `20`);
+			gElement.append(useElement, textElement);
+			return gElement;
+		});
+});
+
+checkersElement.append(...checkerElements);
+
 const checkersObserver = new MutationObserver(mutations => {
 	mutations.forEach(mutation => {
 		const checkerElement = new CheckerElement(/** @type {SVGGElement} */ (mutation.target));
@@ -431,7 +521,7 @@ function updateMovabilityOfCheckers() {
 			.forEach(checkerElement => {
 				checkerElement.permissibleDestinationPoints = /** @type {Set<Point>} */ (new Set(
 					dieElements
-						.map(dieElement => new Checker(checkerElement.player, checkerElement.position).moveBy(dieElement.value))
+						.map(dieElement => new CheckerLegacy(checkerElement.player, checkerElement.position).moveBy(dieElement.value))
 						.filter(potentialCheckerMovement => potentialCheckerMovement !== null)
 						.map(potentialCheckerMovement => potentialCheckerMovement.position)
 						.filter(potentialDestinationPosition => {
@@ -454,7 +544,7 @@ function updateMovabilityOfCheckers() {
 			.forEach(checkerElement => {
 				checkerElement.permissibleDestinationPoints = /** @type {Set<Point>} */ (new Set(
 					dieElements
-						.map(dieElement => new Checker(checkerElement.player, checkerElement.position).moveBy(dieElement.value))
+						.map(dieElement => new CheckerLegacy(checkerElement.player, checkerElement.position).moveBy(dieElement.value))
 						.filter(potentialCheckerMovement => potentialCheckerMovement !== null)
 						.map(potentialCheckerMovement => potentialCheckerMovement.position)
 						.filter(potentialDestinationPosition => {
@@ -485,7 +575,7 @@ checkersElement.addEventListener(`click`, event => {
 		.find(dieElement =>
 			Array.from(checkerElement.permissibleDestinationPoints)
 				.some(permissibleDestinationPoint => {
-					const potentialDestinationChecker = new Checker(checkerElement.player, checkerElement.position).moveBy(dieElement.value);
+					const potentialDestinationChecker = new CheckerLegacy(checkerElement.player, checkerElement.position).moveBy(dieElement.value);
 					if (potentialDestinationChecker === null) return false;
 					if (potentialDestinationChecker.position instanceof Point) {
 						return potentialDestinationChecker.position.value === permissibleDestinationPoint.value;
@@ -496,7 +586,7 @@ checkersElement.addEventListener(`click`, event => {
 		);
 	dieElement.playedAt = Date.now();
 	const oldPosition = checkerElement.position;
-	checkerElement.position = new Checker(checkerElement.player, checkerElement.position).moveBy(dieElement.value).position;
+	checkerElement.position = new CheckerLegacy(checkerElement.player, checkerElement.position).moveBy(dieElement.value).position;
 	const moves = [
 		new Move(checkerElement.player, oldPosition, checkerElement.position),
 	];
@@ -634,7 +724,7 @@ checkersElement.addEventListener('pointerdown', event => {
 		const dieElement = Array.from(/** @type {NodeListOf<SVGUseElement>} */ (document.querySelectorAll(`#dice :not([data-played-at])`)))
 			.map(target => new DieElement(target))
 			.find(unplayedDieElement => {
-				const potentialDestinationChecker = new Checker(checkerElement.player, checkerElement.position).moveBy(unplayedDieElement.value);
+				const potentialDestinationChecker = new CheckerLegacy(checkerElement.player, checkerElement.position).moveBy(unplayedDieElement.value);
 				if (potentialDestinationChecker === null) return false;
 				if (potentialDestinationChecker.position instanceof Point) {
 					return Array.from(checkerElement.permissibleDestinationPoints).map(permissibleDestinationPoint => permissibleDestinationPoint.value).includes(potentialDestinationChecker.position.value) && point !== null && potentialDestinationChecker.position.value === point.value;
