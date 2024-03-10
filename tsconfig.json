@@ -12,6 +12,7 @@
     "moduleResolution": "NodeNext"
   },
   "exclude": [
+    "dist",
     "node_modules"
   ]
 }
