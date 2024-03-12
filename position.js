@@ -1,6 +1,10 @@
 export class Position {}
 
-export class Bar extends Position {}
+export class Bar extends Position {
+	toString() {
+		return `Bar`;
+	}
+}
 
 const MIN_POINT_VALUE = 1;
 const MAX_POINT_VALUE = 24;
@@ -23,5 +27,9 @@ export class Point extends Position {
 
 	static get MAX() {
 		return new Point(MAX_POINT_VALUE);
+	}
+
+	toString() {
+		return `Point(${this.value})`;
 	}
 }

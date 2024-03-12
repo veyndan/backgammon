@@ -1,4 +1,4 @@
-import Checker from "./checker.js";
+import Board from "./board.js";
 import {CheckerLegacy} from "./checker.js";
 import {Bar, Point, Position} from "./position.js";
 import Player from "./player.js";
@@ -16,42 +16,7 @@ Math.clamp = function (x, lower, upper) {
 	return Math.min(Math.max(x, lower), upper);
 };
 
-class Board {
-	constructor() {
-		this.points = [
-			[new Checker(Player.Two), new Checker(Player.Two)],
-			[],
-			[],
-			[],
-			[],
-			[new Checker(Player.One), new Checker(Player.One), new Checker(Player.One), new Checker(Player.One), new Checker(Player.One)],
-			[],
-			[new Checker(Player.One), new Checker(Player.One), new Checker(Player.One)],
-			[],
-			[],
-			[],
-			[new Checker(Player.Two), new Checker(Player.Two), new Checker(Player.Two), new Checker(Player.Two), new Checker(Player.Two)],
-			[new Checker(Player.One), new Checker(Player.One), new Checker(Player.One), new Checker(Player.One), new Checker(Player.One)],
-			[],
-			[],
-			[],
-			[new Checker(Player.Two), new Checker(Player.Two), new Checker(Player.Two)],
-			[],
-			[new Checker(Player.Two), new Checker(Player.Two), new Checker(Player.Two), new Checker(Player.Two), new Checker(Player.Two)],
-			[],
-			[],
-			[],
-			[],
-			[new Checker(Player.One), new Checker(Player.One)],
-		];
-		this.bar = {
-			[Player.One.value]: 0,
-			[Player.Two.value]: 0,
-		};
-	}
-}
-
-const board = new Board();
+const board = Board.startingPosition();
 
 class Move {
 	/**
@@ -306,19 +271,19 @@ const doubleElement = /** @type {HTMLButtonElement} */ (document.getElementById(
 const rollDiceElement = /** @type {HTMLButtonElement} */ (document.getElementById(`roll-dice`));
 const undoElement = /** @type {HTMLButtonElement} */ (document.getElementById(`undo`));
 
-const checkerElements = board.points.flatMap((checkers, pointZeroBased) => {
-	const point = pointZeroBased + 1;
-	return checkers
-		.map((checker, pointStackIndex) => {
+const checkerElements = board.mailbox.flatMap((pointValue, point) => {
+	const pointStackCount = Math.abs(pointValue);
+	return Array.from(Array(pointStackCount), (_, index) => index)
+		.map(pointStackIndex => {
 			const gElement = document.createElementNS(`http://www.w3.org/2000/svg`, `g`);
-			gElement.dataset[`player`] = checker.player.value;
+			gElement.dataset[`player`] = pointValue > 0 ? Player.One.value : Player.Two.value;
 			gElement.dataset[`point`] = `${point}`;
 			gElement.dataset[`pointStackIndex`] = `${pointStackIndex}`;
-			gElement.dataset[`pointStackCount`] = `${checkers.length}`;
+			gElement.dataset[`pointStackCount`] = `${pointStackCount}`;
 			gElement.dataset[`permissibleDestinationPoints`] = `[]`;
 			gElement.style.setProperty(`--point`, `${point}`);
 			gElement.style.setProperty(`--point-stack-index`, `${pointStackIndex}`);
-			gElement.style.setProperty(`--point-stack-count`, `${checkers.length}`);
+			gElement.style.setProperty(`--point-stack-count`, `${pointStackCount}`);
 			const useElement = document.createElementNS(`http://www.w3.org/2000/svg`, `use`);
 			useElement.setAttribute(`href`, `#checker-background`);
 			const textElement = document.createElementNS(`http://www.w3.org/2000/svg`, `text`);
