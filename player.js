@@ -16,4 +16,8 @@ export default class Player {
 	static get Two() {
 		return new Player(TWO_VALUE);
 	}
+
+	toString() {
+		return `Player(${this.value})`;
+	}
 }
