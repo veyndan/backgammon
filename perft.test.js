@@ -51,37 +51,45 @@ function perft(board, depth) {
 
 test(`perft`, function (t) {
 	t.test(`starting position`, function (t) {
+		const board = Board.startingPosition();
 		t.test(`depth 1`, function (t) {
-			const board = Board.startingPosition();
 			t.equal(divide(board, 1), 447);
 			t.end();
 		});
 		t.test(`depth 2`, function (t) {
-			const board = Board.startingPosition();
 			t.equal(divide(board, 2), 202_782);
 			t.end();
 		});
 	});
 	t.test(`scattered`, function (t) {
+		const board = new Board([[0, 1, 1, 1, 1, 3, 0, 1, 0, 0, 0, 0, 2, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 2, 0], [0, 1, 1, 1, 1, 3, 0, 1, 0, 0, 0, 0, 2, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 2, 0]]);
 		t.test(`depth 1`, function (t) {
-			const board = new Board([[0, 1, 1, 1, 1, 3, 0, 1, 0, 0, 0, 0, 2, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 2, 0], [0, 1, 1, 1, 1, 3, 0, 1, 0, 0, 0, 0, 2, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 2, 0]]);
 			t.equal(divide(board, 1), 1_665);
 			t.end();
 		});
 		t.test(`depth 2`, function (t) {
-			const board = new Board([[0, 1, 1, 1, 1, 3, 0, 1, 0, 0, 0, 0, 2, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 2, 0], [0, 1, 1, 1, 1, 3, 0, 1, 0, 0, 0, 0, 2, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 2, 0]]);
 			t.equal(divide(board, 2), 1_083_063);
 			t.end();
 		});
 	});
-	t.test(`end game`, function (t) {
+	t.test(`blocked from bar`, function (t) {
+		const board = new Board([[13, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2], [2, 2, 2, 2, 2, 2, 2, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]]);
 		t.test(`depth 1`, function (t) {
-			const board = new Board([[4, 3, 0, 2, 1, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 2, 0, 4, 1, 8, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]]);
+			t.equal(divide(board, 1), 541);
+			t.end();
+		});
+		t.test(`depth 2`, function (t) {
+			t.equal(divide(board, 2), 4_408);
+			t.end();
+		});
+	});
+	t.test(`end game`, function (t) {
+		const board = new Board([[4, 3, 0, 2, 1, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 2, 0, 4, 1, 8, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]]);
+		t.test(`depth 1`, function (t) {
 			t.equal(divide(board, 1), 203);
 			t.end();
 		});
 		t.test(`depth 2`, function (t) {
-			const board = new Board([[4, 3, 0, 2, 1, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 2, 0, 4, 1, 8, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]]);
 			t.equal(divide(board, 2), 46_690);
 			t.end();
 		});
