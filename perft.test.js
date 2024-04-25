@@ -14,9 +14,9 @@ function divide(board, maxDepth) {
 
 			legalTurns.amMoves.forEach(legalTurn => {
 				const boardNew = new Board([[...board.mailbox[0]], [...board.mailbox[1]]]);
-				const tms = board.playMove(boardNew, legalTurn.anMove);
-				const moveCount = perft(tms, maxDepth - 1);
-				// console.log(`${die0}-${die1}: ${Array.from(Array(legalTurn.cMoves), (_, i) => `${legalTurn.anMove[i * 2] + 1}/${legalTurn.anMove[i * 2 + 1] + 1}`).join(` `)} → ${moveCount}`);
+				boardNew.playMove(legalTurn.anMove);
+				const moveCount = perft(boardNew, maxDepth - 1);
+				// console.log(`${die0}-${die1}: ${Array.from(Array(legalTurn.anMove.length / 2), (_, i) => `${legalTurn.anMove[i * 2] + 1}/${legalTurn.anMove[i * 2 + 1] + 1}`).join(` `)} → ${moveCount}`);
 				totalTurnCount += moveCount;
 			});
 		}
@@ -40,8 +40,8 @@ function perft(board, depth) {
 			const legalTurns = board.legalTurns(die0, die1);
 			legalTurns.amMoves.forEach(legalTurn => {
 				const boardNew = new Board([[...board.mailbox[0]], [...board.mailbox[1]]]);
-				const tms = board.playMove(boardNew, legalTurn.anMove);
-				const moveCount = perft(tms, depth - 1);
+				boardNew.playMove(legalTurn.anMove);
+				const moveCount = perft(boardNew, depth - 1);
 				totalTurnCount += moveCount;
 			});
 		}
@@ -58,6 +58,10 @@ test(`perft`, function (t) {
 		});
 		t.test(`depth 2`, function (t) {
 			t.equal(divide(board, 2), 202_782);
+			t.end();
+		});
+		t.test(`depth 3`, function (t) {
+			t.equal(divide(board, 3), 116_087_720);
 			t.end();
 		});
 	});
