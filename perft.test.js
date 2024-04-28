@@ -13,7 +13,7 @@ function divide(board, maxDepth) {
 			const legalTurns = board.legalTurns(die0, die1);
 
 			legalTurns.amMoves.forEach(legalTurn => {
-				const boardNew = new Board([[...board.mailboxLegacy[0]], [...board.mailboxLegacy[1]]]);
+				const boardNew = new Board([[...board.mailboxLegacy[0]], [...board.mailboxLegacy[1]]], [board.mailbox[0], board.mailbox[1]]);
 				boardNew.playMove(legalTurn.anMove);
 				const moveCount = perft(boardNew, maxDepth - 1);
 				// console.log(`${die0}-${die1}: ${Array.from(Array(legalTurn.anMove.length / 2), (_, i) => `${legalTurn.anMove[i * 2] + 1}/${legalTurn.anMove[i * 2 + 1] + 1}`).join(` `)} → ${moveCount}`);
@@ -39,7 +39,7 @@ function perft(board, depth) {
 		for (let die1 = die0; die1 <= 6; die1++) {
 			const legalTurns = board.legalTurns(die0, die1);
 			legalTurns.amMoves.forEach(legalTurn => {
-				const boardNew = new Board([[...board.mailboxLegacy[0]], [...board.mailboxLegacy[1]]]);
+				const boardNew = new Board([[...board.mailboxLegacy[0]], [...board.mailboxLegacy[1]]], [board.mailbox[0], board.mailbox[1]]);
 				boardNew.playMove(legalTurn.anMove);
 				const moveCount = perft(boardNew, depth - 1);
 				totalTurnCount += moveCount;

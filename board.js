@@ -10,17 +10,21 @@ export class Board {
 	 * 	Zero's within the array indicates a position where no checkers of either
 	 * 	player reside. The absolute value of a position indicates the number of
 	 * 	checkers that reside on that position.
-	 *
+	 * @param {bigint[]} mailbox
 	 */
-	constructor(mailboxLegacy) {
+	constructor(mailboxLegacy, mailbox) {
 		this.mailboxLegacy = mailboxLegacy;
+		this.mailbox = mailbox;
 	}
 
 	/**
 	 * @return {Board}
 	 */
 	static startingPosition() {
-		return new Board([[0b0000, 0b0000, 0b0000, 0b0000, 0b0000, 0b0101, 0b0000, 0b0011, 0b0000, 0b0000, 0b0000, 0b0000, 0b0101, 0b0000, 0b0000, 0b0000, 0b0000, 0b0000, 0b0000, 0b0000, 0b0000, 0b0000, 0b0000, 0b0010, 0b0000], [0b0000, 0b0000, 0b0000, 0b0000, 0b0000, 0b0101, 0b0000, 0b0011, 0b0000, 0b0000, 0b0000, 0b0000, 0b0101, 0b0000, 0b0000, 0b0000, 0b0000, 0b0000, 0b0000, 0b0000, 0b0000, 0b0000, 0b0000, 0b0010, 0b0000]]);
+		return new Board(
+			[[0b0000, 0b0000, 0b0000, 0b0000, 0b0000, 0b0101, 0b0000, 0b0011, 0b0000, 0b0000, 0b0000, 0b0000, 0b0101, 0b0000, 0b0000, 0b0000, 0b0000, 0b0000, 0b0000, 0b0000, 0b0000, 0b0000, 0b0000, 0b0010, 0b0000], [0b0000, 0b0000, 0b0000, 0b0000, 0b0000, 0b0101, 0b0000, 0b0011, 0b0000, 0b0000, 0b0000, 0b0000, 0b0101, 0b0000, 0b0000, 0b0000, 0b0000, 0b0000, 0b0000, 0b0000, 0b0000, 0b0000, 0b0000, 0b0010, 0b0000]],
+			[0b0000_0000_0000_0000_0000_0101_0000_0011_0000_0000_0000_0000_0101_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0010_0000n, 0b0000_0000_0000_0000_0000_0101_0000_0011_0000_0000_0000_0000_0101_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0010_0000n],
+	);
 	}
 
 	/**
@@ -98,7 +102,7 @@ export class Board {
 		/** @type {move} */
 		const pm = {
 			anMove: [...anMoves],
-			anBoard: new Board([[...this.mailboxLegacy[0]], [...this.mailboxLegacy[1]]]),
+			anBoard: new Board([[...this.mailboxLegacy[0]], [...this.mailboxLegacy[1]]], [this.mailbox[0], this.mailbox[1]]),
 		}
 
 		pml.amMoves[pml.cMoves] = pm;
@@ -151,7 +155,7 @@ export class Board {
 				anMoves[nMoveDepth * 2] = 24;
 				anMoves[nMoveDepth * 2 + 1] = 24 - anRoll[nMoveDepth];
 
-				let anBoardNew = new Board([[...this.mailboxLegacy[0]], [...this.mailboxLegacy[1]]]);
+				let anBoardNew = new Board([[...this.mailboxLegacy[0]], [...this.mailboxLegacy[1]]], [this.mailbox[0], this.mailbox[1]]);
 
 				anBoardNew.#ApplySubMove(24, anRoll[nMoveDepth]);
 
@@ -167,7 +171,7 @@ export class Board {
 					anMoves[nMoveDepth * 2] = i;
 					anMoves[nMoveDepth * 2 + 1] = i - anRoll[nMoveDepth];
 
-					let anBoardNew = new Board([[...this.mailboxLegacy[0]], [...this.mailboxLegacy[1]]]);
+					let anBoardNew = new Board([[...this.mailboxLegacy[0]], [...this.mailboxLegacy[1]]], [this.mailbox[0], this.mailbox[1]]);
 
 					anBoardNew.#ApplySubMove(i, anRoll[nMoveDepth]);
 
@@ -226,12 +230,21 @@ export class Board {
 			/** @type {number} */
 			let nDest = anMove[i + 1];
 
+			if (i === 0) {
+				if (this.mailboxLegacy[1][nSrc].toString(2) !== ((this.mailbox[1] >> BigInt((24 - nSrc) * 4)) & 0b1111n).toString(2)) {
+					// console.error(nSrc);
+				}
+			}
 			if (this.mailboxLegacy[1][nSrc] === 0) {
 				/* source point is empty; ignore */
 				continue;
 			}
 
 			this.mailboxLegacy[1][nSrc]--;
+			if (i === 0) {
+				this.mailbox[1] -= (1n << BigInt((24 - nSrc) * 4));
+				console.log((1n << BigInt((24 - nSrc) * 4)).toString(2), (this.mailboxLegacy[1][nSrc]).toString(2), ((this.mailbox[1] >> BigInt((24 - nSrc) * 4)) & 0b1111n).toString(2));
+			}
 			if (nDest >= 0) {
 				this.mailboxLegacy[1][nDest]++;
 
