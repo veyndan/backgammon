@@ -1,6 +1,6 @@
 export class Board {
 	/**
-	 * @param {number[][]} mailbox An array based representation of the board with
+	 * @param {number[][]} mailboxLegacy An array based representation of the board with
 	 * 	exactly 26 entries. The first entry represents the bar for player 2. The
 	 * 	last entry represents the bar for player 1. The remaining middle 24
 	 * 	entries represent the points on the board, where the index of the point
@@ -12,15 +12,15 @@ export class Board {
 	 * 	checkers that reside on that position.
 	 *
 	 */
-	constructor(mailbox) {
-		this.mailbox = mailbox;
+	constructor(mailboxLegacy) {
+		this.mailboxLegacy = mailboxLegacy;
 	}
 
 	/**
 	 * @return {Board}
 	 */
 	static startingPosition() {
-		return new Board([[0, 0, 0, 0, 0, 5, 0, 3, 0, 0, 0, 0, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0], [0, 0, 0, 0, 0, 5, 0, 3, 0, 0, 0, 0, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0]]);
+		return new Board([[0b0000, 0b0000, 0b0000, 0b0000, 0b0000, 0b0101, 0b0000, 0b0011, 0b0000, 0b0000, 0b0000, 0b0000, 0b0101, 0b0000, 0b0000, 0b0000, 0b0000, 0b0000, 0b0000, 0b0000, 0b0000, 0b0000, 0b0000, 0b0010, 0b0000], [0b0000, 0b0000, 0b0000, 0b0000, 0b0000, 0b0101, 0b0000, 0b0011, 0b0000, 0b0000, 0b0000, 0b0000, 0b0101, 0b0000, 0b0000, 0b0000, 0b0000, 0b0000, 0b0000, 0b0000, 0b0000, 0b0000, 0b0000, 0b0010, 0b0000]]);
 	}
 
 	/**
@@ -44,17 +44,17 @@ export class Board {
 	 * @param {number} nRoll
 	 */
 	#ApplySubMove(iSrc, nRoll) {
-		this.mailbox[1][iSrc]--;
+		this.mailboxLegacy[1][iSrc]--;
 
 		/** @type {number} */
 		const iDest = iSrc - nRoll;
 
-		if (this.mailbox[0][23 - iDest]) {
-			this.mailbox[1][iDest] = 1;
-			this.mailbox[0][23 - iDest] = 0;
-			this.mailbox[0][24]++;
+		if (this.mailboxLegacy[0][23 - iDest]) {
+			this.mailboxLegacy[1][iDest] = 1;
+			this.mailboxLegacy[0][23 - iDest] = 0;
+			this.mailboxLegacy[0][24]++;
 		} else {
-			this.mailbox[1][iDest]++;
+			this.mailboxLegacy[1][iDest]++;
 		}
 	}
 
@@ -85,7 +85,7 @@ export class Board {
 			let ok = true
 			for (let j = 0; j < 2; j++) {
 				for (let k = 0; k < 25; k++) {
-					if (this.mailbox[j][k] !== pm.anBoard.mailbox[j][k]) {
+					if (this.mailboxLegacy[j][k] !== pm.anBoard.mailboxLegacy[j][k]) {
 						ok = false;
 					}
 				}
@@ -98,7 +98,7 @@ export class Board {
 		/** @type {move} */
 		const pm = {
 			anMove: [...anMoves],
-			anBoard: new Board([[...this.mailbox[0]], [...this.mailbox[1]]]),
+			anBoard: new Board([[...this.mailboxLegacy[0]], [...this.mailboxLegacy[1]]]),
 		}
 
 		pml.amMoves[pml.cMoves] = pm;
@@ -115,14 +115,14 @@ export class Board {
 		const iDest = iSrc - nPips;
 
 		if (iDest >= 0) { /* Here we can do the Chris rule check */
-			return this.mailbox[0][23 - iDest] < 2;
+			return this.mailboxLegacy[0][23 - iDest] < 2;
 		}
 		/* otherwise, attempting to bear off */
 	
 		/** @type {number} */
 		let nBack;
 		for (nBack = 24; nBack > 0; nBack--) {
-			if (this.mailbox[1][nBack] > 0) {
+			if (this.mailboxLegacy[1][nBack] > 0) {
 				break;
 			}
 		}
@@ -146,12 +146,12 @@ export class Board {
 
 		let fUsed = false;
 
-		if (this.mailbox[1][24] > 0) {
+		if (this.mailboxLegacy[1][24] > 0) {
 			if (this.#LegalMove(24, anRoll[nMoveDepth])) {
 				anMoves[nMoveDepth * 2] = 24;
 				anMoves[nMoveDepth * 2 + 1] = 24 - anRoll[nMoveDepth];
 
-				let anBoardNew = new Board([[...this.mailbox[0]], [...this.mailbox[1]]]);
+				let anBoardNew = new Board([[...this.mailboxLegacy[0]], [...this.mailboxLegacy[1]]]);
 
 				anBoardNew.#ApplySubMove(24, anRoll[nMoveDepth]);
 
@@ -163,11 +163,11 @@ export class Board {
 			}
 		} else {
 			for (let i = iPip; i >= 0; i--) {
-				if (this.mailbox[1][i] > 0 && this.#LegalMove(i, anRoll[nMoveDepth])) {
+				if (this.mailboxLegacy[1][i] > 0 && this.#LegalMove(i, anRoll[nMoveDepth])) {
 					anMoves[nMoveDepth * 2] = i;
 					anMoves[nMoveDepth * 2 + 1] = i - anRoll[nMoveDepth];
 
-					let anBoardNew = new Board([[...this.mailbox[0]], [...this.mailbox[1]]]);
+					let anBoardNew = new Board([[...this.mailboxLegacy[0]], [...this.mailboxLegacy[1]]]);
 
 					anBoardNew.#ApplySubMove(i, anRoll[nMoveDepth]);
 
@@ -213,7 +213,7 @@ export class Board {
 	}
 
 	#swapSides() {
-		this.mailbox = [[...this.mailbox[1]], [...this.mailbox[0]]];
+		this.mailboxLegacy = [[...this.mailboxLegacy[1]], [...this.mailboxLegacy[0]]];
 	}
 
 	/**
@@ -226,17 +226,17 @@ export class Board {
 			/** @type {number} */
 			let nDest = anMove[i + 1];
 
-			if (this.mailbox[1][nSrc] === 0) {
+			if (this.mailboxLegacy[1][nSrc] === 0) {
 				/* source point is empty; ignore */
 				continue;
 			}
 
-			this.mailbox[1][nSrc]--;
+			this.mailboxLegacy[1][nSrc]--;
 			if (nDest >= 0) {
-				this.mailbox[1][nDest]++;
+				this.mailboxLegacy[1][nDest]++;
 
-				this.mailbox[0][24] += this.mailbox[0][23 - nDest];
-				this.mailbox[0][23 - nDest] = 0;
+				this.mailboxLegacy[0][24] += this.mailboxLegacy[0][23 - nDest];
+				this.mailboxLegacy[0][23 - nDest] = 0;
 			}
 		}
 
