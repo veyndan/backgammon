@@ -24,16 +24,10 @@ export class Board {
 	}
 
 	/**
-	 * @typedef positionkey
-	 * @type {object}
-	 * @property {number[]} data
-	 */
-
-	/**
 	 * @typedef move
 	 * @type {object}
 	 * @property {number[]} anMove
-	 * @property {positionkey} key
+	 * @property {Board} anBoard
 	 */
 
 	/**
@@ -85,27 +79,15 @@ export class Board {
 		pml.cMaxMoves = cMoves;
 		pml.cMaxPips = cPip;
 
-		/** @type {positionkey} */
-		const key = {data: Array(7).fill(0)};
-		for (let i = 0, j = 0; i < 3; i++, j += 8) {
-			key.data[i] = this.mailbox[1][j] + (this.mailbox[1][j + 1] << 4)
-				+ (this.mailbox[1][j + 2] << 8) + (this.mailbox[1][j + 3] << 12)
-				+ (this.mailbox[1][j + 4] << 16) + (this.mailbox[1][j + 5] << 20)
-				+ (this.mailbox[1][j + 6] << 24) + (this.mailbox[1][j + 7] << 28);
-			key.data[i + 3] = this.mailbox[0][j] + (this.mailbox[0][j + 1] << 4)
-				+ (this.mailbox[0][j + 2] << 8) + (this.mailbox[0][j + 3] << 12)
-				+ (this.mailbox[0][j + 4] << 16) + (this.mailbox[0][j + 5] << 20)
-				+ (this.mailbox[0][j + 6] << 24) + (this.mailbox[0][j + 7] << 28);
-		}
-		key.data[6] = this.mailbox[0][24] + (this.mailbox[1][24] << 4);
-
 		for (let i = 0; i < pml.cMoves; i++) {
 			const pm = pml.amMoves[i];
 
 			let ok = true
-			for (let j = 0; j < 7; j++) {
-				if (key.data[j] !== pm.key.data[j]) {
-					ok = false
+			for (let j = 0; j < 2; j++) {
+				for (let k = 0; k < 25; k++) {
+					if (this.mailbox[j][k] !== pm.anBoard.mailbox[j][k]) {
+						ok = false;
+					}
 				}
 			}
 			if (ok) {
@@ -116,7 +98,7 @@ export class Board {
 		/** @type {move} */
 		const pm = {
 			anMove: [...anMoves],
-			key: {data: [...key.data]},
+			anBoard: new Board([[...this.mailbox[0]], [...this.mailbox[1]]]),
 		}
 
 		pml.amMoves[pml.cMoves] = pm;
