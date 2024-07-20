@@ -42,6 +42,7 @@ body {
 	max-height: 100vb;
 	display: flex;
 	justify-content: center;
+	align-items: center;
 	gap: 1rem;
 	margin: 0;
 	padding: 1rem;
@@ -194,8 +195,16 @@ body:has(#play-mode > select > option[value="opposite"]:checked) > svg[data-play
 	rotate: .5turn;
 }
 
-body:has(#play-mode > select > option[value="side-by-side"]:checked) > svg[data-player="2"] foreignObject > div {
-	flex-direction: row-reverse;
+body:has(#play-mode > select > option[value="side-by-side"]:checked) {
+	flex-direction: column;
+
+	& > div {
+		writing-mode: unset;
+	}
+
+	& > svg[data-player="2"] foreignObject > div {
+		flex-direction: row-reverse;
+	}
 }
 
 #checker-background {
