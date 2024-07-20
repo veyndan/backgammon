@@ -202,7 +202,7 @@ body:has(#play-mode > select > option[value="side-by-side"]:checked) {
 		writing-mode: unset;
 	}
 
-	& > svg[data-player="2"] foreignObject > div {
+	& > svg[data-player="1"] foreignObject > div {
 		flex-direction: row-reverse;
 	}
 }
