@@ -150,7 +150,7 @@ body > div {
 		}
 	}
 
-	& > #timer {
+	& #timer {
 		display: flex;
 		justify-content: center;
 		align-items: center;
@@ -188,14 +188,14 @@ body > svg {
 		--player-current-checker-background-hsl: var(--player-2-checker-background-hsl);
 		--player-current-checker-text-color-hsl: var(--player-2-checker-text-color-hsl);
 	}
+}
 
-	&[data-player="2"][data-play-mode="opposite"] foreignObject > div {
-		rotate: .5turn;
-	}
+body:has(#play-mode > select > option[value="opposite"]:checked) > svg[data-player="2"] foreignObject > div {
+	rotate: .5turn;
+}
 
-	&[data-player="2"][data-play-mode="side-by-side"] foreignObject > div {
-		flex-direction: row-reverse;
-	}
+body:has(#play-mode > select > option[value="side-by-side"]:checked) > svg[data-player="2"] foreignObject > div {
+	flex-direction: row-reverse;
 }
 
 #checker-background {
