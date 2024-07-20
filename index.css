@@ -107,11 +107,9 @@ body > div {
 				}
 			}
 
-			& > a > svg {
-				width: 1rem;
-				height: 1rem;
-				fill: currentColor;
-				rotate: .75turn;
+			& > a {
+				text-decoration: none;
+				font-size: .9rem;
 			}
 
 			& > span:last-of-type {
