@@ -132,8 +132,6 @@ body > div {
 
 				&:first-of-type {
 					color: hsl(29 86% 72%);
-					text-decoration: underline currentColor 3px;
-					text-underline-position: under;
 				}
 			}
 		}
