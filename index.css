@@ -60,12 +60,14 @@ body > div {
 	display: flex;
 	writing-mode: sideways-lr;
 	justify-content: space-around;
-	gap: 2rem;
+	gap: 1.5rem;
 
 	& > div[data-player] {
 		display: grid;
 		flex-shrink: 0;
 		gap: 0 .75rem;
+		padding: .5rem;
+		border-radius: .5rem;
 		color: white;
 
 		& > .name {
@@ -172,6 +174,14 @@ body > div {
 			padding: .5rem .25rem;
 		}
 	}
+}
+
+body:has(> svg[data-player="1"]) > div > div[data-player="1"] {
+	background: hsl(from var(--background) h s calc(l + 10));
+}
+
+body:has(> svg[data-player="2"]) > div > div[data-player="2"] {
+	background: hsl(from var(--background) h s calc(l + 10));
 }
 
 body > svg {
