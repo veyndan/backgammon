@@ -1,5 +1,6 @@
 {
 	"type": "module",
+	"source": "index.html",
 	"scripts": {
 		"test": "npx tsc && node --test"
 	},
