@@ -174,10 +174,7 @@ body > div {
 	}
 }
 
-body:has(> svg[data-player="1"]) > div > div[data-player="1"] {
-	background: hsl(from var(--background) h s calc(l + 10));
-}
-
+body:has(> svg[data-player="1"]) > div > div[data-player="1"],
 body:has(> svg[data-player="2"]) > div > div[data-player="2"] {
 	background: hsl(from var(--background) h s calc(l + 10));
 }
