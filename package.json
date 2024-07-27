@@ -1,6 +1,7 @@
 {
 	"type": "module",
 	"source": "index.html",
+	"browserslist": "> 0.5%, last 2 versions, not dead",
 	"scripts": {
 		"test": "npx tsc && node --test"
 	},
