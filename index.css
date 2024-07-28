@@ -1,6 +1,34 @@
 :root {
 	color-scheme: light dark;
-	--background: hsl(216 7% 14%);
+	--primary: light-dark(#a0d49b, #39693b);
+	--on-primary: light-dark(#ffffff, #083910);
+	--secondary: light-dark(#52634f, #b9ccb4);
+	--on-secondary: light-dark(#ffffff, #253423);
+	--tertiary: light-dark(#39656b, #a1ced4);
+	--on-tertiary: light-dark(#ffffff, #00363b);
+	--primary-container: light-dark(hsl(115.9 65.9% 82.7%), hsl(121.3 39.1% 22.5%));
+	--on-primary-container: light-dark(#002105, #bbf0b5);
+	--secondary-container: light-dark(#d5e8cf, #3b4b39);
+	--on-secondary-container: light-dark(#101f10, #d5e8cf);
+	--tertiary-container: light-dark(#bcebf1, #1f4d52);
+	--on-tertiary-container: light-dark(#001f23, #bcebf1);
+	--surface-dim: light-dark(#d7dbd3, #10140f);
+	--surface: light-dark(hsl(84 55.6% 96.5%), hsl(108 14.3% 6.9%));
+	--surface-bright: light-dark(#f7fbf1, #363a34);
+	--surface-container-lowest: light-dark(#ffffff, #0b0f0a);
+	--surface-container-low: light-dark(#f1f5ec, #181d17);
+	--surface-container: light-dark(#ebefe6, #1c211b);
+	--surface-container-high: light-dark(#e6e9e0, #272b25);
+	--surface-container-highest: light-dark(#e0e4db, #323630);
+	--on-surface: light-dark(#181d17, #e0e4db);
+	--on-surface-variable: light-dark(#424940, #c2c9bd);
+	--outline: light-dark(#72796f, #8c9388);
+	--outline-variant: light-dark(#c2c9bd, #424940);
+	--inverse-surface: light-dark(#2d322c, #e0e4db);
+	--inverse-on-surface: light-dark(#eef2e9, #2d322c);
+	--inverse-primary: light-dark(#9fd49c, #3b693a);
+	--scrim: light-dark(#000000, #000000);
+	--shadow: light-dark(#000000, #000000);
 	--bar-width: 50px;
 	--checker-radius: 20px;
 	--checker-diameter: calc(var(--checker-radius) * 2);
@@ -28,8 +56,16 @@
 	box-sizing: border-box;
 }
 
+.surface {
+	background: var(--surface);
+	color: var(--on-surface);
+}
+
+.surface-container {
+	background: var(--surface-container);
+}
+
 html {
-	background: var(--background);
 	font: 16px/1.5 system-ui;
 	display: flex;
 	justify-content: center;
@@ -68,7 +104,6 @@ body > div {
 		gap: 0 .75rem;
 		padding: .5rem;
 		border-radius: .5rem;
-		color: white;
 
 		& > .name {
 			grid-area: name;
@@ -90,7 +125,6 @@ body > div {
 			padding: .5rem;
 			border-radius: .5rem;
 			font-weight: bold;
-			background: black;
 
 			& > span:first-of-type {
 				align-self: start;
@@ -117,7 +151,7 @@ body > div {
 			& > span:last-of-type {
 				grid-column: span 2;
 				line-height: 1;
-				color: hsl(29 86% 72%);
+				color: var(--secondary);
 				font-size: 2rem;
 			}
 		}
@@ -131,7 +165,7 @@ body > div {
 				font-weight: bold;
 
 				&:first-of-type {
-					color: hsl(29 86% 72%);
+					color: var(--secondary);
 				}
 			}
 		}
@@ -158,8 +192,6 @@ body > div {
 		padding: .5rem;
 		border-radius: .5rem;
 		font-weight: bold;
-		background: black;
-		color: white;
 		line-height: 1;
 
 		& > .reserve-bank {
@@ -167,7 +199,7 @@ body > div {
 		}
 
 		& > #move {
-			background: var(--background);
+			background: var(--surface);
 			font-size: 1.5rem;
 			padding: .5rem .25rem;
 		}
@@ -176,7 +208,7 @@ body > div {
 
 body:has(> svg[data-player="1"]) > div > div[data-player="1"],
 body:has(> svg[data-player="2"]) > div > div[data-player="2"] {
-	background: hsl(from var(--background) h s calc(l + 10));
+	background: var(--surface-container);
 }
 
 body > svg {
@@ -220,18 +252,19 @@ body:has(#play-mode > select > option[value="side-by-side"]:checked) {
 	translate: calc(var(--half-width) * 2 + var(--bar-width) + 5px);
 	width: var(--hold-width);
 	height: var(--hold-height);
+	fill: var(--secondary-container);
 }
 
 #doubling-cube-face {
 	translate: calc(var(--half-width) * 2 + var(--bar-width) + 5px) calc(.5 * var(--half-height) - var(--die-side-length) / 2);
 
 	& > #die-face-background {
-		fill: firebrick;
+		fill: var(--secondary-container);
 	}
 
 	& > text {
 		translate: calc(var(--die-side-length) / 2) 22px;
-		fill: white;
+		fill: var(--on-secondary-container);
 		font: bold 24px sans-serif;
 		text-anchor: middle;
 		dominant-baseline: central;
@@ -239,7 +272,7 @@ body:has(#play-mode > select > option[value="side-by-side"]:checked) {
 }
 
 .half {
-	fill: hsl(29 86% 72%);
+	fill: var(--primary-container);
 	clip-path: fill-box inset(0 round 4px);
 
 	& > rect {
@@ -263,11 +296,11 @@ use[href="#point"] {
 	translate: calc(var(--point-width) * (var(--child-index) - 1));
 
 	&:nth-child(even) {
-		--fill-color: hsl(30 100% 84%);
+		--fill-color: lch(from var(--primary) 60% c h);
 	}
 
 	&:nth-child(odd) {
-		--fill-color: hsl(11 33% 29%);
+		--fill-color: var(--primary);
 	}
 
 	&:nth-child(0) {
@@ -351,7 +384,7 @@ use[href="#hold"] {
 		&.dragging {
 			transition: filter .3s;
 			cursor: move;
-			filter: drop-shadow(2px 4px 4px hsl(from var(--background) h s l / .3));
+			filter: drop-shadow(2px 4px 4px hsl(from var(--surface) h s l / .3));
 		}
 	}
 
@@ -478,14 +511,14 @@ foreignObject {
 }
 
 #confirm {
-	--background: hsl(149 83% 28%);
+	--surface: hsl(149 83% 28%);
 	--color: hsl(0 0% 100%);
 }
 
 #double,
 #undo,
 #roll-dice {
-	--background: var(--player-current-checker-background);
+	--surface: var(--player-current-checker-background);
 	--color: var(--player-current-checker-text-color);
 }
 
@@ -500,7 +533,7 @@ foreignObject {
 	border: none;
 	border-radius: 4px;
 	--alpha: 1;
-	background: hsl(from var(--background) h s l / var(--alpha));
+	background: hsl(from var(--surface) h s l / var(--alpha));
 	color: hsl(from var(--color) h s l / var(--alpha));
 
 	&:disabled {
