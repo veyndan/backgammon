@@ -56,6 +56,11 @@
 	box-sizing: border-box;
 }
 
+.secondary-container {
+	background: var(--secondary-container);
+	color: var(--on-secondary-container);
+}
+
 .surface {
 	background: var(--surface);
 	color: var(--on-surface);
@@ -63,6 +68,10 @@
 
 .surface-container {
 	background: var(--surface-container);
+}
+
+.surface-container-high {
+	background: var(--surface-container-high);
 }
 
 html {
@@ -96,7 +105,9 @@ body > div {
 	display: flex;
 	writing-mode: sideways-lr;
 	justify-content: space-around;
-	gap: 1.5rem;
+	gap: 1rem;
+	padding: .5rem;
+	border-radius: 8px;
 
 	& > div[data-player] {
 		display: grid;
@@ -199,16 +210,16 @@ body > div {
 		}
 
 		& > #move {
-			background: var(--surface);
 			font-size: 1.5rem;
 			padding: .5rem .25rem;
+			border-radius: 2px;
 		}
 	}
 }
 
 body:has(> svg[data-player="1"]) > div > div[data-player="1"],
 body:has(> svg[data-player="2"]) > div > div[data-player="2"] {
-	background: var(--surface-container);
+	background: var(--surface-container-highest);
 }
 
 body > svg {

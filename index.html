@@ -8,23 +8,23 @@
     <script src="index.js" type="module"></script>
   </head>
   <body>
-    <div>
+    <div class="surface-container">
       <div data-player="1">
         <span class="name" contenteditable="true" spellcheck="false">Player 1</span>
         <svg class="checker" width="20" height="20">
           <use href="#checker-background" style="--checker-radius: 10px;"/>
         </svg>
         <span class="points"><span>0</span> out of <span>5</span> points</span>
-        <span class="surface-container pip">
+        <span class="surface-container-high pip">
           <span>Pip</span>
           <a href="https://bkgm.com/gloss/lookup.cgi?pip+count" target="_blank">&#x1F6C8</a>
           <span>167</span>
         </span>
       </div>
       <div>
-        <div id="timer" class="surface-container">
+        <div id="timer" class="surface-container-high">
           <span class="reserve-bank">02:00</span>
-          <span id="move">12</span>
+          <span id="move" class="secondary-container">12</span>
           <span class="reserve-bank">02:00</span>
         </div>
         <label id="play-mode">
@@ -41,7 +41,7 @@
           <use href="#checker-background" fill="white" style="--checker-radius: 10px;"/>
         </svg>
         <span class="points"><span>0</span> out of <span>5</span> points</span>
-        <span class="surface-container pip">
+        <span class="surface-container-high pip">
           <span>Pip</span>
           <a href="https://bkgm.com/gloss/lookup.cgi?pip+count" target="_blank">&#x1F6C8</a>
           <span>167</span>
