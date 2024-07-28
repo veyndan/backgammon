@@ -76,15 +76,11 @@
 
 html {
 	font: 16px/1.5 system-ui;
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	height: 100vb;
 }
 
 body {
 	width: 100vi;
-	max-height: 100vb;
+	height: 100vb;
 	display: flex;
 	justify-content: center;
 	align-items: center;
