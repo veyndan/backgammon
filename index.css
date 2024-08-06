@@ -116,15 +116,33 @@ body > div {
 		padding: .5rem;
 		border-radius: .5rem;
 
-		& > .name {
-			grid-area: name;
-			font-weight: bold;
-			font-size: 1.5rem;
-		}
+		& > div {
+			display: contents;
 
-		& > .checker {
-			grid-area: checker;
-			align-self: center;
+			& > .name {
+				grid-area: name;
+				font-weight: bold;
+				font-size: 1.5rem;
+			}
+
+			& > .checker {
+				grid-area: checker;
+				align-self: center;
+			}
+
+			& > .points {
+				grid-area: points;
+				font-style: italic;
+				font-size: 1rem;
+
+				& > span {
+					font-weight: bold;
+
+					&:first-of-type {
+						color: var(--secondary);
+					}
+				}
+			}
 		}
 
 		& > .pip {
@@ -164,20 +182,6 @@ body > div {
 				line-height: 1;
 				color: var(--secondary);
 				font-size: 2rem;
-			}
-		}
-
-		& > .points {
-			grid-area: points;
-			font-style: italic;
-			font-size: 1rem;
-
-			& > span {
-				font-weight: bold;
-
-				&:first-of-type {
-					color: var(--secondary);
-				}
 			}
 		}
 
@@ -227,10 +231,49 @@ body > div {
 @media (aspect-ratio > 1) {
 	body > div {
 		grid:
-			'.       timer     timer     .      ' minmax(min-content, max-content)
-			'.       play-mode play-mode .      ' minmax(min-content, max-content)
+			'pip1    timer     timer     pip2   ' minmax(min-content, max-content)
+			'pip1    play-mode play-mode pip2   ' minmax(min-content, max-content)
 			'player1 player1   player2   player2' minmax(min-content, max-content)
 			/minmax(max-content, 1fr) minmax(min-content, max-content) minmax(min-content, max-content) minmax(min-content, 1fr);
+
+			& > div[data-player] {
+				display: contents;
+
+				& > div {
+					display: grid;
+					gap: 0 .75rem;
+					padding: .5rem;
+					border-radius: .5rem;
+					grid-template-areas:
+						"name checker"
+						"points points";
+				}
+
+				&[data-player="1"] {
+					& > div {
+						grid-area: player1;
+					}
+
+					& > .pip {
+						grid-area: pip1;
+					}
+				}
+
+				&[data-player="2"] {
+					& > div {
+						grid-area: player2;
+					}
+
+					& > .pip {
+						grid-area: pip2;
+					}
+				}
+			}
+	}
+
+	body:has(> svg[data-player="1"]) > div > div[data-player="1"] > div,
+	body:has(> svg[data-player="2"]) > div > div[data-player="2"] > div {
+		background: var(--surface-container-highest);
 	}
 }
 
