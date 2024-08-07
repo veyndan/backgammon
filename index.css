@@ -113,7 +113,8 @@ body > div {
 	& > div[data-player] {
 		display: grid;
 		gap: 0 .75rem;
-		padding: .5rem;
+		padding-inline: .5rem 1rem;
+		padding-block: .5rem;
 		border-radius: .5rem;
 
 		& > div {
@@ -243,7 +244,8 @@ body > div {
 					display: grid;
 					justify-content: space-between;
 					gap: 0 .75rem;
-					padding: .5rem;
+					padding-inline: 1rem;
+					padding-block: .5rem;
 					border-radius: .5rem;
 					grid-template-areas:
 						"name checker"
