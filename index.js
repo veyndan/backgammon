@@ -3,13 +3,6 @@ import {CheckerLegacy} from "./checker.js";
 import {Bar, Point, Position} from "./position.js";
 import Player from "./player.js";
 
-// https://github.com/parcel-bundler/parcel/pull/443#issuecomment-354583425
-if (module.hot) {
-	module.hot.accept(function () {
-		window.location.reload();
-	});
-}
-
 /**
  * https://rwaldron.github.io/proposal-math-extensions/#sec-math.clamp
  *
