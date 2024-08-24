@@ -370,7 +370,8 @@ use[href="#point"] {
 	translate: calc(var(--point-width) * (var(--child-index) - 1));
 
 	&:nth-child(even) {
-		--fill-color: lch(from var(--primary) 60% c h);
+		/** TODO Replace with semantic or relative color */
+		--fill-color: #6b9c6b;
 	}
 
 	&:nth-child(odd) {
