@@ -100,69 +100,116 @@
 				</g>
 			</defs>
 
-			<g>
-				<g class="half">
-					<rect/>
-					<g class="quadrant">
-						<use href="#point" data-point="13"/>
-						<use href="#point" data-point="14"/>
-						<use href="#point" data-point="15"/>
-						<use href="#point" data-point="16"/>
-						<use href="#point" data-point="17"/>
-						<use href="#point" data-point="18"/>
-					</g>
-					<g class="quadrant">
-						<use href="#point" data-point="7"/>
-						<use href="#point" data-point="8"/>
-						<use href="#point" data-point="9"/>
-						<use href="#point" data-point="10"/>
-						<use href="#point" data-point="11"/>
-						<use href="#point" data-point="12"/>
-					</g>
-				</g>
-				<g class="half">
-					<rect/>
-					<g class="quadrant">
-						<use href="#point" data-point="19"/>
-						<use href="#point" data-point="20"/>
-						<use href="#point" data-point="21"/>
-						<use href="#point" data-point="22"/>
-						<use href="#point" data-point="23"/>
-						<use href="#point" data-point="24"/>
-					</g>
-					<g class="quadrant">
-						<use href="#point" data-point="1"/>
-						<use href="#point" data-point="2"/>
-						<use href="#point" data-point="3"/>
-						<use href="#point" data-point="4"/>
-						<use href="#point" data-point="5"/>
-						<use href="#point" data-point="6"/>
-					</g>
-				</g>
-			</g>
+			<foreignObject>
+				<div>
+					<div>
+						<div class="half">
+								<div class="quadrant">
+									<svg>
+										<use href="#point" data-point="13"/>
+									</svg>
+									<svg>
+										<use href="#point" data-point="14"/>
+									</svg>
+									<svg>
+										<use href="#point" data-point="15"/>
+									</svg>
+									<svg>
+										<use href="#point" data-point="16"/>
+									</svg>
+									<svg>
+										<use href="#point" data-point="17"/>
+									</svg>
+									<svg>
+										<use href="#point" data-point="18"/>
+									</svg>
+								</div>
+								<div class="quadrant">
+									<svg>
+										<use href="#point" data-point="7"/>
+									</svg>
+									<svg>
+										<use href="#point" data-point="8"/>
+									</svg>
+									<svg>
+										<use href="#point" data-point="9"/>
+									</svg>
+									<svg>
+										<use href="#point" data-point="10"/>
+									</svg>
+									<svg>
+										<use href="#point" data-point="11"/>
+									</svg>
+									<svg>
+										<use href="#point" data-point="12"/>
+									</svg>
+								</div>
+						</div>
+						<div class="half">
+								<div class="quadrant">
+									<svg>
+										<use href="#point" data-point="19"/>
+									</svg>
+									<svg>
+										<use href="#point" data-point="20"/>
+									</svg>
+									<svg>
+										<use href="#point" data-point="21"/>
+									</svg>
+									<svg>
+										<use href="#point" data-point="22"/>
+									</svg>
+									<svg>
+										<use href="#point" data-point="23"/>
+									</svg>
+									<svg>
+										<use href="#point" data-point="24"/>
+									</svg>
+								</div>
+								<div class="quadrant">
+									<svg>
+										<use href="#point" data-point="1"/>
+									</svg>
+									<svg>
+										<use href="#point" data-point="2"/>
+									</svg>
+									<svg>
+										<use href="#point" data-point="3"/>
+									</svg>
+									<svg>
+										<use href="#point" data-point="4"/>
+									</svg>
+									<svg>
+										<use href="#point" data-point="5"/>
+									</svg>
+									<svg>
+										<use href="#point" data-point="6"/>
+									</svg>
+								</div>
+						</div>
+					</div>
+					<div>
+						<div>
+							<button id="double" type="button">Double</button>
+							<button id="undo" type="button" hidden="hidden">Undo</button>
+							<button id="confirm" type="button" hidden="hidden">Confirm</button>
+						</div>
+						<div>
+							<button id="roll-dice" type="button">Roll Dice</button>
+							<div id="dice-container">
+								<svg id="dice-swap" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960"><path d="M280-160 80-360l200-200 56 57-103 103h287v80H233l103 103-56 57Zm400-240-56-57 103-103H440v-80h287L624-743l56-57 200 200-200 200Z"/></svg>
+								<svg id="dice"/>
+							</div>
+						</div>
+					</div>
+				</div>
+			</foreignObject>
 			<use href="#hold"/>
 			<g id="doubling-cube-face">
 				<rect id="die-face-background" rx="4"/>
 				<text>64</text>
 			</g>
 			<use href="#hold"/>
-
-			<foreignObject>
-				<div>
-					<div>
-						<button id="double" type="button">Double</button>
-						<button id="undo" type="button" hidden="hidden">Undo</button>
-						<button id="confirm" type="button" hidden="hidden">Confirm</button>
-					</div>
-					<div>
-						<button id="roll-dice" type="button">Roll Dice</button>
-						<div id="dice-container">
-							<svg id="dice-swap" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960"><path d="M280-160 80-360l200-200 56 57-103 103h287v80H233l103 103-56 57Zm400-240-56-57 103-103H440v-80h287L624-743l56-57 200 200-200 200Z"/></svg>
-							<svg id="dice"/>
-						</div>
-					</div>
-				</div>
-			</foreignObject>
 
 			<g id="checkers"></g>
 			<g id="drop-points"/>

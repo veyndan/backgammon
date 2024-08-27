@@ -558,7 +558,9 @@ checkersElement.addEventListener('pointerdown', event => {
 
 	checkerElement.target.setPointerCapture(event.pointerId);
 
-	const boundary = new DOMRect(0, 0, (/** @type {SVGGElement} */ (document.querySelector(`.half`))).getBBox().width * 2 + 50, (/** @type {SVGGElement} */ (document.querySelector(`.half`))).getBBox().height);
+	const halfElement = /** @type {SVGGElement} */ (document.querySelector(`.half`));
+
+	const boundary = new DOMRect(0, 0, halfElement.clientWidth * 2 + 50, halfElement.clientHeight);
 
 	const getPointerPosition = (/** @type {PointerEvent} */ event) => {
 		const CTM = svgElement.getScreenCTM();
@@ -619,7 +621,6 @@ checkersElement.addEventListener('pointerdown', event => {
 		// @ts-ignore
 		const dy = Math.clamp(coordinates.y - offset.y, minY, maxY);
 		let point = null;
-		const halfBBox = /** @type {SVGGElement} */ (document.querySelector(`.half`)).getBBox();
 		const checkerDiameter = /** @type {SVGGElement} */ (document.querySelector(`#checkers > *`)).getBBox().width;
 		const pointHeight = /** @type {SVGUseElement} */ (document.querySelector(`use[href="#point"]`)).getBBox().height;
 		const barWidth = 50;
@@ -628,22 +629,22 @@ checkersElement.addEventListener('pointerdown', event => {
 		if (dy <= pointHeight) {
 			additionalPoints = 12;
 			multiplier = 1;
-		} else if (dy >= (halfBBox.height - checkerDiameter - pointHeight)) {
+		} else if (dy >= (halfElement.clientHeight - checkerDiameter - pointHeight)) {
 			additionalPoints = 13;
 			multiplier = -1;
 		} else {
 			additionalPoints = null;
 		}
 		if (additionalPoints !== null) {
-			if (dx <= halfBBox.width - (checkerDiameter / 2)) {
+			if (dx <= halfElement.clientWidth - (checkerDiameter / 2)) {
 				point = new Point(multiplier * Math.round(dx / checkerDiameter + 1) + additionalPoints);
-			} else if (dx >= halfBBox.width && dx <= (halfBBox.width + barWidth - checkerDiameter)) {
+			} else if (dx >= halfElement.clientWidth && dx <= (halfElement.clientWidth + barWidth - checkerDiameter)) {
 				point = null
-			} else if (dx < halfBBox.width) {
+			} else if (dx < halfElement.clientWidth) {
 				// If most of the checker is on the bar, but some of it is on a point in the left half of the board,
 				// just put it on the point on the left half.
 				point = new Point(additionalPoints + multiplier * 6);
-			} else if (dx < halfBBox.width + barWidth - (checkerDiameter / 2)) {
+			} else if (dx < halfElement.clientWidth + barWidth - (checkerDiameter / 2)) {
 				// If most of the checker is on the bar, but some of it is on a point in the right half of the board,
 				// just put it on the point on the right half.
 				point = new Point(additionalPoints + multiplier * 7);

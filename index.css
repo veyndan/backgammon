@@ -300,7 +300,7 @@ body > svg {
 	}
 }
 
-body:has(#play-mode > select > option[value="opposite"]:checked) > svg[data-player="2"] foreignObject > div {
+body:has(#play-mode > select > option[value="opposite"]:checked) > svg[data-player="2"] > foreignObject > div > div:last-of-type {
 	rotate: .5turn;
 }
 
@@ -311,7 +311,7 @@ body:has(#play-mode > select > option[value="side-by-side"]:checked) {
 		writing-mode: unset;
 	}
 
-	& > svg[data-player="1"] foreignObject > div {
+	& > svg[data-player="1"] > foreignObject > div > div:last-of-type {
 		flex-direction: row-reverse;
 	}
 }
@@ -345,66 +345,72 @@ body:has(#play-mode > select > option[value="side-by-side"]:checked) {
 	}
 }
 
-.half {
-	fill: var(--primary-container);
-	clip-path: fill-box inset(0 round 8px);
+body > svg > foreignObject {
+	inline-size: calc(2 * var(--half-width) + var(--bar-width));
+	block-size: var(--half-height);
 
-	& > rect {
-		width: var(--half-width);
-		height: var(--half-height);
-	}
+	& > div {
+		position: relative;
 
-	.quadrant:last-of-type {
-		translate: 0 var(--half-height);
-		rotate: x .5turn;
-	}
+		& > div:first-of-type {
+			display: flex;
+			gap: var(--bar-width);
 
-	&:last-of-type {
-		translate: calc(var(--half-width) + var(--bar-width));
+			& > .half {
+				inline-size: var(--half-width);
+				block-size: var(--half-height);
+				display: flex;
+				flex-direction: column;
+				justify-content: space-between;
+				background: var(--primary-container);
+				clip-path: fill-box inset(0 round 8px);
+
+				& > .quadrant {
+					display: flex;
+
+					& > svg {
+						inline-size: var(--point-width);
+						block-size: var(--point-height);
+
+						&:nth-child(even) {
+							/** TODO Replace with semantic or relative color */
+							--fill-color: #6b9c6b;
+						}
+
+						&:nth-child(odd) {
+							--fill-color: var(--primary);
+						}
+					}
+
+					&:last-of-type {
+						transform: scale(-1, -1);
+					}
+				}
+			}
+		}
+
+		& > div:last-of-type {
+			position: absolute;
+			inset-block-start: 0;
+			inline-size: 100%;
+			block-size: 100%;
+			display: flex;
+			gap: var(--bar-width);
+
+			& > div {
+				display: flex;
+				flex: 1;
+				align-items: center;
+				justify-content: center;
+				gap: 8px;
+			}
+		}
 	}
 }
 
 use[href="#point"] {
 	fill: var(--fill-color);
 	stroke: var(--fill-color);
-	translate: calc(var(--point-width) * (var(--child-index) - 1));
-
-	&:nth-child(even) {
-		/** TODO Replace with semantic or relative color */
-		--fill-color: #6b9c6b;
-	}
-
-	&:nth-child(odd) {
-		--fill-color: var(--primary);
-	}
-
-	&:nth-child(0) {
-		--child-index: 0;
-	}
-
-	&:nth-child(1) {
-		--child-index: 1;
-	}
-
-	&:nth-child(2) {
-		--child-index: 2;
-	}
-
-	&:nth-child(3) {
-		--child-index: 3;
-	}
-
-	&:nth-child(4) {
-		--child-index: 4;
-	}
-
-	&:nth-child(5) {
-		--child-index: 5;
-	}
-
-	&:nth-child(6) {
-		--child-index: 6;
-	}
 }
 
 #drop-points {
@@ -561,27 +567,6 @@ use[href="#hold"] {
 
 	&.y2 {
 		cy: calc(var(--die-side-length) * .75);
-	}
-}
-
-foreignObject {
-	--height: 80px;
-	width: calc(var(--half-width) * 2 + var(--bar-width));
-	height: var(--height);
-	y: calc(var(--half-height) / 2 - var(--height) / 2);
-
-	& > div {
-		height: 100%;
-		display: flex;
-		gap: var(--bar-width);
-
-		& > div {
-			display: flex;
-			flex: 1;
-			align-items: center;
-			justify-content: center;
-			gap: 8px;
-		}
 	}
 }
 
