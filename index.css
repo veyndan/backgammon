@@ -401,11 +401,11 @@ body > svg > foreignObject {
 			inline-size: 100%;
 			block-size: 100%;
 			display: flex;
-			gap: calc(var(--bar-width) + 16px);
+			justify-content: space-between;
 
 			& > div {
+				inline-size: var(--half-width);
 				display: flex;
-				flex: 1;
 				align-items: center;
 				justify-content: center;
 				gap: 8px;
