@@ -323,14 +323,14 @@ body:has(#play-mode > select > option[value="side-by-side"]:checked) {
 }
 
 #hold {
-	translate: calc(var(--half-width) * 2 + var(--bar-width) + 5px);
+	translate: calc(var(--half-width) * 2 + var(--bar-width) + 16px + 5px);
 	width: var(--hold-width);
 	height: var(--hold-height);
 	fill: var(--secondary-container);
 }
 
 #doubling-cube-face {
-	translate: calc(var(--half-width) * 2 + var(--bar-width) + 5px) calc(.5 * var(--half-height) - var(--die-side-length) / 2);
+	translate: calc(var(--half-width) * 2 + 16px + var(--bar-width) + 5px) calc(.5 * var(--half-height) - var(--die-side-length) / 2);
 
 	& > #die-face-background {
 		fill: var(--secondary-container);
@@ -346,7 +346,7 @@ body:has(#play-mode > select > option[value="side-by-side"]:checked) {
 }
 
 body > svg > foreignObject {
-	inline-size: calc(2 * var(--half-width) + var(--bar-width));
+	inline-size: calc(2 * var(--half-width) + var(--bar-width) + 16px);
 	block-size: var(--half-height);
 
 	& > div {
@@ -354,7 +354,7 @@ body > svg > foreignObject {
 
 		& > div:first-of-type {
 			display: flex;
-			gap: var(--bar-width);
+			gap: 8px;
 
 			& > .half {
 				inline-size: var(--half-width);
@@ -387,6 +387,12 @@ body > svg > foreignObject {
 					}
 				}
 			}
+
+			& > .bar {
+				inline-size: var(--bar-width);
+				background: var(--secondary-container);
+				border-radius: 8px;
+			}
 		}
 
 		& > div:last-of-type {
@@ -395,7 +401,7 @@ body > svg > foreignObject {
 			inline-size: 100%;
 			block-size: 100%;
 			display: flex;
-			gap: var(--bar-width);
+			gap: calc(var(--bar-width) + 16px);
 
 			& > div {
 				display: flex;
@@ -430,7 +436,7 @@ use[href="#drop-point"],
 		calc(
 			var(--is-top-point) * (var(--checker-diameter) * rem(var(--point) - 1, var(--point-per-side)))
 			+ var(--is-bottom-point) * (2 * var(--half-width) - var(--checker-diameter) * (rem(var(--point) - 1, var(--point-per-side)) + 1))
-			+ var(--is-right-point) * var(--bar-width)
+			+ var(--is-right-point) * (var(--bar-width) + 16px)
 		);
 }
 
@@ -498,7 +504,7 @@ use[href="#hold"] {
 	}
 
 	&[data-hit] {
-		translate: calc(var(--half-width) + (var(--bar-width) - var(--checker-diameter)) / 2) var(--translate-y);
+		translate: calc(var(--half-width) + 8px + (var(--bar-width) - var(--checker-diameter)) / 2) var(--translate-y);
 
 		&[data-player="1"] {
 			--translate-y: calc(var(--checker-diameter) * 2.5);
