@@ -43,6 +43,45 @@ export class CheckerLegacy {
 	}
 }
 
+class State {
+	/**
+	 * @param {Player} player
+	 * @param {Board} board
+	 */
+	constructor(player, board) {
+		this.player = player;
+		this.board = board;
+	}
+}
+
+class AState extends State {
+	/**
+	 * @return {BState}
+	 */
+	rollDice() {
+		return new BState(this.player, this.board);
+	}
+
+	double() {
+
+	}
+}
+
+class BState extends State {
+	/**
+	 * @return {AState}
+	 */
+	confirm() {
+		const board = this.board;
+		// ...
+		return new AState(this.player.value === Player.One.value ? Player.Two.value : Player.One.value, board);
+	}
+
+	undo() {
+
+	}
+}
+
 class Board {
 	constructor() {
 		this.points = [
