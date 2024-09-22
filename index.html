@@ -8,53 +8,54 @@
 		<script src="index.js" type="module"></script>
 	</head>
 	<body class="surface">
-		<div class="surface-container">
-			<div data-player="1">
-				<div>
-					<span class="name" contenteditable="true" spellcheck="false">Player 1</span>
-					<svg class="checker" width="20" height="20">
-						<use href="#checker-background" style="--checker-radius: 10px;"/>
-					</svg>
-					<span class="points"><span>0</span> out of <span>5</span> points</span>
+		<div>
+			<div data-player="1" class="surface-container-high">
+				<span class="name" contenteditable="true" spellcheck="false">Player 1</span>
+				<svg class="checker" width="16" height="16">
+					<use href="#checker-background" style="--checker-radius: 8px;"/>
+				</svg>
+				<div class="points">
+					<span class="current">0</span>
+					<span class="total">/5</span>
+					<span class="label">points</span>
 				</div>
-				<span class="surface-container-high pip">
-					<span>Pip</span>
-					<a href="https://bkgm.com/gloss/lookup.cgi?pip+count" target="_blank">&#x1F6C8;</a>
-					<span>167</span>
+				<span class="pip">
+					<span class="current">167</span>
+					<span class="label">pips</span>
+				</span>
+			</div>
+			<div data-player="2" class="surface-container-high">
+				<span class="name" contenteditable="true" spellcheck="false">Player 2</span>
+				<svg class="checker" width="16" height="16">
+					<use href="#checker-background" fill="white" style="--checker-radius: 8px;"/>
+				</svg>
+				<div class="points">
+					<span class="current">0</span>
+					<span class="total">/5</span>
+					<span class="label">points</span>
+				</div>
+				<span class="pip">
+					<span class="current">167</span>
+					<span class="label">pips</span>
 				</span>
 			</div>
 			<div id="timer" class="surface-container-high">
 				<span class="reserve-bank">02:00</span>
-				<span id="move" class="secondary-container">12</span>
+				<span id="move">12</span>
 				<span class="reserve-bank">02:00</span>
-			</div>
-			<label id="play-mode">
-				Play Mode
-				<select>
-					<option value="opposite">Opposite</option>
-					<option value="side-by-side">Side-By-Side</option>
-				</select>
-			</label>
-			<div data-player="2">
-				<div>
-					<span class="name" contenteditable="true" spellcheck="false">Player 2</span>
-					<svg class="checker" width="20" height="20">
-						<use href="#checker-background" fill="white" style="--checker-radius: 10px;"/>
-					</svg>
-					<span class="points"><span>0</span> out of <span>5</span> points</span>
-				</div>
-				<span class="surface-container-high pip">
-					<span>Pip</span>
-					<a href="https://bkgm.com/gloss/lookup.cgi?pip+count" target="_blank">&#x1F6C8;</a>
-					<span>167</span>
-				</span>
 			</div>
 		</div>
 
-		<svg viewBox="0 0 596 480" data-player="1">
+<!--		TODO These are random numbers for the view box. Didn't calculate it.-->
+<!--		TODO WHY is this all fucking SVG? It should be 99% HTML/CSS and a bit of SVG.
+That'd make the sizing and laying out of things fucking TRIVIAL.
+We'll of course need to keep the checkers in their own layer, and not embedded as part of the point.
+Still, it'll be a lot easier.
+Can't wait to delete all that maths from the CSS for translating things.-->
+		<svg viewBox="0 0 500 400" data-player="1">
 			<defs>
 				<!-- The point should have dimensions 1:4, so exactly 4 stacked checkers can fill a point -->
-				<polyline id="point" points="2,0 20,158 38,0" stroke-width="4" stroke-linejoin="round" stroke-linecap="square"/>
+				<polyline id="point" points="2,0 16,126 30,0" stroke-width="4" stroke-linejoin="round" stroke-linecap="square"/>
 				<circle id="drop-point" r="6" fill="darkorange"/>
 				<circle id="checker-background"/>
 				<rect id="hold" rx="4"/>
@@ -188,6 +189,16 @@
 									</svg>
 								</div>
 						</div>
+						<div>
+							<div class="hold"></div>
+							<svg>
+								<g id="doubling-cube-face">
+									<rect id="die-face-background" rx="4"/>
+									<text>64</text>
+								</g>
+							</svg>
+							<div class="hold"></div>
+						</div>
 					</div>
 					<div>
 						<div>
@@ -205,15 +216,16 @@
 					</div>
 				</div>
 			</foreignObject>
-			<use href="#hold"/>
-			<g id="doubling-cube-face">
-				<rect id="die-face-background" rx="4"/>
-				<text>64</text>
-			</g>
-			<use href="#hold"/>
 
 			<g id="checkers"></g>
 			<g id="drop-points"/>
 		</svg>
+		<label id="play-mode">
+			Play Mode
+			<select>
+				<option value="opposite">Opposite</option>
+				<option value="side-by-side">Side-By-Side</option>
+			</select>
+		</label>
 	</body>
 </html>
