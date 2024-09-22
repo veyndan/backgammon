@@ -8,16 +8,21 @@
 		<script src="index.js" type="module"></script>
 	</head>
 	<body class="surface">
-		<div class="surface-container">
+		<div>
 			<div data-player="1">
 				<div>
-					<span class="name" contenteditable="true" spellcheck="false">Player 1</span>
-					<svg class="checker" width="20" height="20">
-						<use href="#checker-background" style="--checker-radius: 10px;"/>
-					</svg>
-					<span class="points"><span>0</span> out of <span>5</span> points</span>
+					<div class="player-info">
+						<span class="name" contenteditable="true" spellcheck="false">Player 1</span>
+						<svg class="checker" width="20" height="20">
+							<use href="#checker-background" style="--checker-radius: 10px;"/>
+						</svg>
+					</div>
+					<div class="points-container">
+						<span class="title">Points</span>
+						<span class="points">0<span class="out-of"> out of </span>5</span>
+					</div>
 				</div>
-				<span class="surface-container-high pip">
+				<span class="pip">
 					<span>Pip</span>
 					<a href="https://bkgm.com/gloss/lookup.cgi?pip+count" target="_blank">&#x1F6C8;</a>
 					<span>167</span>
@@ -37,13 +42,18 @@
 			</label>
 			<div data-player="2">
 				<div>
-					<span class="name" contenteditable="true" spellcheck="false">Player 2</span>
-					<svg class="checker" width="20" height="20">
-						<use href="#checker-background" fill="white" style="--checker-radius: 10px;"/>
-					</svg>
-					<span class="points"><span>0</span> out of <span>5</span> points</span>
+					<div class="player-info">
+						<span class="name" contenteditable="true" spellcheck="false">Player 2</span>
+						<svg class="checker" width="20" height="20">
+							<use href="#checker-background" fill="white" style="--checker-radius: 10px;"/>
+						</svg>
+					</div>
+					<div class="points-container">
+						<span class="title">Points</span>
+						<span class="points">0<span class="out-of"> out of </span>5</span>
+					</div>
 				</div>
-				<span class="surface-container-high pip">
+				<span class="pip">
 					<span>Pip</span>
 					<a href="https://bkgm.com/gloss/lookup.cgi?pip+count" target="_blank">&#x1F6C8;</a>
 					<span>167</span>

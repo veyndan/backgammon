@@ -112,35 +112,57 @@ body > div {
 
 	& > div[data-player] {
 		display: grid;
-		gap: 0 .75rem;
-		padding-inline: .5rem 1rem;
+		gap: .5rem;
+		grid-template-areas:
+			"player-info player-info"
+			"points pip";
+		grid-template-columns: 1fr max-content;
+		padding-inline: 1rem;
 		padding-block: .5rem;
 		border-radius: .5rem;
 
 		& > div {
 			display: contents;
 
-			& > .name {
-				grid-area: name;
-				font-weight: bold;
-				font-size: 1.5rem;
-			}
+			& > .player-info {
+				grid-area: player-info;
+				display: flex;
+				gap: .75rem;
 
-			& > .checker {
-				grid-area: checker;
-				align-self: center;
-			}
-
-			& > .points {
-				grid-area: points;
-				font-style: italic;
-				font-size: 1rem;
-
-				& > span {
+				& > .name {
 					font-weight: bold;
+					font-size: 1.5rem;
+				}
 
-					&:first-of-type {
-						color: var(--secondary);
+				& > .checker {
+					align-self: center;
+				}
+			}
+
+			& > .points-container {
+				grid-area: points;
+				display: flex;
+				flex-direction: column;
+				gap: .25rem;
+				border: solid var(--outline-variant);
+				border-radius: .5rem;
+				font-weight: bold;
+				padding: .5rem;
+				line-height: 1;
+
+				& > .title {
+					font-size: 1rem;
+				}
+
+				& > .points {
+					color: var(--secondary);
+					font-size: 2rem;
+
+					& > span {
+						color: var(--on-surface);
+						font-size: 1.25rem;
+						font-weight: normal;
+						padding: .25rem;
 					}
 				}
 			}
@@ -148,13 +170,12 @@ body > div {
 
 		& > .pip {
 			grid-area: pip;
-			inline-size: 5rem;
 			display: grid;
 			grid-template-columns: 1fr max-content;
 			gap: .25rem;
-			padding: .5rem;
 			border-radius: .5rem;
 			font-weight: bold;
+			padding: .5rem;
 
 			& > span:first-of-type {
 				align-self: start;
@@ -188,16 +209,10 @@ body > div {
 
 		&[data-player="1"] {
 			grid-area: player1;
-			grid-template-areas:
-				"pip name checker"
-				"pip points points";
 		}
 
 		&[data-player="2"] {
 			grid-area: player2;
-			grid-template-areas:
-				"name checker pip"
-				"points points pip";
 		}
 	}
 
@@ -229,6 +244,7 @@ body > div {
 	}
 }
 
+/*
 @media (aspect-ratio > 1) {
 	body > div {
 		grid:
@@ -248,7 +264,7 @@ body > div {
 					padding-block: .5rem;
 					border-radius: .5rem;
 					grid-template-areas:
-						"name checker"
+						"player-info player-info"
 						"points points";
 				}
 
@@ -279,7 +295,7 @@ body > div {
 		background: var(--surface-container-highest);
 	}
 }
-
+*/
 body:has(> svg[data-player="1"]) > div > div[data-player="1"],
 body:has(> svg[data-player="2"]) > div > div[data-player="2"] {
 	background: var(--surface-container-highest);
