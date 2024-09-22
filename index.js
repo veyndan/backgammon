@@ -1,5 +1,6 @@
 import Board from "./board.js";
 import {CheckerLegacy} from "./checker.js";
+import {Move, Touch, Turn} from "./movement.js";
 import {Bar, Point, Position} from "./position.js";
 import Player from "./player.js";
 
@@ -17,41 +18,6 @@ Math.clamp = function (x, lower, upper) {
 };
 
 const board = Board.startingPosition();
-
-class Move {
-	/**
-	 * @param {Player} player
-	 * @param {Position} from
-	 * @param {Position} to
-	 */
-	constructor(player, from, to) {
-		this.player = player;
-		this.from = from;
-		this.to = to;
-	}
-}
-
-class Touch {
-	/**
-	 * @param {Move[]} moves
-	 */
-	constructor(moves) {
-		this.moves = moves;
-	}
-}
-
-class Turn {
-	/**
-	 * @param {Player} player
-	 */
-	constructor(player) {
-		this.player = player;
-		/**
-		 * @type {Touch[]}
-		 */
-		this.touches = [];
-	}
-}
 
 let turn = new Turn(Player.One);
 
