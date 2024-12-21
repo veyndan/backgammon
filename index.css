@@ -139,43 +139,6 @@ g.checker {
 	display: flex;
 	writing-mode: sideways-lr;
 	gap: 8px;
-
-	& > div[data-player] {
-		display: grid;
-		grid-template-columns: 1fr auto;
-		gap: 8px 12px;
-		padding-block: 8px;
-		padding-inline: 12px;
-		border-radius: 8px;
-		background: var(--surface-container-high);
-
-		& > .checker {
-			justify-self: end;
-			--checker-radius: 8px;
-			--checker-diameter: calc(var(--checker-radius) * 2);
-			inline-size: var(--checker-diameter);
-			aspect-ratio: 1;
-		}
-
-		& > .score {
-			display: flex;
-			flex-direction: column;
-			justify-content: end;
-		}
-
-		& > .points {
-			& > span:first-of-type > span {
-				color: var(--on-surface-variable);
-				vertical-align: top;
-				padding-inline-start: 1px;
-				line-height: 2;
-			}
-		}
-
-		& > .pip {
-			align-items: end;
-		}
-	}
 }
 
 #timer {
@@ -197,8 +160,8 @@ g.checker {
 	writing-mode: sideways-rl;
 }
 
-body:has(> svg[data-player="1"]) #players > div[data-player="1"],
-body:has(> svg[data-player="2"]) #players > div[data-player="2"] {
+body:has(> svg[data-player="1"]) #players > veyndan-player[data-player="1"],
+body:has(> svg[data-player="2"]) #players > veyndan-player[data-player="2"] {
 	background: var(--primary-container);
 }
 

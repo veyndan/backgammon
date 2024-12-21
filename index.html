@@ -9,30 +9,37 @@
 	</head>
 	<body class="surface">
 		<div id="players">
-			<div data-player="1">
-				<span class="name typography-body-medium-700" contenteditable="true" spellcheck="false">Player 1</span>
-				<div class="checker"></div>
-				<div class="points score">
-					<span class="typography-body-large-700">3<span class="typography-label-small-700">/5</span></span>
-					<span class="typography-label-small-400">points</span>
+			<template id="player">
+				<link rel="stylesheet" href="index.css"/>
+				<link rel="stylesheet" href="player.css"/>
+				<div>
+					<slot name="name" class="typography-body-medium-700">Player</slot>
+					<div class="checker"></div>
+					<div class="points score">
+						<span class="typography-body-large-700">
+							<slot name="points-achieved">-</slot><span class="typography-label-small-700">/<slot name="points-required">-</slot></span>
+						</span>
+						<span class="typography-label-small-400">points</span>
+					</div>
+					<div class="pip score">
+						<slot name="pips" class="typography-body-large-700">-</slot>
+						<span class="typography-label-small-400">pips</span>
+					</div>
 				</div>
-				<div class="pip score">
-					<span class="typography-body-large-700">167</span>
-					<span class="typography-label-small-400">pips</span>
-				</div>
-			</div>
-			<div data-player="2">
-				<span class="name typography-body-medium-700" contenteditable="true" spellcheck="false">Player 2</span>
-				<div class="checker"></div>
-				<div class="points score">
-					<span class="typography-body-large-700">1<span class="typography-label-small-700">/5</span></span>
-					<span class="typography-label-small-400">points</span>
-				</div>
-				<div class="pip score">
-					<span class="typography-body-large-700">167</span>
-					<span class="typography-label-small-400">pips</span>
-				</div>
-			</div>
+			</template>
+
+			<veyndan-player data-player="1">
+				<span slot="name" contenteditable="true" spellcheck="false">Player 1</span>
+				<span slot="points-achieved">3</span>
+				<span slot="points-required">5</span>
+				<span slot="pips">167</span>
+			</veyndan-player>
+			<veyndan-player data-player="2">
+				<span slot="name" contenteditable="true" spellcheck="false">Player 2</span>
+				<span slot="points-achieved">1</span>
+				<span slot="points-required">5</span>
+				<span slot="pips">167</span>
+			</veyndan-player>
 		</div>
 		<div id="timer">
 			<span class="reserve-bank typography-body-small-700">02:00</span>

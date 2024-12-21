@@ -1,0 +1,39 @@
+:host {
+	background: var(--surface-container-high);
+	border-radius: 8px;
+}
+
+:host > div {
+	display: grid;
+	grid-template-columns: 1fr auto;
+	gap: 8px 12px;
+	padding-block: 8px;
+	padding-inline: 12px;
+}
+
+.checker {
+	justify-self: end;
+	--checker-radius: 8px;
+	--checker-diameter: calc(var(--checker-radius) * 2);
+	inline-size: var(--checker-diameter);
+	aspect-ratio: 1;
+}
+
+.score {
+	display: flex;
+	flex-direction: column;
+	justify-content: end;
+}
+
+.points {
+	& > span:first-of-type > span {
+		color: var(--on-surface-variable);
+		vertical-align: top;
+		padding-inline-start: 1px;
+		line-height: 2;
+	}
+}
+
+.pip {
+	align-items: end;
+}
