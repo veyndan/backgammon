@@ -143,6 +143,10 @@ button {
 
 		& > .checker {
 			justify-self: end;
+			--checker-radius: 8px;
+			--checker-diameter: calc(var(--checker-radius) * 2);
+			width: var(--checker-diameter);
+			height: var(--checker-diameter);
 		}
 
 		& > .score {
