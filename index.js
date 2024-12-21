@@ -276,6 +276,7 @@ const checkerElements = board.mailbox.flatMap((pointValue, point) => {
 	return Array.from(Array(pointStackCount), (_, index) => index)
 		.map(pointStackIndex => {
 			const gElement = document.createElementNS(`http://www.w3.org/2000/svg`, `g`);
+			gElement.classList.add(`checker`);
 			gElement.dataset[`player`] = pointValue > 0 ? Player.One.value : Player.Two.value;
 			gElement.dataset[`point`] = `${point}`;
 			gElement.dataset[`pointStackIndex`] = `${pointStackIndex}`;

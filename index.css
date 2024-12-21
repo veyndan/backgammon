@@ -122,6 +122,11 @@ button {
 	--player-current-checker-text-color: var(--surface-container-lowest);
 }
 
+.checker {
+	fill: var(--player-current-checker-background);
+	color: var(--player-current-checker-text-color);
+}
+
 #players {
 	display: flex;
 	writing-mode: sideways-lr;
@@ -138,7 +143,6 @@ button {
 
 		& > .checker {
 			justify-self: end;
-			fill: var(--player-current-checker-background);
 		}
 
 		& > .score {
@@ -353,8 +357,6 @@ use[href="#hold"] {
 /*noinspection CssInvalidFunction*/
 #checkers > * {
 	transition: translate .3s;
-	fill: var(--player-current-checker-background);
-	color: var(--player-current-checker-text-color);
 
 	&:not([data-permissible-destination-points="[]"]) {
 		&:hover {
