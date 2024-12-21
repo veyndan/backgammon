@@ -91,17 +91,55 @@
 }
 
 html {
+	height: 100%;
 	font: 16px/1.5 system-ui;
 }
 
 body {
-	width: 100vi;
-	height: 100vb;
+	height: 100%;
+	display: flex;
+	flex-direction: column;
+	padding: 16px;
+	gap: 8px;
+}
+
+main {
+	flex:1;
+	overflow: auto;
 	display: flex;
 	justify-content: center;
 	align-items: center;
 	gap: 8px;
-	padding: 1rem;
+}
+
+body > :not(main) > * {
+	padding-inline: 1rem;
+	margin-inline: auto;
+}
+
+header > nav {
+	& > ul {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 1em;
+		list-style-type: none;
+		padding-inline: 0;
+
+		& > li:first-child:has(> a[href="/index.html"]) {
+			margin-inline-end: auto;
+		}
+	}
+
+	a {
+		&:any-link {
+			color: LinkText;
+		}
+
+		&[aria-current="page"] {
+			color: inherit;
+			text-decoration: inherit;
+		}
+	}
 }
 
 button {
@@ -160,22 +198,22 @@ g.checker {
 	writing-mode: sideways-rl;
 }
 
-body:has(> svg[data-player="1"]) #players > veyndan-player[data-player="1"],
-body:has(> svg[data-player="2"]) #players > veyndan-player[data-player="2"] {
+main:has(> svg[data-player="1"]) #players > veyndan-player[data-player="1"],
+main:has(> svg[data-player="2"]) #players > veyndan-player[data-player="2"] {
 	background: var(--primary-container);
 }
 
-body > svg {
+main > svg {
 	touch-action: none;
 	max-height: 100%;
 	margin-inline: 8px;
 }
 
-body:has(#play-mode > select > option[value="opposite"]:checked) > svg[data-player="2"] > foreignObject > div > div:last-of-type {
+main:has(#play-mode > select > option[value="opposite"]:checked) > svg[data-player="2"] > foreignObject > div > div:last-of-type {
 	rotate: .5turn;
 }
 
-body:has(#play-mode > select > option[value="side-by-side"]:checked) {
+main:has(#play-mode > select > option[value="side-by-side"]:checked) {
 	flex-direction: column;
 
 	#players, #timer, #play-mode {
@@ -216,7 +254,7 @@ body:has(#play-mode > select > option[value="side-by-side"]:checked) {
 	}
 }
 
-body > svg > foreignObject {
+main > svg > foreignObject {
 	inline-size: calc(2 * var(--half-width) + var(--bar-width) + 16px);
 	block-size: var(--half-height);
 

@@ -8,216 +8,225 @@
 		<script src="index.js" type="module"></script>
 	</head>
 	<body class="surface">
-		<div id="players">
-			<template id="player">
-				<link rel="stylesheet" href="index.css"/>
-				<link rel="stylesheet" href="player.css"/>
-				<div>
-					<slot name="name" class="typography-body-medium-700">Player</slot>
-					<div class="checker"></div>
-					<div class="points score">
-						<span class="typography-body-large-700">
-							<slot name="points-achieved">-</slot><span class="typography-label-small-700">/<slot name="points-required">-</slot></span>
-						</span>
-						<span class="typography-label-small-400">points</span>
-					</div>
-					<div class="pip score">
-						<slot name="pips" class="typography-body-large-700">-</slot>
-						<span class="typography-label-small-400">pips</span>
-					</div>
-				</div>
-			</template>
-
-			<veyndan-player data-player="1">
-				<span slot="name" contenteditable="true" spellcheck="false">Player 1</span>
-				<span slot="points-achieved">3</span>
-				<span slot="points-required">5</span>
-				<span slot="pips">167</span>
-			</veyndan-player>
-			<veyndan-player data-player="2">
-				<span slot="name" contenteditable="true" spellcheck="false">Player 2</span>
-				<span slot="points-achieved">1</span>
-				<span slot="points-required">5</span>
-				<span slot="pips">167</span>
-			</veyndan-player>
-		</div>
-		<div id="timer">
-			<span class="reserve-bank typography-body-small-700">02:00</span>
-			<span id="move" class="typography-body-medium-700">12</span>
-			<span class="reserve-bank typography-body-small-700">02:00</span>
-		</div>
-
-		<svg viewBox="0 0 596 480" data-player="1">
-			<defs>
-				<!-- The point should have dimensions 1:4, so exactly 4 stacked checkers can fill a point -->
-				<polyline id="point" points="2,0 20,158 38,0" stroke-width="4" stroke-linejoin="round" stroke-linecap="square"/>
-				<circle id="drop-point" r="6" fill="darkorange"/>
-				<circle id="checker-background"/>
-				<rect id="hold" rx="4"/>
-				<rect id="die-face-background" rx="4"/>
-				<g id="die-face-pip-1">
-					<use href="#die-face-background"/>
-					<circle class="die-pip x1 y1"/>
-				</g>
-				<g id="die-face-pip-2">
-					<use href="#die-face-background"/>
-					<circle class="die-pip x0 y0"/>
-					<circle class="die-pip x2 y2"/>
-				</g>
-				<g id="die-face-pip-3">
-					<use href="#die-face-background"/>
-					<circle class="die-pip x0 y0"/>
-					<circle class="die-pip x1 y1"/>
-					<circle class="die-pip x2 y2"/>
-				</g>
-				<g id="die-face-pip-4">
-					<use href="#die-face-background"/>
-					<circle class="die-pip x0 y0"/>
-					<circle class="die-pip x0 y2"/>
-					<circle class="die-pip x2 y0"/>
-					<circle class="die-pip x2 y2"/>
-				</g>
-				<g id="die-face-pip-5">
-					<use href="#die-face-background"/>
-					<circle class="die-pip x0 y0"/>
-					<circle class="die-pip x0 y2"/>
-					<circle class="die-pip x1 y1"/>
-					<circle class="die-pip x2 y0"/>
-					<circle class="die-pip x2 y2"/>
-				</g>
-				<g id="die-face-pip-6">
-					<use href="#die-face-background"/>
-					<circle class="die-pip x0 y0"/>
-					<circle class="die-pip x0 y1"/>
-					<circle class="die-pip x0 y2"/>
-					<circle class="die-pip x2 y0"/>
-					<circle class="die-pip x2 y1"/>
-					<circle class="die-pip x2 y2"/>
-				</g>
-			</defs>
-
-			<foreignObject>
-				<div>
+		<header>
+			<nav>
+				<ul>
+					<li><a href="/index.html" aria-current="page">Backgammon</a></li>
+				</ul>
+			</nav>
+		</header>
+		<main>
+			<div id="players">
+				<template id="player">
+					<link rel="stylesheet" href="index.css"/>
+					<link rel="stylesheet" href="player.css"/>
 					<div>
-						<div class="half">
-								<div class="quadrant">
-									<svg>
-										<use href="#point" data-point="13"/>
-									</svg>
-									<svg>
-										<use href="#point" data-point="14"/>
-									</svg>
-									<svg>
-										<use href="#point" data-point="15"/>
-									</svg>
-									<svg>
-										<use href="#point" data-point="16"/>
-									</svg>
-									<svg>
-										<use href="#point" data-point="17"/>
-									</svg>
-									<svg>
-										<use href="#point" data-point="18"/>
-									</svg>
-								</div>
-								<div class="quadrant">
-									<svg>
-										<use href="#point" data-point="7"/>
-									</svg>
-									<svg>
-										<use href="#point" data-point="8"/>
-									</svg>
-									<svg>
-										<use href="#point" data-point="9"/>
-									</svg>
-									<svg>
-										<use href="#point" data-point="10"/>
-									</svg>
-									<svg>
-										<use href="#point" data-point="11"/>
-									</svg>
-									<svg>
-										<use href="#point" data-point="12"/>
-									</svg>
-								</div>
+						<slot name="name" class="typography-body-medium-700">Player</slot>
+						<div class="checker"></div>
+						<div class="points score">
+							<span class="typography-body-large-700">
+								<slot name="points-achieved">-</slot><span class="typography-label-small-700">/<slot name="points-required">-</slot></span>
+							</span>
+							<span class="typography-label-small-400">points</span>
 						</div>
-						<div class="bar"></div>
-						<div class="half">
-								<div class="quadrant">
-									<svg>
-										<use href="#point" data-point="19"/>
-									</svg>
-									<svg>
-										<use href="#point" data-point="20"/>
-									</svg>
-									<svg>
-										<use href="#point" data-point="21"/>
-									</svg>
-									<svg>
-										<use href="#point" data-point="22"/>
-									</svg>
-									<svg>
-										<use href="#point" data-point="23"/>
-									</svg>
-									<svg>
-										<use href="#point" data-point="24"/>
-									</svg>
-								</div>
-								<div class="quadrant">
-									<svg>
-										<use href="#point" data-point="1"/>
-									</svg>
-									<svg>
-										<use href="#point" data-point="2"/>
-									</svg>
-									<svg>
-										<use href="#point" data-point="3"/>
-									</svg>
-									<svg>
-										<use href="#point" data-point="4"/>
-									</svg>
-									<svg>
-										<use href="#point" data-point="5"/>
-									</svg>
-									<svg>
-										<use href="#point" data-point="6"/>
-									</svg>
-								</div>
+						<div class="pip score">
+							<slot name="pips" class="typography-body-large-700">-</slot>
+							<span class="typography-label-small-400">pips</span>
 						</div>
 					</div>
+				</template>
+
+				<veyndan-player data-player="1">
+					<span slot="name" contenteditable="true" spellcheck="false">Player 1</span>
+					<span slot="points-achieved">3</span>
+					<span slot="points-required">5</span>
+					<span slot="pips">167</span>
+				</veyndan-player>
+				<veyndan-player data-player="2">
+					<span slot="name" contenteditable="true" spellcheck="false">Player 2</span>
+					<span slot="points-achieved">1</span>
+					<span slot="points-required">5</span>
+					<span slot="pips">167</span>
+				</veyndan-player>
+			</div>
+			<div id="timer">
+				<span class="reserve-bank typography-body-small-700">02:00</span>
+				<span id="move" class="typography-body-medium-700">12</span>
+				<span class="reserve-bank typography-body-small-700">02:00</span>
+			</div>
+
+			<svg viewBox="0 0 596 480" data-player="1">
+				<defs>
+					<!-- The point should have dimensions 1:4, so exactly 4 stacked checkers can fill a point -->
+					<polyline id="point" points="2,0 20,158 38,0" stroke-width="4" stroke-linejoin="round" stroke-linecap="square"/>
+					<circle id="drop-point" r="6" fill="darkorange"/>
+					<circle id="checker-background"/>
+					<rect id="hold" rx="4"/>
+					<rect id="die-face-background" rx="4"/>
+					<g id="die-face-pip-1">
+						<use href="#die-face-background"/>
+						<circle class="die-pip x1 y1"/>
+					</g>
+					<g id="die-face-pip-2">
+						<use href="#die-face-background"/>
+						<circle class="die-pip x0 y0"/>
+						<circle class="die-pip x2 y2"/>
+					</g>
+					<g id="die-face-pip-3">
+						<use href="#die-face-background"/>
+						<circle class="die-pip x0 y0"/>
+						<circle class="die-pip x1 y1"/>
+						<circle class="die-pip x2 y2"/>
+					</g>
+					<g id="die-face-pip-4">
+						<use href="#die-face-background"/>
+						<circle class="die-pip x0 y0"/>
+						<circle class="die-pip x0 y2"/>
+						<circle class="die-pip x2 y0"/>
+						<circle class="die-pip x2 y2"/>
+					</g>
+					<g id="die-face-pip-5">
+						<use href="#die-face-background"/>
+						<circle class="die-pip x0 y0"/>
+						<circle class="die-pip x0 y2"/>
+						<circle class="die-pip x1 y1"/>
+						<circle class="die-pip x2 y0"/>
+						<circle class="die-pip x2 y2"/>
+					</g>
+					<g id="die-face-pip-6">
+						<use href="#die-face-background"/>
+						<circle class="die-pip x0 y0"/>
+						<circle class="die-pip x0 y1"/>
+						<circle class="die-pip x0 y2"/>
+						<circle class="die-pip x2 y0"/>
+						<circle class="die-pip x2 y1"/>
+						<circle class="die-pip x2 y2"/>
+					</g>
+				</defs>
+
+				<foreignObject>
 					<div>
 						<div>
-							<button id="double" type="button">Double</button>
-							<button id="undo" type="button" hidden="hidden">Undo</button>
-							<button id="confirm" type="button" hidden="hidden">Confirm</button>
+							<div class="half">
+									<div class="quadrant">
+										<svg>
+											<use href="#point" data-point="13"/>
+										</svg>
+										<svg>
+											<use href="#point" data-point="14"/>
+										</svg>
+										<svg>
+											<use href="#point" data-point="15"/>
+										</svg>
+										<svg>
+											<use href="#point" data-point="16"/>
+										</svg>
+										<svg>
+											<use href="#point" data-point="17"/>
+										</svg>
+										<svg>
+											<use href="#point" data-point="18"/>
+										</svg>
+									</div>
+									<div class="quadrant">
+										<svg>
+											<use href="#point" data-point="7"/>
+										</svg>
+										<svg>
+											<use href="#point" data-point="8"/>
+										</svg>
+										<svg>
+											<use href="#point" data-point="9"/>
+										</svg>
+										<svg>
+											<use href="#point" data-point="10"/>
+										</svg>
+										<svg>
+											<use href="#point" data-point="11"/>
+										</svg>
+										<svg>
+											<use href="#point" data-point="12"/>
+										</svg>
+									</div>
+							</div>
+							<div class="bar"></div>
+							<div class="half">
+									<div class="quadrant">
+										<svg>
+											<use href="#point" data-point="19"/>
+										</svg>
+										<svg>
+											<use href="#point" data-point="20"/>
+										</svg>
+										<svg>
+											<use href="#point" data-point="21"/>
+										</svg>
+										<svg>
+											<use href="#point" data-point="22"/>
+										</svg>
+										<svg>
+											<use href="#point" data-point="23"/>
+										</svg>
+										<svg>
+											<use href="#point" data-point="24"/>
+										</svg>
+									</div>
+									<div class="quadrant">
+										<svg>
+											<use href="#point" data-point="1"/>
+										</svg>
+										<svg>
+											<use href="#point" data-point="2"/>
+										</svg>
+										<svg>
+											<use href="#point" data-point="3"/>
+										</svg>
+										<svg>
+											<use href="#point" data-point="4"/>
+										</svg>
+										<svg>
+											<use href="#point" data-point="5"/>
+										</svg>
+										<svg>
+											<use href="#point" data-point="6"/>
+										</svg>
+									</div>
+							</div>
 						</div>
 						<div>
-							<button id="roll-dice" type="button">Roll Dice</button>
-							<div id="dice-container">
-								<svg id="dice-swap" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960"><path d="M280-160 80-360l200-200 56 57-103 103h287v80H233l103 103-56 57Zm400-240-56-57 103-103H440v-80h287L624-743l56-57 200 200-200 200Z"/></svg>
-								<svg id="dice"/>
+							<div>
+								<button id="double" type="button">Double</button>
+								<button id="undo" type="button" hidden="hidden">Undo</button>
+								<button id="confirm" type="button" hidden="hidden">Confirm</button>
+							</div>
+							<div>
+								<button id="roll-dice" type="button">Roll Dice</button>
+								<div id="dice-container">
+									<svg id="dice-swap" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960"><path d="M280-160 80-360l200-200 56 57-103 103h287v80H233l103 103-56 57Zm400-240-56-57 103-103H440v-80h287L624-743l56-57 200 200-200 200Z"/></svg>
+									<svg id="dice"/>
+								</div>
 							</div>
 						</div>
 					</div>
-				</div>
-			</foreignObject>
-			<use href="#hold"/>
-			<g id="doubling-cube-face">
-				<rect id="die-face-background" rx="4"/>
-				<text>64</text>
-			</g>
-			<use href="#hold"/>
+				</foreignObject>
+				<use href="#hold"/>
+				<g id="doubling-cube-face">
+					<rect id="die-face-background" rx="4"/>
+					<text>64</text>
+				</g>
+				<use href="#hold"/>
 
-			<g id="checkers"></g>
-			<g id="drop-points"/>
-		</svg>
+				<g id="checkers"></g>
+				<g id="drop-points"/>
+			</svg>
 
-		<label id="play-mode">
-			Play Mode
-			<select>
-				<option value="opposite">Opposite</option>
-				<option value="side-by-side">Side-By-Side</option>
-			</select>
-		</label>
+			<label id="play-mode">
+				Play Mode
+				<select>
+					<option value="opposite">Opposite</option>
+					<option value="side-by-side">Side-By-Side</option>
+				</select>
+			</label>
+		</main>
 	</body>
 </html>

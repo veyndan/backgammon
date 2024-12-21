@@ -261,7 +261,7 @@ class DieElement {
 	}
 }
 
-const svgElement = /** @type {SVGSVGElement} */ (document.querySelector(`body > svg`));
+const svgElement = /** @type {SVGSVGElement} */ (document.querySelector(`main > svg`));
 const checkersElement = document.getElementById('checkers');
 const confirmElement = /** @type {HTMLButtonElement} */ (document.getElementById(`confirm`));
 const diceContainerElement = /** @type {HTMLDivElement} */ (document.querySelector(`#dice-container`));
