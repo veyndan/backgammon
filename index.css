@@ -259,8 +259,7 @@ body > svg > foreignObject {
 						block-size: var(--point-height);
 
 						&:nth-child(even) {
-							/** TODO Replace with semantic or relative color */
-							--fill-color: #6b9c6b;
+							--fill-color: hsl(from var(--secondary) h s 50%);
 						}
 
 						&:nth-child(odd) {
