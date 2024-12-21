@@ -56,22 +56,29 @@
 	box-sizing: border-box;
 }
 
-.secondary-container {
-	background: var(--secondary-container);
-	color: var(--on-secondary-container);
-}
-
 .surface {
 	background: var(--surface);
 	color: var(--on-surface);
 }
 
-.surface-container {
-	background: var(--surface-container);
+.typography-body-large-700 {
+	font: 700 20px/1 system-ui;
 }
 
-.surface-container-high {
-	background: var(--surface-container-high);
+.typography-body-medium-700 {
+	font: 700 18px/1 system-ui;
+}
+
+.typography-body-small-700 {
+	font: 700 12px/1 system-ui;
+}
+
+.typography-label-small-700 {
+	font: 700 8px/1 system-ui;
+}
+
+.typography-label-small-400 {
+	font: 400 8px/1 system-ui;
 }
 
 html {
@@ -84,7 +91,7 @@ body {
 	display: flex;
 	justify-content: center;
 	align-items: center;
-	gap: 1rem;
+	gap: 8px;
 	margin: 0;
 	padding: 1rem;
 }
@@ -97,197 +104,76 @@ button {
 	}
 }
 
-body > div {
-	display: grid;
-	grid:
-		'player1 timer     player2' minmax(min-content, max-content)
-		'player1 play-mode player2' minmax(min-content, max-content)
-		/minmax(max-content, 1fr) minmax(min-content, max-content) minmax(max-content, 1fr);
+#players {
+	display: flex;
 	writing-mode: sideways-lr;
-	justify-content: space-around;
-	align-items: center;
-	gap: 1rem;
-	padding: .5rem;
-	border-radius: 8px;
+	gap: 8px;
 
 	& > div[data-player] {
 		display: grid;
-		gap: 0 .75rem;
-		padding-inline: .5rem 1rem;
-		padding-block: .5rem;
-		border-radius: .5rem;
+		grid-template-columns: 1fr auto;
+		gap: 8px 12px;
+		padding-block: 8px;
+		padding-inline: 12px;
+		border-radius: 8px;
+		background: var(--surface-container-high);
 
-		& > div {
-			display: contents;
+		& > .name {
+		}
 
-			& > .name {
-				grid-area: name;
-				font-weight: bold;
-				font-size: 1.5rem;
-			}
+		& > .checker {
+			justify-self: end;
+		}
 
-			& > .checker {
-				grid-area: checker;
-				align-self: center;
-			}
+		& > .score {
+			display: flex;
+			flex-direction: column;
+			justify-content: end;
+		}
 
-			& > .points {
-				grid-area: points;
-				font-style: italic;
-				font-size: 1rem;
-
-				& > span {
-					font-weight: bold;
-
-					&:first-of-type {
-						color: var(--secondary);
-					}
-				}
+		& > .points {
+			& > span:first-of-type > span {
+				color: var(--on-surface-variable);
+				vertical-align: top;
+				padding-inline-start: 1px;
+				line-height: 2;
 			}
 		}
 
 		& > .pip {
-			grid-area: pip;
-			inline-size: 5rem;
-			display: grid;
-			grid-template-columns: 1fr max-content;
-			gap: .25rem;
-			padding: .5rem;
-			border-radius: .5rem;
-			font-weight: bold;
-
-			& > span:first-of-type {
-				align-self: start;
-				line-height: 1;
-			}
-
-			& > a {
-				block-size: 1rem;
-				inline-size: 1rem;
-				align-self: start;
-				line-height: 1;
-				color: inherit;
-
-				&:hover {
-					opacity: .5;
-				}
-			}
-
-			& > a {
-				text-decoration: none;
-				font-size: .9rem;
-			}
-
-			& > span:last-of-type {
-				grid-column: span 2;
-				line-height: 1;
-				color: var(--secondary);
-				font-size: 2rem;
-			}
+			align-items: end;
 		}
-
-		&[data-player="1"] {
-			grid-area: player1;
-			grid-template-areas:
-				"pip name checker"
-				"pip points points";
-		}
-
-		&[data-player="2"] {
-			grid-area: player2;
-			grid-template-areas:
-				"name checker pip"
-				"points points pip";
-		}
-	}
-
-	& #timer {
-		grid-area: timer;
-		display: flex;
-		justify-content: center;
-		align-items: center;
-		gap: .5rem;
-		margin-block: auto;
-		padding: .5rem;
-		border-radius: .5rem;
-		font-weight: bold;
-		line-height: 1;
-
-		& > .reserve-bank {
-			font-size: .9rem;
-		}
-
-		& > #move {
-			font-size: 1.5rem;
-			padding: .5rem .25rem;
-			border-radius: 2px;
-		}
-	}
-
-	& #play-mode {
-		grid-area: play-mode;
 	}
 }
 
-@media (aspect-ratio > 1) {
-	body > div {
-		grid:
-			'pip1    timer     timer     pip2   ' minmax(min-content, max-content)
-			'pip1    play-mode play-mode pip2   ' minmax(min-content, max-content)
-			'player1 player1   player2   player2' minmax(min-content, max-content)
-			/minmax(max-content, 1fr) minmax(min-content, max-content) minmax(min-content, max-content) minmax(min-content, 1fr);
+#timer {
+	display: flex;
+	align-items: center;
+	writing-mode: sideways-lr;
+	gap: 8px;
+	padding-block: 4px;
+	padding-inline: 14px;
+	border-radius: 8px;
+	background: var(--surface-container-high);
 
-			& > div[data-player] {
-				display: contents;
-
-				& > div {
-					display: grid;
-					justify-content: space-between;
-					gap: 0 .75rem;
-					padding-inline: 1rem;
-					padding-block: .5rem;
-					border-radius: .5rem;
-					grid-template-areas:
-						"name checker"
-						"points points";
-				}
-
-				&[data-player="1"] {
-					& > div {
-						grid-area: player1;
-					}
-
-					& > .pip {
-						grid-area: pip1;
-					}
-				}
-
-				&[data-player="2"] {
-					& > div {
-						grid-area: player2;
-					}
-
-					& > .pip {
-						grid-area: pip2;
-					}
-				}
-			}
-	}
-
-	body:has(> svg[data-player="1"]) > div > div[data-player="1"] > div,
-	body:has(> svg[data-player="2"]) > div > div[data-player="2"] > div {
-		background: var(--surface-container-highest);
+	& > #move {
+		color: var(--secondary);
 	}
 }
 
-body:has(> svg[data-player="1"]) > div > div[data-player="1"],
-body:has(> svg[data-player="2"]) > div > div[data-player="2"] {
-	background: var(--surface-container-highest);
+#play-mode {
+	writing-mode: sideways-rl;
+}
+
+body:has(> svg[data-player="1"]) #players > div[data-player="1"],
+body:has(> svg[data-player="2"]) #players > div[data-player="2"] {
+	background: var(--primary-container);
 }
 
 body > svg {
 	touch-action: none;
 	max-height: 100%;
+	margin-inline: 8px;
 
 	&[data-player="1"] {
 		--player-current-checker-background: var(--player-1-checker-background);
@@ -307,7 +193,7 @@ body:has(#play-mode > select > option[value="opposite"]:checked) > svg[data-play
 body:has(#play-mode > select > option[value="side-by-side"]:checked) {
 	flex-direction: column;
 
-	& > div {
+	#players, #timer, #play-mode {
 		writing-mode: unset;
 	}
 
