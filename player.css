@@ -1,6 +1,7 @@
 :host {
 	background: var(--surface-container-high);
 	border-radius: 8px;
+	transition: background-color 400ms;
 }
 
 :host > div {
