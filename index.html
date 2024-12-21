@@ -8,47 +8,40 @@
 		<script src="index.js" type="module"></script>
 	</head>
 	<body class="surface">
-		<div class="surface-container">
+		<div id="players">
 			<div data-player="1">
-				<div>
-					<span class="name" contenteditable="true" spellcheck="false">Player 1</span>
-					<svg class="checker" width="20" height="20">
-						<use href="#checker-background" style="--checker-radius: 10px;"/>
-					</svg>
-					<span class="points"><span>0</span> out of <span>5</span> points</span>
+				<span class="name typography-body-medium-700" contenteditable="true" spellcheck="false">Player 1</span>
+				<svg class="checker" width="16" height="16">
+					<use href="#checker-background" style="--checker-radius: 8px;"/>
+				</svg>
+				<div class="points score">
+					<span class="typography-body-large-700">3<span class="typography-label-small-700">/5</span></span>
+					<span class="typography-label-small-400">points</span>
 				</div>
-				<span class="surface-container-high pip">
-					<span>Pip</span>
-					<a href="https://bkgm.com/gloss/lookup.cgi?pip+count" target="_blank">&#x1F6C8;</a>
-					<span>167</span>
-				</span>
+				<div class="pip score">
+					<span class="typography-body-large-700">167</span>
+					<span class="typography-label-small-400">pips</span>
+				</div>
 			</div>
-			<div id="timer" class="surface-container-high">
-				<span class="reserve-bank">02:00</span>
-				<span id="move" class="secondary-container">12</span>
-				<span class="reserve-bank">02:00</span>
-			</div>
-			<label id="play-mode">
-				Play Mode
-				<select>
-					<option value="opposite">Opposite</option>
-					<option value="side-by-side">Side-By-Side</option>
-				</select>
-			</label>
 			<div data-player="2">
-				<div>
-					<span class="name" contenteditable="true" spellcheck="false">Player 2</span>
-					<svg class="checker" width="20" height="20">
-						<use href="#checker-background" fill="white" style="--checker-radius: 10px;"/>
-					</svg>
-					<span class="points"><span>0</span> out of <span>5</span> points</span>
+				<span class="name typography-body-medium-700" contenteditable="true" spellcheck="false">Player 2</span>
+				<svg class="checker" width="16" height="16">
+					<use href="#checker-background" fill="white" style="--checker-radius: 8px;"/>
+				</svg>
+				<div class="points score">
+					<span class="typography-body-large-700">1<span class="typography-label-small-700">/5</span></span>
+					<span class="typography-label-small-400">points</span>
 				</div>
-				<span class="surface-container-high pip">
-					<span>Pip</span>
-					<a href="https://bkgm.com/gloss/lookup.cgi?pip+count" target="_blank">&#x1F6C8;</a>
-					<span>167</span>
-				</span>
+				<div class="pip score">
+					<span class="typography-body-large-700">167</span>
+					<span class="typography-label-small-400">pips</span>
+				</div>
 			</div>
+		</div>
+		<div id="timer">
+			<span class="reserve-bank typography-body-small-700">02:00</span>
+			<span id="move" class="typography-body-medium-700">12</span>
+			<span class="reserve-bank typography-body-small-700">02:00</span>
 		</div>
 
 		<svg viewBox="0 0 596 480" data-player="1">
@@ -215,5 +208,13 @@
 			<g id="checkers"></g>
 			<g id="drop-points"/>
 		</svg>
+
+		<label id="play-mode">
+			Play Mode
+			<select>
+				<option value="opposite">Opposite</option>
+				<option value="side-by-side">Side-By-Side</option>
+			</select>
+		</label>
 	</body>
 </html>
