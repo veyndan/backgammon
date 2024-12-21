@@ -1,34 +1,76 @@
+@layer reset {
+	*, ::before, ::after {
+		box-sizing: border-box;
+	}
+
+	body {
+		margin: 0;
+	}
+}
+
+@layer typography {
+	.typography-body-large-700 {
+		font: 700 20px/1 system-ui;
+	}
+
+	.typography-body-medium-700 {
+		font: 700 18px/1 system-ui;
+	}
+
+	.typography-body-small-700 {
+		font: 700 12px/1 system-ui;
+	}
+
+	.typography-label-small-700 {
+		font: 700 8px/1 system-ui;
+	}
+
+	.typography-label-small-400 {
+		font: 400 8px/1 system-ui;
+	}
+}
+
+@layer palette {
+	:root {
+		--primary: light-dark(#a0d49b, #39693b);
+		--on-primary: light-dark(#ffffff, #083910);
+		--secondary: light-dark(#52634f, #b9ccb4);
+		--on-secondary: light-dark(#ffffff, #253423);
+		--tertiary: light-dark(#39656b, #a1ced4);
+		--on-tertiary: light-dark(#ffffff, #00363b);
+		--primary-container: light-dark(hsl(115.9 65.9% 82.7%), hsl(121.3 39.1% 22.5%));
+		--on-primary-container: light-dark(#002105, #bbf0b5);
+		--secondary-container: light-dark(#d5e8cf, #3b4b39);
+		--on-secondary-container: light-dark(#101f10, #d5e8cf);
+		--tertiary-container: light-dark(#bcebf1, #1f4d52);
+		--on-tertiary-container: light-dark(#001f23, #bcebf1);
+		--surface-dim: light-dark(#d7dbd3, #10140f);
+		--surface: light-dark(hsl(84 55.6% 96.5%), hsl(108 14.3% 6.9%));
+		--surface-bright: light-dark(#f7fbf1, #363a34);
+		--surface-container-lowest: light-dark(#ffffff, #0b0f0a);
+		--surface-container-low: light-dark(#f1f5ec, #181d17);
+		--surface-container: light-dark(#ebefe6, #1c211b);
+		--surface-container-high: light-dark(#e6e9e0, #272b25);
+		--surface-container-highest: light-dark(#e0e4db, #323630);
+		--on-surface: light-dark(#181d17, #e0e4db);
+		--on-surface-variable: light-dark(#424940, #c2c9bd);
+		--outline: light-dark(#72796f, #8c9388);
+		--outline-variant: light-dark(#c2c9bd, #424940);
+		--inverse-surface: light-dark(#2d322c, #e0e4db);
+		--inverse-on-surface: light-dark(#eef2e9, #2d322c);
+		--inverse-primary: light-dark(#9fd49c, #3b693a);
+		--scrim: light-dark(#000000, #000000);
+		--shadow: light-dark(#000000, #000000);
+	}
+
+	.surface {
+		background: var(--surface);
+		color: var(--on-surface);
+	}
+}
+
 :root {
 	color-scheme: light dark;
-	--primary: light-dark(#a0d49b, #39693b);
-	--on-primary: light-dark(#ffffff, #083910);
-	--secondary: light-dark(#52634f, #b9ccb4);
-	--on-secondary: light-dark(#ffffff, #253423);
-	--tertiary: light-dark(#39656b, #a1ced4);
-	--on-tertiary: light-dark(#ffffff, #00363b);
-	--primary-container: light-dark(hsl(115.9 65.9% 82.7%), hsl(121.3 39.1% 22.5%));
-	--on-primary-container: light-dark(#002105, #bbf0b5);
-	--secondary-container: light-dark(#d5e8cf, #3b4b39);
-	--on-secondary-container: light-dark(#101f10, #d5e8cf);
-	--tertiary-container: light-dark(#bcebf1, #1f4d52);
-	--on-tertiary-container: light-dark(#001f23, #bcebf1);
-	--surface-dim: light-dark(#d7dbd3, #10140f);
-	--surface: light-dark(hsl(84 55.6% 96.5%), hsl(108 14.3% 6.9%));
-	--surface-bright: light-dark(#f7fbf1, #363a34);
-	--surface-container-lowest: light-dark(#ffffff, #0b0f0a);
-	--surface-container-low: light-dark(#f1f5ec, #181d17);
-	--surface-container: light-dark(#ebefe6, #1c211b);
-	--surface-container-high: light-dark(#e6e9e0, #272b25);
-	--surface-container-highest: light-dark(#e0e4db, #323630);
-	--on-surface: light-dark(#181d17, #e0e4db);
-	--on-surface-variable: light-dark(#424940, #c2c9bd);
-	--outline: light-dark(#72796f, #8c9388);
-	--outline-variant: light-dark(#c2c9bd, #424940);
-	--inverse-surface: light-dark(#2d322c, #e0e4db);
-	--inverse-on-surface: light-dark(#eef2e9, #2d322c);
-	--inverse-primary: light-dark(#9fd49c, #3b693a);
-	--scrim: light-dark(#000000, #000000);
-	--shadow: light-dark(#000000, #000000);
 	--bar-width: 50px;
 	--checker-radius: 20px;
 	--checker-diameter: calc(var(--checker-radius) * 2);
@@ -48,35 +90,6 @@
 	--point-height: calc(var(--checker-diameter) * 4);
 }
 
-*, ::before, ::after {
-	box-sizing: border-box;
-}
-
-.surface {
-	background: var(--surface);
-	color: var(--on-surface);
-}
-
-.typography-body-large-700 {
-	font: 700 20px/1 system-ui;
-}
-
-.typography-body-medium-700 {
-	font: 700 18px/1 system-ui;
-}
-
-.typography-body-small-700 {
-	font: 700 12px/1 system-ui;
-}
-
-.typography-label-small-700 {
-	font: 700 8px/1 system-ui;
-}
-
-.typography-label-small-400 {
-	font: 400 8px/1 system-ui;
-}
-
 html {
 	font: 16px/1.5 system-ui;
 }
@@ -88,7 +101,6 @@ body {
 	justify-content: center;
 	align-items: center;
 	gap: 8px;
-	margin: 0;
 	padding: 1rem;
 }
 
