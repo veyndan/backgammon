@@ -123,8 +123,16 @@ button {
 }
 
 .checker {
-	fill: var(--player-current-checker-background);
 	color: var(--player-current-checker-text-color);
+}
+
+div.checker {
+	background: var(--player-current-checker-background);
+	clip-path: circle(var(--checker-radius));
+}
+
+g.checker {
+	fill: var(--player-current-checker-background);
 }
 
 #players {
@@ -145,8 +153,8 @@ button {
 			justify-self: end;
 			--checker-radius: 8px;
 			--checker-diameter: calc(var(--checker-radius) * 2);
-			width: var(--checker-diameter);
-			height: var(--checker-diameter);
+			inline-size: var(--checker-diameter);
+			aspect-ratio: 1;
 		}
 
 		& > .score {
