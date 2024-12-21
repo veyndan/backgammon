@@ -40,9 +40,9 @@
 	--half-height: calc(var(--point-height) * 2 + var(--checker-diameter) * 2 + var(--die-side-length) + 40px);
 	--hold-width: var(--checker-diameter);
 	--hold-height: calc(var(--checkers-per-player) * var(--checker-thickness));
-	--player-1-checker-background: hsl(0 0% 0%);
+	--player-1-checker-background: var(--surface-container-lowest);
 	--player-1-checker-text-color: var(--player-2-checker-background);
-	--player-2-checker-background: hsl(0 0% 100%);
+	--player-2-checker-background: var(--on-surface);
 	--player-2-checker-text-color: var(--player-1-checker-background);
 	--point-count: 24;
 	--point-per-side: calc(var(--point-count) / 2);
@@ -104,6 +104,16 @@ button {
 	}
 }
 
+[data-player="1"] {
+	--player-current-checker-background: var(--player-1-checker-background);
+	--player-current-checker-text-color: var(--player-1-checker-text-color);
+}
+
+[data-player="2"] {
+	--player-current-checker-background: var(--player-2-checker-background);
+	--player-current-checker-text-color: var(--player-2-checker-text-color);
+}
+
 #players {
 	display: flex;
 	writing-mode: sideways-lr;
@@ -123,6 +133,7 @@ button {
 
 		& > .checker {
 			justify-self: end;
+			fill: var(--player-current-checker-background);
 		}
 
 		& > .score {
@@ -174,16 +185,6 @@ body > svg {
 	touch-action: none;
 	max-height: 100%;
 	margin-inline: 8px;
-
-	&[data-player="1"] {
-		--player-current-checker-background: var(--player-1-checker-background);
-		--player-current-checker-text-color: var(--player-1-checker-text-color);
-	}
-
-	&[data-player="2"] {
-		--player-current-checker-background: var(--player-2-checker-background);
-		--player-current-checker-text-color: var(--player-2-checker-text-color);
-	}
 }
 
 body:has(#play-mode > select > option[value="opposite"]:checked) > svg[data-player="2"] > foreignObject > div > div:last-of-type {
