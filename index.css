@@ -467,18 +467,6 @@ use[href="#drop-point"] {
 	}
 }
 
-#confirm {
-	--surface: hsl(149 83% 28%);
-	--color: hsl(0 0% 100%);
-}
-
-#double,
-#undo,
-#roll-dice {
-	--surface: var(--player-current-checker-background);
-	--color: var(--player-current-checker-text-color);
-}
-
 #confirm,
 #double,
 #undo,
@@ -487,6 +475,8 @@ use[href="#drop-point"] {
 	padding-inline: 21px;
 	border: none;
 	border-radius: 8px;
+	--surface: var(--player-current-checker-background);
+	--color: var(--player-current-checker-text-color);
 	--alpha: 1;
 	background: hsl(from var(--surface) h s l / var(--alpha));
 	color: hsl(from var(--color) h s l / var(--alpha));
@@ -498,6 +488,11 @@ use[href="#drop-point"] {
 	&:hover:not(:disabled) {
 		--alpha: .85;
 	}
+}
+
+#confirm {
+	--surface: hsl(149 83% 28%);
+	--color: hsl(0 0% 100%);
 }
 
 #dice-container {
