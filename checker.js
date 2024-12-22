@@ -37,3 +37,16 @@ export class CheckerLegacy {
 		}
 	}
 }
+
+customElements.define(
+	"veyndan-checker",
+	class extends HTMLElement {
+		constructor() {
+			super();
+			const template = /** @type {HTMLTemplateElement} */ (document.querySelector(`template#checker`));
+			this
+				.attachShadow({mode: "open"})
+				.appendChild(template.content.cloneNode(true));
+		}
+	},
+);

@@ -12,12 +12,10 @@
 	padding-inline: 12px;
 }
 
-.checker {
+veyndan-checker {
 	justify-self: end;
 	--checker-radius: 8px;
 	--checker-diameter: calc(var(--checker-radius) * 2);
-	inline-size: var(--checker-diameter);
-	aspect-ratio: 1;
 }
 
 .score {

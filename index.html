@@ -17,13 +17,19 @@
 			</nav>
 		</header>
 		<main>
+			<template id="checker">
+				<link rel="stylesheet" href="index.css"/>
+				<link rel="stylesheet" href="checker.css"/>
+				<div></div>
+			</template>
+
 			<div id="players">
 				<template id="player">
 					<link rel="stylesheet" href="index.css"/>
 					<link rel="stylesheet" href="player.css"/>
 					<div>
 						<slot name="name" class="typography-body-medium-700">Player</slot>
-						<div class="checker"></div>
+						<veyndan-checker class="flat"></veyndan-checker>
 						<div class="points score">
 							<span class="typography-body-large-700">
 								<slot name="points-achieved">-</slot><span class="typography-label-small-700">/<slot name="points-required">-</slot></span>
@@ -152,9 +158,15 @@
 									</div>
 							</div>
 							<div id="sidebar">
-								<div class="hold"></div>
+								<div class="hold" data-player="2">
+									<veyndan-checker class="upright"></veyndan-checker>
+									<veyndan-checker class="upright"></veyndan-checker>
+								</div>
 								<div id="doubling-cube-face" class="die typography-body-medium-700">64</div>
-								<div class="hold"></div>
+								<div class="hold" data-player="1">
+									<veyndan-checker class="upright"></veyndan-checker>
+									<veyndan-checker class="upright"></veyndan-checker>
+								</div>
 							</div>
 						</div>
 						<div id="controls">

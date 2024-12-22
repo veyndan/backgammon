@@ -159,17 +159,9 @@ button {
 	--player-current-checker-text-color: var(--surface-container-lowest);
 }
 
-.checker {
-	color: var(--player-current-checker-text-color);
-}
-
-div.checker {
-	background: var(--player-current-checker-background);
-	clip-path: circle(var(--checker-radius));
-}
-
 g.checker {
 	fill: var(--player-current-checker-background);
+	color: var(--player-current-checker-text-color);
 }
 
 #players {
@@ -231,8 +223,17 @@ main:has(#play-mode > select > option[value="side-by-side"]:checked) {
 }
 
 .hold {
+	--checker-radius: 14px;
+	--checker-diameter: calc(var(--checker-radius) * 2);
+	--gap: 1px;
+	--padding: 2px;
 	width: var(--hold-width);
-	height: calc(var(--checkers-per-player) * var(--checker-thickness) + 19px);
+	height: calc(var(--checkers-per-player) * var(--checker-thickness) + 2 * var(--padding) + (var(--checkers-per-player) - 1) * var(--gap));
+	display: flex;
+	flex-direction: column-reverse;
+	justify-content: end;
+	gap: var(--gap);
+	padding: var(--padding);
 	background: var(--secondary-container);
 	border-radius: 4px;
 }

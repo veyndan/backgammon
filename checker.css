@@ -1,0 +1,15 @@
+:host {
+	inline-size: var(--checker-diameter);
+	color: var(--player-current-checker-text-color);
+	background: var(--player-current-checker-background);
+}
+
+:host(.flat) {
+	block-size: var(--checker-diameter);
+	clip-path: circle(var(--checker-radius));
+}
+
+:host(.upright) {
+	block-size: var(--checker-thickness);
+	border-radius: 2px;
+}
