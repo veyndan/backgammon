@@ -209,7 +209,7 @@ main > svg {
 	margin-inline: 8px;
 }
 
-main:has(#play-mode > select > option[value="opposite"]:checked) > svg[data-player="2"] > foreignObject > div > div:last-of-type {
+main:has(#play-mode > select > option[value="opposite"]:checked) > svg[data-player="2"] > foreignObject > div > #controls {
 	rotate: .5turn;
 }
 
@@ -220,7 +220,7 @@ main:has(#play-mode > select > option[value="side-by-side"]:checked) {
 		writing-mode: unset;
 	}
 
-	& > svg[data-player="1"] > foreignObject > div > div:last-of-type {
+	& > svg[data-player="1"] > foreignObject > div > #controls {
 		flex-direction: row-reverse;
 	}
 }
@@ -254,7 +254,7 @@ main > svg > foreignObject {
 	& > div {
 		position: relative;
 
-		& > div:first-of-type {
+		& > #board {
 			display: flex;
 			gap: 8px;
 
@@ -299,7 +299,7 @@ main > svg > foreignObject {
 			}
 		}
 
-		& > div:last-of-type {
+		& > #controls {
 			position: absolute;
 			inset-block-start: 0;
 			inline-size: calc(100% - var(--hold-width) - 8px);
