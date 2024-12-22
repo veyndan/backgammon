@@ -239,12 +239,13 @@ main:has(#play-mode > select > option[value="side-by-side"]:checked) {
 }
 
 #doubling-cube-face {
+	--die-side-length: 28px;
 	display: flex;
 	align-items: center;
 	justify-content: center;
+	rotate: .25turn;
 	background: var(--secondary-container);
 	color: var(--on-secondary-container);
-	font: bold 24px sans-serif;
 }
 
 main > svg > foreignObject {
@@ -295,6 +296,7 @@ main > svg > foreignObject {
 			& > #sidebar {
 				display: flex;
 				flex-direction: column;
+				align-items: center;
 				justify-content: space-evenly;
 			}
 		}
