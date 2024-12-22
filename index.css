@@ -127,6 +127,7 @@ header > nav {
 		gap: 1em;
 		list-style-type: none;
 		padding-inline: 0;
+		font-weight: bold;
 
 		& > li:first-child:has(> a[href="/index.html"]) {
 			margin-inline-end: auto;
