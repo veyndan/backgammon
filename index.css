@@ -80,8 +80,7 @@
 	--die-gap: 8px;
 	--half-width: calc(var(--point-width) * 6);
 	--half-height: calc(var(--point-height) * 2 + var(--checker-diameter) * 2 + var(--die-side-length) + 40px);
-	--hold-width: var(--checker-diameter);
-	--hold-height: calc(var(--checkers-per-player) * var(--checker-thickness));
+	--hold-width: calc(var(--checker-diameter) - 8px);
 	--point-count: 24;
 	--point-per-side: calc(var(--point-count) / 2);
 	--point-min: 1;
@@ -233,7 +232,7 @@ main:has(#play-mode > select > option[value="side-by-side"]:checked) {
 
 .hold {
 	width: var(--hold-width);
-	height: var(--hold-height);
+	height: calc(var(--checkers-per-player) * var(--checker-thickness) + 19px);
 	background: var(--secondary-container);
 	border-radius: 4px;
 }
