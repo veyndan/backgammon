@@ -467,10 +467,7 @@ use[href="#drop-point"] {
 	}
 }
 
-#confirm,
-#double,
-#undo,
-#roll-dice {
+#controls button {
 	padding-block: 10.5px;
 	padding-inline: 21px;
 	border: none;
@@ -488,11 +485,11 @@ use[href="#drop-point"] {
 	&:hover:not(:disabled) {
 		--alpha: .85;
 	}
-}
 
-#confirm {
-	--surface: hsl(149 83% 28%);
-	--color: hsl(0 0% 100%);
+	&#confirm {
+		--surface: hsl(149 83% 28%);
+		--color: hsl(0 0% 100%);
+	}
 }
 
 #dice-container {
