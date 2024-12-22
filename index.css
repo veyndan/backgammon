@@ -277,16 +277,13 @@ main > svg > foreignObject {
 				& > .quadrant {
 					display: flex;
 
-					& > svg {
-						inline-size: var(--point-width);
-						block-size: var(--point-height);
-
+					& > veyndan-point {
 						&:nth-child(even) {
-							--fill-color: hsl(from var(--secondary) h s 50%);
+							color: hsl(from var(--secondary) h s 50%);
 						}
 
 						&:nth-child(odd) {
-							--fill-color: var(--primary);
+							color: var(--primary);
 						}
 					}
 
@@ -320,11 +317,6 @@ main > svg > foreignObject {
 			}
 		}
 	}
-}
-
-use[href="#point"] {
-	fill: var(--fill-color);
-	stroke: var(--fill-color);
 }
 
 #drop-points {

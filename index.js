@@ -2,6 +2,7 @@ import Board from "./board.js";
 import {CheckerLegacy} from "./checker.js";
 import {Bar, Point, Position} from "./position.js";
 import Player from "./player.js";
+import "./point.js"
 
 /**
  * https://rwaldron.github.io/proposal-math-extensions/#sec-math.clamp
@@ -623,7 +624,7 @@ checkersElement.addEventListener('pointerdown', event => {
 		const dy = Math.clamp(coordinates.y - offset.y, minY, maxY);
 		let point = null;
 		const checkerDiameter = /** @type {SVGGElement} */ (document.querySelector(`#checkers > *`)).getBBox().width;
-		const pointHeight = /** @type {SVGUseElement} */ (document.querySelector(`use[href="#point"]`)).getBBox().height;
+		const pointHeight = document.querySelector(`veyndan-point`).getBoundingClientRect().y
 		const barWidth = 50;
 		let additionalPoints;
 		let multiplier;

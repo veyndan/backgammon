@@ -1,0 +1,14 @@
+:host {
+	inline-size: var(--point-width);
+	block-size: var(--point-height);
+}
+
+svg {
+	inline-size: inherit;
+	block-size: inherit;
+}
+
+polyline {
+	fill: currentColor;
+	stroke: currentColor;
+}
