@@ -60,7 +60,6 @@
 				<defs>
 					<circle id="drop-point" r="6" fill="darkorange"/>
 					<circle id="checker-background"/>
-					<rect id="hold" rx="4"/>
 					<rect id="die-face-background" rx="4"/>
 					<g id="die-face-pip-1">
 						<use href="#die-face-background"/>
@@ -152,6 +151,11 @@
 										<veyndan-point data-point="6"></veyndan-point>
 									</div>
 							</div>
+							<div>
+								<div class="hold"></div>
+								<div id="doubling-cube-face" class="die">64</div>
+								<div class="hold"></div>
+							</div>
 						</div>
 						<div>
 							<div>
@@ -169,12 +173,6 @@
 						</div>
 					</div>
 				</foreignObject>
-				<use href="#hold"/>
-				<g id="doubling-cube-face">
-					<rect id="die-face-background" rx="4"/>
-					<text>64</text>
-				</g>
-				<use href="#hold"/>
 
 				<g id="checkers"></g>
 				<g id="drop-points"/>
