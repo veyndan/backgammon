@@ -292,7 +292,7 @@ main > svg > foreignObject {
 				border-radius: 8px;
 			}
 
-			& > div:last-of-type {
+			& > #sidebar {
 				display: flex;
 				flex-direction: column;
 				justify-content: space-evenly;
