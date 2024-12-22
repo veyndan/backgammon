@@ -21,6 +21,10 @@
 		font: 700 12px/1 system-ui;
 	}
 
+	.typography-label-large-700 {
+		font: 700 14px/1.43 system-ui;
+	}
+
 	.typography-label-small-700 {
 		font: 700 8px/1 system-ui;
 	}
@@ -71,16 +75,16 @@
 
 :root {
 	color-scheme: light dark;
-	--bar-width: 50px;
-	--checker-radius: 20px;
+	--bar-width: 38px;
+	--checker-radius: 16px;
 	--checker-diameter: calc(var(--checker-radius) * 2);
 	--checker-thickness: 5px;
 	--checkers-per-player: 15;
-	--die-side-length: 40px;
+	--die-side-length: 36px;
 	--die-gap: 8px;
 	--half-width: calc(var(--point-width) * 6);
-	--half-height: calc(var(--point-height) * 2 + var(--checker-diameter) * 2 + var(--die-side-length) + 40px);
-	--hold-width: calc(var(--checker-diameter) - 8px);
+	--half-height: calc(var(--point-height) * 2 + var(--checker-diameter) * 2 + var(--die-side-length) + 24px);
+	--hold-width: calc(var(--checker-diameter));
 	--point-count: 24;
 	--point-per-side: calc(var(--point-count) / 2);
 	--point-min: 1;
@@ -372,8 +376,6 @@ use[href="#drop-point"] {
 
 	& > text {
 		fill: currentColor;
-		font-weight: bold;
-		font-size: 18px;
 		user-select: none;
 		dominant-baseline: central;
 		text-anchor: middle;
@@ -480,12 +482,10 @@ use[href="#drop-point"] {
 #double,
 #undo,
 #roll-dice {
-	block-size: 40px;
-	font-weight: bold;
-	font-size: 1rem;
-	padding-inline: 20px;
+	padding-block: 10.5px;
+	padding-inline: 21px;
 	border: none;
-	border-radius: 4px;
+	border-radius: 8px;
 	--alpha: 1;
 	background: hsl(from var(--surface) h s l / var(--alpha));
 	color: hsl(from var(--color) h s l / var(--alpha));
@@ -514,7 +514,7 @@ use[href="#drop-point"] {
 #dice {
 	/* TODO Remove setting of full-width, as this causes the "click to swap dice" click zone to be too large. */
 	inline-size: 100%;
-	block-size: 56px;
+	block-size: 52px;
 
 	:nth-child(1):nth-last-child(4),
 	:nth-child(2):nth-last-child(3) {

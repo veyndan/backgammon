@@ -289,8 +289,9 @@ const checkerElements = board.mailbox.flatMap((pointValue, point) => {
 			const useElement = document.createElementNS(`http://www.w3.org/2000/svg`, `use`);
 			useElement.setAttribute(`href`, `#checker-background`);
 			const textElement = document.createElementNS(`http://www.w3.org/2000/svg`, `text`);
-			textElement.setAttribute(`x`, `20`);
-			textElement.setAttribute(`y`, `20`);
+			textElement.classList.add(`typography-label-large-700`);
+			textElement.setAttribute(`x`, `16`);
+			textElement.setAttribute(`y`, `16`);
 			gElement.append(useElement, textElement);
 			return gElement;
 		});
@@ -562,7 +563,7 @@ checkersElement.addEventListener('pointerdown', event => {
 
 	const halfElement = /** @type {SVGGElement} */ (document.querySelector(`.half`));
 
-	const boundary = new DOMRect(0, 0, halfElement.clientWidth * 2 + 50, halfElement.clientHeight);
+	const boundary = new DOMRect(0, 0, halfElement.clientWidth * 2 + 38, halfElement.clientHeight);
 
 	const getPointerPosition = (/** @type {PointerEvent} */ event) => {
 		const CTM = svgElement.getScreenCTM();
@@ -625,7 +626,7 @@ checkersElement.addEventListener('pointerdown', event => {
 		let point = null;
 		const checkerDiameter = /** @type {SVGGElement} */ (document.querySelector(`#checkers > *`)).getBBox().width;
 		const pointHeight = document.querySelector(`veyndan-point`).getBoundingClientRect().y
-		const barWidth = 50;
+		const barWidth = 38;
 		let additionalPoints;
 		let multiplier;
 		if (dy <= pointHeight) {
