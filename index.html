@@ -66,46 +66,6 @@
 				<defs>
 					<circle id="drop-point" r="6" fill="darkorange"/>
 					<circle id="checker-background"/>
-					<rect id="die-face-background" rx="4"/>
-					<g id="die-face-pip-1">
-						<use href="#die-face-background"/>
-						<circle class="die-pip x1 y1"/>
-					</g>
-					<g id="die-face-pip-2">
-						<use href="#die-face-background"/>
-						<circle class="die-pip x0 y0"/>
-						<circle class="die-pip x2 y2"/>
-					</g>
-					<g id="die-face-pip-3">
-						<use href="#die-face-background"/>
-						<circle class="die-pip x0 y0"/>
-						<circle class="die-pip x1 y1"/>
-						<circle class="die-pip x2 y2"/>
-					</g>
-					<g id="die-face-pip-4">
-						<use href="#die-face-background"/>
-						<circle class="die-pip x0 y0"/>
-						<circle class="die-pip x0 y2"/>
-						<circle class="die-pip x2 y0"/>
-						<circle class="die-pip x2 y2"/>
-					</g>
-					<g id="die-face-pip-5">
-						<use href="#die-face-background"/>
-						<circle class="die-pip x0 y0"/>
-						<circle class="die-pip x0 y2"/>
-						<circle class="die-pip x1 y1"/>
-						<circle class="die-pip x2 y0"/>
-						<circle class="die-pip x2 y2"/>
-					</g>
-					<g id="die-face-pip-6">
-						<use href="#die-face-background"/>
-						<circle class="die-pip x0 y0"/>
-						<circle class="die-pip x0 y1"/>
-						<circle class="die-pip x0 y2"/>
-						<circle class="die-pip x2 y0"/>
-						<circle class="die-pip x2 y1"/>
-						<circle class="die-pip x2 y2"/>
-					</g>
 				</defs>
 
 				<foreignObject>
@@ -179,7 +139,7 @@
 								<button id="roll-dice" class="typography-body-small-700"  type="button">Roll Dice</button>
 								<div id="dice-container">
 									<svg id="dice-swap" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960"><path d="M280-160 80-360l200-200 56 57-103 103h287v80H233l103 103-56 57Zm400-240-56-57 103-103H440v-80h287L624-743l56-57 200 200-200 200Z"/></svg>
-									<svg id="dice"/>
+									<ol id="dice"></ol>
 								</div>
 							</div>
 						</div>

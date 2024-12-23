@@ -81,7 +81,6 @@
 	--checker-thickness: 5px;
 	--checkers-per-player: 15;
 	--die-side-length: 36px;
-	--die-gap: 8px;
 	--half-width: calc(var(--point-width) * 6);
 	--half-height: calc(var(--point-height) * 2 + var(--checker-diameter) * 2 + var(--die-side-length) + 24px);
 	--hold-width: calc(var(--checker-diameter));
@@ -428,42 +427,70 @@ use[href="#drop-point"] {
 .die {
 	inline-size: var(--die-side-length);
 	block-size: var(--die-side-length);
+	display: grid;
+	--pip-diameter: 8px;
+	grid-template: repeat(3, var(--pip-diameter)) / repeat(3, var(--pip-diameter));
+	align-content: center;
+	justify-content: center;
+	gap: 1px;
 	background: var(--player-current-checker-background);
 	border-radius: 4px;
-}
 
-#die-face-background {
-	width: var(--die-side-length);
-	height: var(--die-side-length);
-	fill: var(--player-current-checker-background);
-}
-
-.die-pip {
-	r: 4px;
-	fill: var(--player-current-checker-text-color);
-
-	&.x0 {
-		cx: calc(var(--die-side-length) * .25);
+	.pip {
+		border-radius: 50%;
+		background: var(--player-current-checker-text-color);
+		visibility: hidden;
 	}
 
-	&.x1 {
-		cx: calc(var(--die-side-length) * .5);
+	&[data-value="1"] .pip {
+		&:nth-child(5) {
+			visibility: visible;
+		}
 	}
 
-	&.x2 {
-		cx: calc(var(--die-side-length) * .75);
+	&[data-value="2"] .pip {
+		&:nth-child(1),
+		&:nth-child(9) {
+			visibility: visible;
+		}
 	}
 
-	&.y0 {
-		cy: calc(var(--die-side-length) * .25);
+	&[data-value="3"] .pip {
+		&:nth-child(1),
+		&:nth-child(5),
+		&:nth-child(9) {
+			visibility: visible;
+		}
 	}
 
-	&.y1 {
-		cy: calc(var(--die-side-length) * .5);
+	&[data-value="4"] .pip {
+		&:nth-child(1),
+		&:nth-child(3),
+		&:nth-child(7),
+		&:nth-child(9) {
+			visibility: visible;
+		}
 	}
 
-	&.y2 {
-		cy: calc(var(--die-side-length) * .75);
+	&[data-value="5"] .pip {
+		&:nth-child(1),
+		&:nth-child(3),
+		&:nth-child(5),
+		&:nth-child(7),
+		&:nth-child(9) {
+			visibility: visible;
+		}
+	}
+
+	&[data-value="6"] .pip {
+		&:nth-child(1),
+		&:nth-child(3),
+		&:nth-child(4),
+		&:nth-child(6),
+		&:nth-child(7),
+		&:nth-child(9) {
+			visibility: visible;
+		}
 	}
 }
 
@@ -493,10 +520,11 @@ use[href="#drop-point"] {
 }
 
 #dice-container {
+	inline-size: 100%;
 	display: none;
-	block-size: var(--height);
 	flex-direction: column;
 	align-items: center;
+	margin-block-end: 16px;
 }
 
 #dice-swap {
@@ -505,42 +533,21 @@ use[href="#drop-point"] {
 }
 
 #dice {
-	/* TODO Remove setting of full-width, as this causes the "click to swap dice" click zone to be too large. */
-	inline-size: 100%;
-	block-size: 52px;
+	display: flex;
+	justify-content: center;
+	margin: 0;
+	padding: 0;
+	list-style-type: none;
 
-	:nth-child(1):nth-last-child(4),
-	:nth-child(2):nth-last-child(3) {
-		transition: translate .4s;
-	}
+	.die {
+		flex: 0 1 var(--die-side-length);
+		overflow: hidden;
+		margin-inline: 4px;
 
-	:nth-child(1):nth-last-child(2) {
-		translate: calc(var(--half-width) / 2 - var(--die-side-length) - var(--die-gap) / 2);
-	}
-
-	:nth-child(2):last-child {
-		translate: calc(var(--half-width) / 2 + var(--die-gap) / 2);
-	}
-
-	:nth-child(1):nth-last-child(4) {
-		translate: calc(var(--half-width) / 2 - 2 * var(--die-side-length) - 3 * var(--die-gap) / 2);
-	}
-
-	:nth-child(2):nth-last-child(3) {
-		translate: calc(var(--half-width) / 2 - var(--die-side-length) - var(--die-gap) / 2);
-	}
-
-	:nth-child(3):nth-last-child(2) {
-		translate: calc(var(--half-width) / 2 + var(--die-gap) / 2);
-	}
-
-	:nth-child(4):nth-last-child(1) {
-		translate: calc(var(--half-width) / 2 + var(--die-side-length) + 3 * var(--die-gap) / 2);
-	}
-
-	:nth-child(3):nth-last-child(2),
-	:nth-child(4):nth-last-child(1) {
-		animation: .2s .3125s 1 backwards fade-in;
+		&:nth-child(n + 3) {
+			animation: .5s backwards flex-grow,
+				.2s .8125s backwards fade-in;
+		}
 	}
 }
 
@@ -550,6 +557,16 @@ use[href="#drop-point"] {
 	}
 	to {
 		opacity: 1;
+	}
+}
+
+@keyframes flex-grow {
+	from {
+		flex: 0;
+		margin-inline: 0;
+	}
+	to {
+		flex: 0 1 var(--die-side-length);
 	}
 }
 

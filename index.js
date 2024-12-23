@@ -206,7 +206,7 @@ class CheckerElement {
 
 class DieElement {
 	/**
-	 * @param {SVGUseElement} target
+	 * @param {HTMLLIElement} target
 	 */
 	constructor(target) {
 		this.target = target;
@@ -217,11 +217,15 @@ class DieElement {
 	 * @return {DieElement}
 	 */
 	static create(value = this.#generateRandomValue()) {
-		const useElement = document.createElementNS(`http://www.w3.org/2000/svg`, `use`);
-		useElement.setAttribute(`href`, `#die-face-pip-${value}`);
-		useElement.dataset[`value`] = `${value}`;
-		useElement.classList.add(`die`);
-		return new DieElement(useElement);
+		const liElement = document.createElement(`li`);
+		liElement.classList.add(`die`);
+		liElement.dataset[`value`] = `${value}`;
+		for (let i = 0; i < 9; i++) {
+			const pipElement = document.createElement(`div`);
+			pipElement.classList.add(`pip`);
+			liElement.append(pipElement);
+		}
+		return new DieElement(liElement);
 	}
 
 	/**
@@ -267,7 +271,7 @@ const checkersElement = document.getElementById('checkers');
 const confirmElement = /** @type {HTMLButtonElement} */ (document.getElementById(`confirm`));
 const diceContainerElement = /** @type {HTMLDivElement} */ (document.querySelector(`#dice-container`));
 const diceSwapElement = /** @type {SVGSVGElement} */ (document.querySelector(`#dice-swap`));
-const diceElement = /** @type {SVGSVGElement} */ (document.querySelector(`#dice`));
+const diceElement = /** @type {HTMLDivElement} */ (document.querySelector(`#dice`));
 const doubleElement = /** @type {HTMLButtonElement} */ (document.getElementById(`double`));
 const rollDiceElement = /** @type {HTMLButtonElement} */ (document.getElementById(`roll-dice`));
 const undoElement = /** @type {HTMLButtonElement} */ (document.getElementById(`undo`));
@@ -342,16 +346,16 @@ const diceObserver = new MutationObserver(mutations => {
 	mutations.forEach(mutation => {
 		confirmElement.hidden = false;
 		undoElement.hidden = false;
-		const dieElement = new DieElement(/** @type {SVGUseElement} */ (mutation.target))
+		const dieElement = new DieElement(/** @type {HTMLLIElement} */ (mutation.target))
 		if (dieElement.playedAt !== undefined) {
 			undoElement.disabled = false;
-			const unplayedDieElements = Array.from(/** @type {NodeListOf<SVGUseElement>} */ (document.querySelectorAll(`#dice :not([data-played-at])`)))
+			const unplayedDieElements = Array.from(/** @type {NodeListOf<HTMLLIElement>} */ (document.querySelectorAll(`#dice .die:not([data-played-at])`)))
 				.map(target => new DieElement(target));
 			if (unplayedDieElements.length === 0) {
 				confirmElement.disabled = false;
 			}
 		} else {
-			const playedDieElements = Array.from(/** @type {NodeListOf<SVGUseElement>} */ (document.querySelectorAll(`#dice [data-played-at]`)))
+			const playedDieElements = Array.from(/** @type {NodeListOf<HTMLLIElement>} */ (document.querySelectorAll(`#dice .die[data-played-at]`)))
 				.map(target => new DieElement(target));
 			if (playedDieElements.length === 0) {
 				undoElement.disabled = true;
@@ -396,7 +400,7 @@ undoElement.addEventListener(`click`, () => {
 		}
 		lastMovedCheckerElement.position = move.from;
 	});
-	const lastPlayedDieElement = Array.from(/** @type {NodeListOf<SVGUseElement>} */ (document.querySelectorAll(`#dice [data-played-at]`)))
+	const lastPlayedDieElement = Array.from(/** @type {NodeListOf<HTMLLIElement>} */ (document.querySelectorAll(`#dice .die[data-played-at]`)))
 		.map(target => new DieElement(target))
 		.reduce((mostRecentlyPlayedDieElement, dieElement) => mostRecentlyPlayedDieElement.playedAt > dieElement.playedAt ? mostRecentlyPlayedDieElement : dieElement);
 	lastPlayedDieElement.playedAt = undefined;
@@ -452,7 +456,7 @@ diceContainerElement.addEventListener(`click`, () => {
 });
 
 function updateMovabilityOfCheckers() {
-	const dieElements = Array.from(/** @type {NodeListOf<SVGUseElement>} */ (document.querySelectorAll(`#dice :not([data-played-at])`)))
+	const dieElements = Array.from(/** @type {NodeListOf<HTMLLIElement>} */ (document.querySelectorAll(`#dice .die:not([data-played-at])`)))
 		.map(target => new DieElement(target));
 	const checkerElements = Array.from(/** @type {NodeListOf<SVGGElement>} */ (document.querySelectorAll(`#checkers > [data-player="${turn.player.value}"]`)))
 		.map(value => new CheckerElement(value));
@@ -511,7 +515,7 @@ checkersElement.addEventListener(`click`, event => {
 	}
 	const checkerElement = new CheckerElement((/** @type {SVGUseElement} */ (event.target)).closest(`#checkers > *`));
 	if (checkerElement.permissibleDestinationPoints.size === 0) return;
-	const dieElement = Array.from(/** @type {NodeListOf<SVGUseElement>} */ (document.querySelectorAll(`#dice :not([data-played-at])`)))
+	const dieElement = Array.from(/** @type {NodeListOf<HTMLLIElement>} */ (document.querySelectorAll(`#dice .die:not([data-played-at])`)))
 		.map(target => new DieElement(target))
 		.find(dieElement =>
 			Array.from(checkerElement.permissibleDestinationPoints)
@@ -663,7 +667,7 @@ checkersElement.addEventListener('pointerdown', event => {
 	const endDrag = (/** @type {PointerEvent} */ event) => {
 		const coord = getPointerPosition(event);
 		const point = pointFromCoordinates(coord);
-		const dieElement = Array.from(/** @type {NodeListOf<SVGUseElement>} */ (document.querySelectorAll(`#dice :not([data-played-at])`)))
+		const dieElement = Array.from(/** @type {NodeListOf<HTMLLIElement>} */ (document.querySelectorAll(`#dice .die:not([data-played-at])`)))
 			.map(target => new DieElement(target))
 			.find(unplayedDieElement => {
 				const potentialDestinationChecker = new CheckerLegacy(checkerElement.player, checkerElement.position).moveBy(unplayedDieElement.value);
