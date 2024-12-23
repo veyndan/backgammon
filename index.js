@@ -432,10 +432,7 @@ rollDiceElement.addEventListener(`click`, () => {
 				if (++count === limit) {
 					clearInterval(intervalID);
 					if (firstDieElement.value === secondDieElement.value) {
-						setTimeout(
-							() => diceElement.append(DieElement.create(firstDieElement.value).target, DieElement.create(firstDieElement.value).target),
-							200,
-						);
+						diceElement.append(DieElement.create(firstDieElement.value).target, DieElement.create(firstDieElement.value).target);
 					} else {
 						diceContainerElement.style.cursor = `pointer`;
 						diceSwapElement.style.visibility = `visible`;

@@ -545,8 +545,8 @@ use[href="#drop-point"] {
 		margin-inline: 4px;
 
 		&:nth-child(n + 3) {
-			animation: .5s backwards flex-grow,
-				.2s .8125s backwards fade-in;
+			animation: .5s .2s backwards flex-grow,
+				.2s 1.0125s backwards fade-in;
 		}
 	}
 }
