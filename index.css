@@ -546,7 +546,7 @@ use[href="#drop-point"] {
 
 		&:nth-child(n + 3) {
 			animation: .5s .2s backwards flex-grow,
-				.2s 1.0125s backwards fade-in;
+				.2s .8125s backwards fade-in;
 		}
 	}
 }
