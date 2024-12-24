@@ -347,7 +347,6 @@ rollDiceElement.addEventListener(`click`, () => {
 	doubleElement.hidden = true;
 	rollDiceElement.hidden = true;
 	diceContainerElement.style.display = `flex`;
-	diceContainerElement.style.cursor = `default`;
 	confirmElement.hidden = false;
 	confirmElement.disabled = true;
 	undoElement.hidden = false;
@@ -388,8 +387,6 @@ rollDiceElement.addEventListener(`click`, () => {
 					secondDieElement.classList.remove(`rolling`);
 					if (firstDieElement.value === secondDieElement.value) {
 						diceElement.append(firstDieElement.cloneNode(true), secondDieElement.cloneNode(true));
-					} else {
-						diceContainerElement.style.cursor = `pointer`;
 					}
 					updateMovabilityOfCheckers();
 				}

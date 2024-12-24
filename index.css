@@ -465,8 +465,12 @@ use[href="#drop-point"] {
 		margin-block: 4px;
 	}
 
-	&:has(#dice :not(.rolling):first-child:nth-last-child(2)) #dice-swap {
-		visibility: visible;
+	&:has(#dice :not(.rolling):first-child:nth-last-child(2)) {
+		cursor: pointer;
+
+		#dice-swap {
+			visibility: visible;
+		}
 	}
 }
 
