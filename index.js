@@ -216,7 +216,7 @@ class DieElement {
 	 * @param {number} value
 	 * @return {DieElement}
 	 */
-	static create(value = this.#generateRandomValue()) {
+	static create(value) {
 		const liElement = document.createElement(`li`);
 		liElement.classList.add(`die`);
 		liElement.dataset[`value`] = `${value}`;
@@ -256,13 +256,6 @@ class DieElement {
 	 */
 	get value() {
 		return Number(this.target.dataset[`value`]);
-	}
-
-	/**
-	 * @return {number}
-	 */
-	static #generateRandomValue() {
-		return Math.floor(Math.random() * 6 + 1);
 	}
 }
 
@@ -421,12 +414,19 @@ rollDiceElement.addEventListener(`click`, () => {
 	 * @param {number} limit
 	 */
 	function repeatedlyRollDice(limit) {
-		diceElement.replaceChildren(DieElement.create().target, DieElement.create().target);
+		/**
+		 * @return {number}
+		 */
+		function generateRandomValue() {
+			return Math.floor(Math.random() * 6 + 1);
+		}
+
+		diceElement.replaceChildren(DieElement.create(generateRandomValue()).target, DieElement.create(generateRandomValue()).target);
 		let count = 1;
 		const intervalID = setInterval(
 			() => {
-				const firstDieElement = DieElement.create();
-				const secondDieElement = DieElement.create();
+				const firstDieElement = DieElement.create(generateRandomValue());
+				const secondDieElement = DieElement.create(generateRandomValue());
 				diceElement.replaceChildren(firstDieElement.target, secondDieElement.target);
 
 				if (++count === limit) {
