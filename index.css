@@ -244,9 +244,12 @@ main:has(#play-mode > select > option[value="side-by-side"]:checked) {
 
 #doubling-cube-face {
 	--die-side-length: 28px;
+	inline-size: var(--die-side-length);
+	block-size: var(--die-side-length);
 	display: flex;
 	align-items: center;
 	justify-content: center;
+	border-radius: 4px;
 	rotate: .25turn;
 	background: var(--secondary-container);
 	color: var(--on-secondary-container);
