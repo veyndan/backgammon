@@ -458,11 +458,16 @@ use[href="#drop-point"] {
 	flex-direction: column;
 	align-items: center;
 	margin-block-end: 16px;
-}
 
-#dice-swap {
-	block-size: 12px;
-	margin-block: 4px;
+	#dice-swap {
+		visibility: hidden;
+		block-size: 12px;
+		margin-block: 4px;
+	}
+
+	&:has(#dice :not(.rolling):first-child:nth-last-child(2)) #dice-swap {
+		visibility: visible;
+	}
 }
 
 #dice {

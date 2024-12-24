@@ -348,7 +348,6 @@ rollDiceElement.addEventListener(`click`, () => {
 	rollDiceElement.hidden = true;
 	diceContainerElement.style.display = `flex`;
 	diceContainerElement.style.cursor = `default`;
-	diceSwapElement.style.visibility = `hidden`;
 	confirmElement.hidden = false;
 	confirmElement.disabled = true;
 	undoElement.hidden = false;
@@ -367,25 +366,30 @@ rollDiceElement.addEventListener(`click`, () => {
 
 		const dieElement0 = /** @type {DieElement} */ (document.createElement(`veyndan-die`));
 		dieElement0.value = generateRandomValue();
+		dieElement0.classList.add(`rolling`);
 		const dieElement1 = /** @type {DieElement} */ (document.createElement(`veyndan-die`));
 		dieElement1.value = generateRandomValue();
+		dieElement1.classList.add(`rolling`);
 		diceElement.replaceChildren(dieElement0, dieElement1);
 		let count = 1;
 		const intervalID = setInterval(
 			() => {
 				const firstDieElement = /** @type {DieElement} */ (document.createElement(`veyndan-die`));
 				firstDieElement.value = generateRandomValue();
+				firstDieElement.classList.add(`rolling`);
 				const secondDieElement = /** @type {DieElement} */ (document.createElement(`veyndan-die`));
 				secondDieElement.value = generateRandomValue();
+				secondDieElement.classList.add(`rolling`);
 				diceElement.replaceChildren(firstDieElement, secondDieElement);
 
 				if (++count === limit) {
 					clearInterval(intervalID);
+					firstDieElement.classList.remove(`rolling`);
+					secondDieElement.classList.remove(`rolling`);
 					if (firstDieElement.value === secondDieElement.value) {
 						diceElement.append(firstDieElement.cloneNode(true), secondDieElement.cloneNode(true));
 					} else {
 						diceContainerElement.style.cursor = `pointer`;
-						diceSwapElement.style.visibility = `visible`;
 					}
 					updateMovabilityOfCheckers();
 				}
