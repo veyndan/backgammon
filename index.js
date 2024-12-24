@@ -3,6 +3,8 @@ import {CheckerLegacy} from "./checker.js";
 import {Bar, Point, Position} from "./position.js";
 import Player from "./player.js";
 import "./point.js"
+// noinspection ES6UnusedImports
+import DieElement from "./die.js";
 
 /**
  * https://rwaldron.github.io/proposal-math-extensions/#sec-math.clamp
@@ -204,61 +206,6 @@ class CheckerElement {
 	}
 }
 
-class DieElement {
-	/**
-	 * @param {HTMLLIElement} target
-	 */
-	constructor(target) {
-		this.target = target;
-	}
-
-	/**
-	 * @param {number} value
-	 * @return {DieElement}
-	 */
-	static create(value) {
-		const liElement = document.createElement(`li`);
-		liElement.classList.add(`die`);
-		liElement.dataset[`value`] = `${value}`;
-		for (let i = 0; i < 9; i++) {
-			const pipElement = document.createElement(`div`);
-			pipElement.classList.add(`pip`);
-			liElement.append(pipElement);
-		}
-		return new DieElement(liElement);
-	}
-
-	/**
-	 * @return {(number|undefined)}
-	 */
-	get playedAt() {
-		const playedAtDataAttribute = this.target.dataset[`playedAt`];
-		if (playedAtDataAttribute !== undefined) {
-			return Number(playedAtDataAttribute);
-		} else {
-			return undefined;
-		}
-	}
-
-	/**
-	 * @param {(number|undefined)} value
-	 */
-	set playedAt(value) {
-		if (value !== undefined) {
-			this.target.dataset[`playedAt`] = String(value);
-		} else {
-			delete this.target.dataset[`playedAt`];
-		}
-	}
-
-	/**
-	 * @return {number}
-	 */
-	get value() {
-		return Number(this.target.dataset[`value`]);
-	}
-}
-
 const svgElement = /** @type {SVGSVGElement} */ (document.querySelector(`main > svg`));
 const checkersElement = document.getElementById('checkers');
 const confirmElement = /** @type {HTMLButtonElement} */ (document.getElementById(`confirm`));
@@ -339,17 +286,15 @@ const diceObserver = new MutationObserver(mutations => {
 	mutations.forEach(mutation => {
 		confirmElement.hidden = false;
 		undoElement.hidden = false;
-		const dieElement = new DieElement(/** @type {HTMLLIElement} */ (mutation.target))
+		const dieElement = /** @type {DieElement} */ (mutation.target);
 		if (dieElement.playedAt !== undefined) {
 			undoElement.disabled = false;
-			const unplayedDieElements = Array.from(/** @type {NodeListOf<HTMLLIElement>} */ (document.querySelectorAll(`#dice .die:not([data-played-at])`)))
-				.map(target => new DieElement(target));
+			const unplayedDieElements = Array.from(/** @type {NodeListOf<DieElement>} */ (document.querySelectorAll(`#dice veyndan-die:not([data-played-at])`)));
 			if (unplayedDieElements.length === 0) {
 				confirmElement.disabled = false;
 			}
 		} else {
-			const playedDieElements = Array.from(/** @type {NodeListOf<HTMLLIElement>} */ (document.querySelectorAll(`#dice .die[data-played-at]`)))
-				.map(target => new DieElement(target));
+			const playedDieElements = Array.from(/** @type {NodeListOf<DieElement>} */ (document.querySelectorAll(`#dice veyndan-die[data-played-at]`)));
 			if (playedDieElements.length === 0) {
 				undoElement.disabled = true;
 			} else {
@@ -393,8 +338,7 @@ undoElement.addEventListener(`click`, () => {
 		}
 		lastMovedCheckerElement.position = move.from;
 	});
-	const lastPlayedDieElement = Array.from(/** @type {NodeListOf<HTMLLIElement>} */ (document.querySelectorAll(`#dice .die[data-played-at]`)))
-		.map(target => new DieElement(target))
+	const lastPlayedDieElement = Array.from(/** @type {NodeListOf<DieElement>} */ (document.querySelectorAll(`#dice veyndan-die[data-played-at]`)))
 		.reduce((mostRecentlyPlayedDieElement, dieElement) => mostRecentlyPlayedDieElement.playedAt > dieElement.playedAt ? mostRecentlyPlayedDieElement : dieElement);
 	lastPlayedDieElement.playedAt = undefined;
 });
@@ -421,18 +365,24 @@ rollDiceElement.addEventListener(`click`, () => {
 			return Math.floor(Math.random() * 6 + 1);
 		}
 
-		diceElement.replaceChildren(DieElement.create(generateRandomValue()).target, DieElement.create(generateRandomValue()).target);
+		const dieElement0 = /** @type {DieElement} */ (document.createElement(`veyndan-die`));
+		dieElement0.value = generateRandomValue();
+		const dieElement1 = /** @type {DieElement} */ (document.createElement(`veyndan-die`));
+		dieElement1.value = generateRandomValue();
+		diceElement.replaceChildren(dieElement0, dieElement1);
 		let count = 1;
 		const intervalID = setInterval(
 			() => {
-				const firstDieElement = DieElement.create(generateRandomValue());
-				const secondDieElement = DieElement.create(generateRandomValue());
-				diceElement.replaceChildren(firstDieElement.target, secondDieElement.target);
+				const firstDieElement = /** @type {DieElement} */ (document.createElement(`veyndan-die`));
+				firstDieElement.value = generateRandomValue();
+				const secondDieElement = /** @type {DieElement} */ (document.createElement(`veyndan-die`));
+				secondDieElement.value = generateRandomValue();
+				diceElement.replaceChildren(firstDieElement, secondDieElement);
 
 				if (++count === limit) {
 					clearInterval(intervalID);
 					if (firstDieElement.value === secondDieElement.value) {
-						diceElement.append(DieElement.create(firstDieElement.value).target, DieElement.create(firstDieElement.value).target);
+						diceElement.append(firstDieElement.cloneNode(true), secondDieElement.cloneNode(true));
 					} else {
 						diceContainerElement.style.cursor = `pointer`;
 						diceSwapElement.style.visibility = `visible`;
@@ -453,8 +403,7 @@ diceContainerElement.addEventListener(`click`, () => {
 });
 
 function updateMovabilityOfCheckers() {
-	const dieElements = Array.from(/** @type {NodeListOf<HTMLLIElement>} */ (document.querySelectorAll(`#dice .die:not([data-played-at])`)))
-		.map(target => new DieElement(target));
+	const dieElements = Array.from(/** @type {NodeListOf<DieElement>} */ (document.querySelectorAll(`#dice veyndan-die:not([data-played-at])`)));
 	const checkerElements = Array.from(/** @type {NodeListOf<SVGGElement>} */ (document.querySelectorAll(`#checkers > [data-player="${turn.player.value}"]`)))
 		.map(value => new CheckerElement(value));
 	const positionNameToCheckerElements = Map.groupBy(checkerElements, checkerElement => checkerElement.position.constructor.name);
@@ -512,8 +461,7 @@ checkersElement.addEventListener(`click`, event => {
 	}
 	const checkerElement = new CheckerElement((/** @type {SVGUseElement} */ (event.target)).closest(`#checkers > *`));
 	if (checkerElement.permissibleDestinationPoints.size === 0) return;
-	const dieElement = Array.from(/** @type {NodeListOf<HTMLLIElement>} */ (document.querySelectorAll(`#dice .die:not([data-played-at])`)))
-		.map(target => new DieElement(target))
+	const dieElement = Array.from(/** @type {NodeListOf<DieElement>} */ (document.querySelectorAll(`#dice veyndan-die:not([data-played-at])`)))
 		.find(dieElement =>
 			Array.from(checkerElement.permissibleDestinationPoints)
 				.some(permissibleDestinationPoint => {
@@ -664,8 +612,7 @@ checkersElement.addEventListener('pointerdown', event => {
 	const endDrag = (/** @type {PointerEvent} */ event) => {
 		const coord = getPointerPosition(event);
 		const point = pointFromCoordinates(coord);
-		const dieElement = Array.from(/** @type {NodeListOf<HTMLLIElement>} */ (document.querySelectorAll(`#dice .die:not([data-played-at])`)))
-			.map(target => new DieElement(target))
+		const dieElement = Array.from(/** @type {NodeListOf<DieElement>} */ (document.querySelectorAll(`#dice veyndan-die:not([data-played-at])`)))
 			.find(unplayedDieElement => {
 				const potentialDestinationChecker = new CheckerLegacy(checkerElement.player, checkerElement.position).moveBy(unplayedDieElement.value);
 				if (potentialDestinationChecker === null) return false;

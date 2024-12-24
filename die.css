@@ -1,0 +1,73 @@
+:host {
+	inline-size: var(--die-side-length);
+	block-size: var(--die-side-length);
+	display: grid;
+	--pip-diameter: 8px;
+	grid-template: repeat(3, var(--pip-diameter)) / repeat(3, var(--pip-diameter));
+	align-content: center;
+	justify-content: center;
+	gap: 1px;
+	background: var(--player-current-checker-background);
+	border-radius: 4px;
+
+	.pip {
+		border-radius: 50%;
+		background: var(--player-current-checker-text-color);
+		visibility: hidden;
+	}
+}
+
+:host([data-value="1"]) .pip {
+	&:nth-of-type(5) {
+		visibility: visible;
+	}
+}
+
+:host([data-value="2"]) .pip {
+	&:nth-of-type(1),
+	&:nth-of-type(9) {
+		visibility: visible;
+	}
+}
+
+:host([data-value="3"]) .pip {
+	&:nth-of-type(1),
+	&:nth-of-type(5),
+	&:nth-of-type(9) {
+		visibility: visible;
+	}
+}
+
+:host([data-value="4"]) .pip {
+	&:nth-of-type(1),
+	&:nth-of-type(3),
+	&:nth-of-type(7),
+	&:nth-of-type(9) {
+		visibility: visible;
+	}
+}
+
+:host([data-value="5"]) .pip {
+	&:nth-of-type(1),
+	&:nth-of-type(3),
+	&:nth-of-type(5),
+	&:nth-of-type(7),
+	&:nth-of-type(9) {
+		visibility: visible;
+	}
+}
+
+:host([data-value="6"]) .pip {
+	&:nth-of-type(1),
+	&:nth-of-type(3),
+	&:nth-of-type(4),
+	&:nth-of-type(6),
+	&:nth-of-type(7),
+	&:nth-of-type(9) {
+		visibility: visible;
+	}
+}
+
+:host([data-played-at]) {
+	opacity: .5;
+}

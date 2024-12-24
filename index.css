@@ -427,76 +427,6 @@ use[href="#drop-point"] {
 	}
 }
 
-.die {
-	inline-size: var(--die-side-length);
-	block-size: var(--die-side-length);
-	display: grid;
-	--pip-diameter: 8px;
-	grid-template: repeat(3, var(--pip-diameter)) / repeat(3, var(--pip-diameter));
-	align-content: center;
-	justify-content: center;
-	gap: 1px;
-	background: var(--player-current-checker-background);
-	border-radius: 4px;
-
-	.pip {
-		border-radius: 50%;
-		background: var(--player-current-checker-text-color);
-		visibility: hidden;
-	}
-
-	&[data-value="1"] .pip {
-		&:nth-child(5) {
-			visibility: visible;
-		}
-	}
-
-	&[data-value="2"] .pip {
-		&:nth-child(1),
-		&:nth-child(9) {
-			visibility: visible;
-		}
-	}
-
-	&[data-value="3"] .pip {
-		&:nth-child(1),
-		&:nth-child(5),
-		&:nth-child(9) {
-			visibility: visible;
-		}
-	}
-
-	&[data-value="4"] .pip {
-		&:nth-child(1),
-		&:nth-child(3),
-		&:nth-child(7),
-		&:nth-child(9) {
-			visibility: visible;
-		}
-	}
-
-	&[data-value="5"] .pip {
-		&:nth-child(1),
-		&:nth-child(3),
-		&:nth-child(5),
-		&:nth-child(7),
-		&:nth-child(9) {
-			visibility: visible;
-		}
-	}
-
-	&[data-value="6"] .pip {
-		&:nth-child(1),
-		&:nth-child(3),
-		&:nth-child(4),
-		&:nth-child(6),
-		&:nth-child(7),
-		&:nth-child(9) {
-			visibility: visible;
-		}
-	}
-}
-
 #controls button {
 	padding-block: 10.5px;
 	padding-inline: 21px;
@@ -542,7 +472,7 @@ use[href="#drop-point"] {
 	padding: 0;
 	list-style-type: none;
 
-	.die {
+	veyndan-die {
 		flex: 0 1 var(--die-side-length);
 		overflow: hidden;
 		margin-inline: 4px;
@@ -571,8 +501,4 @@ use[href="#drop-point"] {
 	to {
 		flex: 0 1 var(--die-side-length);
 	}
-}
-
-.die[data-played-at] {
-	opacity: .5;
 }
