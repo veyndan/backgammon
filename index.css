@@ -462,7 +462,7 @@ use[href="#drop-point"] {
 	#dice-swap {
 		visibility: hidden;
 		block-size: 12px;
-		margin-block: 4px;
+		margin-block: -1px;
 	}
 
 	&:has(#dice :not(.rolling):first-child:nth-last-child(2)) {
@@ -482,9 +482,9 @@ use[href="#drop-point"] {
 	list-style-type: none;
 
 	veyndan-die {
-		flex: 0 1 var(--die-side-length);
+		flex: 0 1 calc(var(--die-side-length) + 14px);
 		overflow: hidden;
-		margin-inline: 4px;
+		margin-inline: -2px;
 
 		&:nth-child(n + 3) {
 			animation: .5s .2s backwards flex-grow,
@@ -508,6 +508,6 @@ use[href="#drop-point"] {
 		margin-inline: 0;
 	}
 	to {
-		flex: 0 1 var(--die-side-length);
+		flex: 0 1 calc(var(--die-side-length) + 14px);
 	}
 }

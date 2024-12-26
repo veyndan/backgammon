@@ -1,4 +1,14 @@
 :host {
+	position: relative;
+	inline-size: calc(var(--die-side-length) + 14px);
+	block-size: calc(var(--die-side-length) + 14px);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.pips {
+	position: relative;
 	inline-size: var(--die-side-length);
 	block-size: var(--die-side-length);
 	display: grid;
@@ -70,4 +80,30 @@
 
 :host([data-played-at]) {
 	opacity: .5;
+}
+
+:host(.rolling) .motion-lines {
+	visibility: visible;
+}
+
+.motion-lines {
+	visibility: hidden;
+	position: absolute;
+
+	& > path {
+		fill: none;
+		stroke: var(--player-current-checker-text-color);
+		stroke-linecap: round;
+	}
+
+	&:first-of-type {
+		top: 0;
+		left: 0;
+	}
+
+	&:last-of-type {
+		bottom: 0;
+		right: 0;
+		rotate: .5turn;
+	}
 }
