@@ -20,7 +20,9 @@
 			<template id="checker">
 				<link rel="stylesheet" href="index.css"/>
 				<link rel="stylesheet" href="checker.css"/>
-				<div></div>
+				<div class="typography-label-large-700">
+					<slot name="text"></slot>
+				</div>
 			</template>
 			<template id="die">
 				<link rel="stylesheet" href="index.css"/>
@@ -88,7 +90,6 @@
 			<svg viewBox="0 0 478 400" data-player="1">
 				<defs>
 					<circle id="drop-point" r="6" fill="darkorange"/>
-					<circle id="checker-background"/>
 				</defs>
 
 				<foreignObject>
@@ -166,10 +167,10 @@
 								</div>
 							</div>
 						</div>
+						<div id="checkers"></div>
 					</div>
 				</foreignObject>
 
-				<g id="checkers"></g>
 				<g id="drop-points"/>
 			</svg>
 

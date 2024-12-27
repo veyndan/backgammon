@@ -163,11 +163,6 @@ button {
 	--player-current-checker-text-color: var(--surface-container-lowest);
 }
 
-g.checker {
-	fill: var(--player-current-checker-background);
-	color: var(--player-current-checker-text-color);
-}
-
 #players {
 	display: flex;
 	writing-mode: sideways-lr;
@@ -218,12 +213,6 @@ main:has(#play-mode > select > option[value="side-by-side"]:checked) {
 	& > svg[data-player="1"] > foreignObject > div > #controls {
 		flex-direction: row-reverse;
 	}
-}
-
-#checker-background {
-	cx: var(--checker-radius);
-	cy: var(--checker-radius);
-	r: var(--checker-radius);
 }
 
 .hold {
@@ -324,6 +313,14 @@ main > svg > foreignObject {
 				gap: 8px;
 			}
 		}
+
+		& > #checkers {
+			pointer-events: none;
+			position: absolute;
+			inset-block-start: 0;
+			block-size: 100%;
+			inline-size: 100%;
+		}
 	}
 }
 
@@ -359,6 +356,11 @@ use[href="#drop-point"] {
 
 /*noinspection CssInvalidFunction*/
 #checkers > * {
+	pointer-events: auto;
+	position: absolute;
+	display: flex;
+	align-items: center;
+	justify-content: center;
 	transition: translate .3s;
 
 	&:not([data-permissible-destination-points="[]"]) {
