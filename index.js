@@ -509,7 +509,7 @@ checkersElement.addEventListener('pointerdown', event => {
 
 	const halfElement = /** @type {CheckerElement} */ (document.querySelector(`.half`));
 
-	const boundary = new DOMRect(0, 0, halfElement.clientWidth * 2 + 38, halfElement.clientHeight);
+	const boundary = new DOMRect(0, 0, halfElement.clientWidth * 2 + 38 + 8 * 2, halfElement.clientHeight);
 
 	const getPointerPosition = (/** @type {PointerEvent} */ event) => {
 		const CTM = svgElement.getScreenCTM();
@@ -571,7 +571,7 @@ checkersElement.addEventListener('pointerdown', event => {
 		let point = null;
 		const checkerDiameter = /** @type {CheckerElement} */ (document.querySelector(`#checkers > *`)).clientWidth;
 		const pointHeight = document.querySelector(`veyndan-point`).getBoundingClientRect().y
-		const barWidth = 38;
+		const barWidth = 38 + 8 * 2;
 		let additionalPoints;
 		let multiplier;
 		if (dy <= pointHeight) {
