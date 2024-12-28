@@ -543,8 +543,8 @@ checkersElement.addEventListener('pointerdown', event => {
 
 		checkerElement.permissibleDestinationPoints
 			.forEach(permissibleDestinationPoint => {
-				const dropPointElement = document.createElementNS(`http://www.w3.org/2000/svg`, `use`);
-				dropPointElement.setAttribute(`href`, `#drop-point`);
+				const dropPointElement = document.createElement(`div`);
+				dropPointElement.classList.add(`drop-point`);
 				dropPointElement.dataset[`point`] = `${permissibleDestinationPoint.value}`
 				dropPointElement.style.setProperty(`--point`, `${permissibleDestinationPoint.value}`);
 				document.getElementById(`drop-points`).append(dropPointElement);

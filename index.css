@@ -246,12 +246,16 @@ main:has(#play-mode > select > option[value="side-by-side"]:checked) {
 
 main > svg > foreignObject {
 	inline-size: calc(2 * var(--half-width) + var(--bar-width) + 24px + var(--hold-width));
-	block-size: var(--half-height);
+	block-size: calc(var(--half-height) + 40px);
 
 	& > div {
+		block-size: 100%;
+		inline-size: 100%;
 		position: relative;
 
 		& > #board {
+			position: absolute;
+			inset-block: 20px;
 			display: flex;
 			gap: 8px;
 
@@ -299,9 +303,8 @@ main > svg > foreignObject {
 
 		& > #controls {
 			position: absolute;
-			inset-block-start: 0;
+			inset-block: 20px;
 			inline-size: calc(100% - var(--hold-width) - 8px);
-			block-size: 100%;
 			display: flex;
 			justify-content: space-between;
 
@@ -317,19 +320,21 @@ main > svg > foreignObject {
 		& > #checkers {
 			pointer-events: none;
 			position: absolute;
-			inset-block-start: 0;
-			block-size: 100%;
+			inset-block: 20px;
+			inline-size: 100%;
+		}
+
+		& > #drop-points {
+			pointer-events: none;
+			position: absolute;
+			inset-block: 0;
 			inline-size: 100%;
 		}
 	}
 }
 
-#drop-points {
-	translate: var(--checker-radius) -14px;
-}
-
 /*noinspection CssInvalidFunction*/
-use[href="#drop-point"],
+.drop-point,
 #checkers > *:not([data-hit]) {
 	/* Returns 1 if the --point is in [1,12], else 0. */
 	--is-bottom-point: calc(1 - var(--is-top-point));
@@ -346,9 +351,16 @@ use[href="#drop-point"],
 }
 
 /*noinspection CssInvalidFunction*/
-use[href="#drop-point"] {
+.drop-point {
+	--drop-point-diameter: 12px;
+	block-size: var(--drop-point-diameter);
+	aspect-ratio: 1;
+	border-radius: 50%;
+	background: darkorange;
 	translate:
-		var(--translate-x)
+		calc(
+			var(--translate-x) + (var(--checker-diameter) - var(--drop-point-diameter)) / 2
+		)
 		calc(
 			var(--is-bottom-point) * (var(--half-height) + 28px)
 		);
