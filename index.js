@@ -206,6 +206,7 @@ class CheckerOnBoardElement {
 	}
 }
 
+const mainElement = document.querySelector(`main`);
 const svgElement = /** @type {SVGSVGElement} */ (document.querySelector(`main > svg`));
 const checkersElement = document.getElementById('checkers');
 const confirmElement = /** @type {HTMLButtonElement} */ (document.getElementById(`confirm`));
@@ -315,7 +316,7 @@ confirmElement.addEventListener(`click`, () => {
 	confirmElement.hidden = true;
 	undoElement.hidden = true;
 	turn = new Turn(turn.player.value === Player.One.value ? Player.Two : Player.One);
-	svgElement.dataset[`player`] = turn.player.value;
+	mainElement.dataset[`player`] = turn.player.value;
 });
 
 undoElement.addEventListener(`click`, () => {

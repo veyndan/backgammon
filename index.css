@@ -188,8 +188,8 @@ button {
 	writing-mode: sideways-rl;
 }
 
-main:has(> svg[data-player="1"]) #players > veyndan-player[data-player="1"],
-main:has(> svg[data-player="2"]) #players > veyndan-player[data-player="2"] {
+main[data-player="1"] #players > veyndan-player[data-player="1"],
+main[data-player="2"] #players > veyndan-player[data-player="2"] {
 	background: var(--primary-container);
 }
 
@@ -199,7 +199,7 @@ main > svg {
 	margin-inline: 8px;
 }
 
-main:has(#play-mode > select > option[value="opposite"]:checked) > svg[data-player="2"] > foreignObject > div > #controls {
+main[data-player="2"]:has(#play-mode > select > option[value="opposite"]:checked) > svg > foreignObject > div > #controls {
 	rotate: .5turn;
 }
 
@@ -210,7 +210,7 @@ main:has(#play-mode > select > option[value="side-by-side"]:checked) {
 		writing-mode: unset;
 	}
 
-	& > svg[data-player="1"] > foreignObject > div > #controls {
+	&[data-player="1"] > svg > foreignObject > div > #controls {
 		flex-direction: row-reverse;
 	}
 }
