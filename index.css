@@ -105,15 +105,6 @@ body {
 	gap: 8px;
 }
 
-main {
-	flex:1;
-	overflow: auto;
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	gap: 8px;
-}
-
 body > :not(main) > * {
 	padding-inline: 1rem;
 	margin-inline: auto;
@@ -193,13 +184,7 @@ main[data-player="2"] #players > veyndan-player[data-player="2"] {
 	background: var(--primary-container);
 }
 
-main > svg {
-	touch-action: none;
-	max-height: 100%;
-	margin-inline: 8px;
-}
-
-main[data-player="2"]:has(#play-mode > select > option[value="opposite"]:checked) > svg > foreignObject > div > #controls {
+main[data-player="2"]:has(#play-mode > select > option[value="opposite"]:checked) > svg > foreignObject > .main > .foreignObject > #controls {
 	rotate: .5turn;
 }
 
@@ -210,7 +195,7 @@ main:has(#play-mode > select > option[value="side-by-side"]:checked) {
 		writing-mode: unset;
 	}
 
-	&[data-player="1"] > svg > foreignObject > div > #controls {
+	&[data-player="1"] > svg > foreignObject > .main > .foreignObject > #controls {
 		flex-direction: row-reverse;
 	}
 }
@@ -244,100 +229,125 @@ main:has(#play-mode > select > option[value="side-by-side"]:checked) {
 	color: var(--on-secondary-container);
 }
 
-main > svg > foreignObject {
-	inline-size: calc(2 * var(--half-width) + var(--bar-width) + 24px + var(--hold-width));
-	block-size: calc(var(--half-height) + 40px);
+main {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	block-size: calc(100% - 56px);
 
-	& > div {
-		block-size: 100%;
-		inline-size: 100%;
-		display: grid;
-		grid-template-rows: 20px var(--half-height) 20px;
-		grid-template-columns: var(--half-width) var(--bar-width) var(--half-width) var(--hold-width);
-		column-gap: 8px;
+	& > svg {
+		touch-action: none;
+		max-height: 100%;
+		margin-inline: 8px;
 
-		& > #board {
-			display: contents;
+		& > foreignObject {
+			block-size: 100%;
+			inline-size: 100%;
 
-			& > .half {
-				grid-row: 2;
+			& > .main {
+				inline-size: calc(70px + 8px + 26px + 16px + 2 * var(--half-width) + var(--bar-width) + 24px + var(--hold-width) + 16px + 26px);
+				block-size: calc(var(--half-height) + 40px);
+				flex:1;
+				overflow: auto;
 				display: flex;
-				flex-direction: column;
-				justify-content: space-between;
-				background: var(--primary-container);
-				clip-path: fill-box inset(0 round 8px);
-
-				&#outer-board {
-					grid-column: 1;
-				}
-
-				&#inner-board {
-					grid-column: 3;
-				}
-
-				& > .quadrant {
-					display: flex;
-
-					& > veyndan-point {
-						&:nth-child(even) {
-							color: hsl(from var(--secondary) h s 50%);
-						}
-
-						&:nth-child(odd) {
-							color: var(--primary);
-						}
-					}
-
-					&:last-of-type {
-						transform: scale(-1, -1);
-					}
-				}
-			}
-
-			& > .bar {
-				grid-row: 2;
-				grid-column: 2;
-				background: var(--secondary-container);
-				border-radius: 8px;
-			}
-
-			& > #sidebar {
-				grid-row: 2;
-				grid-column: 4;
-				display: flex;
-				flex-direction: column;
-				align-items: center;
-				justify-content: space-evenly;
-			}
-		}
-
-		& > #controls {
-			grid-row: 2;
-			grid-column: 1 / span 3;
-			align-self: center;
-			display: flex;
-			justify-content: space-between;
-			z-index: 1;
-
-			& > div {
-				inline-size: var(--half-width);
-				display: flex;
-				align-items: center;
 				justify-content: center;
+				align-items: center;
 				gap: 8px;
+
+				& > .foreignObject {
+					block-size: 100%;
+					inline-size: 100%;
+					display: grid;
+					grid-template-rows: 20px var(--half-height) 20px;
+					grid-template-columns: var(--half-width) var(--bar-width) var(--half-width) var(--hold-width);
+					column-gap: 8px;
+					margin-inline: 8px;
+
+					& > #board {
+						display: contents;
+
+						& > .half {
+							grid-row: 2;
+							display: flex;
+							flex-direction: column;
+							justify-content: space-between;
+							background: var(--primary-container);
+							clip-path: fill-box inset(0 round 8px);
+
+							&#outer-board {
+								grid-column: 1;
+							}
+
+							&#inner-board {
+								grid-column: 3;
+							}
+
+							& > .quadrant {
+								display: flex;
+
+								& > veyndan-point {
+									&:nth-child(even) {
+										color: hsl(from var(--secondary) h s 50%);
+									}
+
+									&:nth-child(odd) {
+										color: var(--primary);
+									}
+								}
+
+								&:last-of-type {
+									transform: scale(-1, -1);
+								}
+							}
+						}
+
+						& > .bar {
+							grid-row: 2;
+							grid-column: 2;
+							background: var(--secondary-container);
+							border-radius: 8px;
+						}
+
+						& > #sidebar {
+							grid-row: 2;
+							grid-column: 4;
+							display: flex;
+							flex-direction: column;
+							align-items: center;
+							justify-content: space-evenly;
+						}
+					}
+
+					& > #controls {
+						grid-row: 2;
+						grid-column: 1 / span 3;
+						align-self: center;
+						display: flex;
+						justify-content: space-between;
+						z-index: 1;
+
+						& > div {
+							inline-size: var(--half-width);
+							display: flex;
+							align-items: center;
+							justify-content: center;
+							gap: 8px;
+						}
+					}
+
+					& > #checkers {
+						pointer-events: none;
+						grid-row: 2;
+						grid-column: 1 / span 3;
+					}
+
+					& > #drop-points {
+						pointer-events: none;
+						grid-row: 1 / -1;
+						grid-column: 1 / span 3;
+					}
+				}
 			}
-		}
-
-		& > #checkers {
-			pointer-events: none;
-			grid-row: 2;
-			grid-column: 1 / span 3;
-		}
-
-		& > #drop-points {
-			pointer-events: none;
-			grid-row: 1 / -1;
-			grid-column: 1 / span 3;
 		}
 	}
 }

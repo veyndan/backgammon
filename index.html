@@ -17,165 +17,167 @@
 			</nav>
 		</header>
 		<main data-player="1">
-			<template id="checker">
-				<link rel="stylesheet" href="index.css"/>
-				<link rel="stylesheet" href="checker.css"/>
-				<div class="typography-label-large-700">
-					<slot name="text"></slot>
-				</div>
-			</template>
-			<template id="die">
-				<link rel="stylesheet" href="index.css"/>
-				<link rel="stylesheet" href="die.css"/>
-				<svg class="motion-lines" width="12px" height="12px">
-					<path d="M2,6 A14,14 0 0 1 6,2" stroke-width="1"/>
-					<path d="M3,10 A14,14 0 0 1 10,3" stroke-width="2"/>
-				</svg>
-				<svg class="motion-lines" width="12px" height="12px">
-					<path d="M2,6 A14,14 0 0 1 6,2" stroke-width="1"/>
-					<path d="M3,10 A14,14 0 0 1 10,3" stroke-width="2"/>
-				</svg>
-				<div class="pips">
-					<div class="pip"></div>
-					<div class="pip"></div>
-					<div class="pip"></div>
-					<div class="pip"></div>
-					<div class="pip"></div>
-					<div class="pip"></div>
-					<div class="pip"></div>
-					<div class="pip"></div>
-					<div class="pip"></div>
-				</div>
-			</template>
-
-			<div id="players">
-				<template id="player">
-					<link rel="stylesheet" href="index.css"/>
-					<link rel="stylesheet" href="player.css"/>
-					<div>
-						<slot name="name" class="typography-body-medium-700">Player</slot>
-						<veyndan-checker class="flat"></veyndan-checker>
-						<div class="points score">
-							<span class="typography-body-large-700">
-								<slot name="points-achieved">-</slot><span class="typography-label-small-700">/<slot name="points-required">-</slot></span>
-							</span>
-							<span class="typography-label-small-400">points</span>
-						</div>
-						<div class="pip score">
-							<slot name="pips" class="typography-body-large-700">-</slot>
-							<span class="typography-label-small-400">pips</span>
-						</div>
-					</div>
-				</template>
-
-				<veyndan-player data-player="1">
-					<span slot="name" contenteditable="true" spellcheck="false">Player 1</span>
-					<span slot="points-achieved">3</span>
-					<span slot="points-required">5</span>
-					<span slot="pips">167</span>
-				</veyndan-player>
-				<veyndan-player data-player="2">
-					<span slot="name" contenteditable="true" spellcheck="false">Player 2</span>
-					<span slot="points-achieved">1</span>
-					<span slot="points-required">5</span>
-					<span slot="pips">167</span>
-				</veyndan-player>
-			</div>
-			<div id="timer">
-				<span class="reserve-bank typography-body-small-700">02:00</span>
-				<span id="move" class="typography-body-medium-700">12</span>
-				<span class="reserve-bank typography-body-small-700">02:00</span>
-			</div>
-
-			<svg viewBox="0 0 478 420">
+			<svg viewBox="0 0 640 420">
 				<foreignObject>
-					<div>
-						<div id="board">
-							<template id="point">
+					<div class="main">
+						<template id="checker">
+							<link rel="stylesheet" href="index.css"/>
+							<link rel="stylesheet" href="checker.css"/>
+							<div class="typography-label-large-700">
+								<slot name="text"></slot>
+							</div>
+						</template>
+						<template id="die">
+							<link rel="stylesheet" href="index.css"/>
+							<link rel="stylesheet" href="die.css"/>
+							<svg class="motion-lines" width="12px" height="12px">
+								<path d="M2,6 A14,14 0 0 1 6,2" stroke-width="1"/>
+								<path d="M3,10 A14,14 0 0 1 10,3" stroke-width="2"/>
+							</svg>
+							<svg class="motion-lines" width="12px" height="12px">
+								<path d="M2,6 A14,14 0 0 1 6,2" stroke-width="1"/>
+								<path d="M3,10 A14,14 0 0 1 10,3" stroke-width="2"/>
+							</svg>
+							<div class="pips">
+								<div class="pip"></div>
+								<div class="pip"></div>
+								<div class="pip"></div>
+								<div class="pip"></div>
+								<div class="pip"></div>
+								<div class="pip"></div>
+								<div class="pip"></div>
+								<div class="pip"></div>
+								<div class="pip"></div>
+							</div>
+						</template>
+
+						<div id="players">
+							<template id="player">
 								<link rel="stylesheet" href="index.css"/>
-								<link rel="stylesheet" href="point.css"/>
-								<svg>
-									<!-- The point should have dimensions 1:4, so exactly 4 stacked checkers can fill a point -->
-									<polyline points="2,0 16,126 30,0" stroke-width="4" stroke-linejoin="round" stroke-linecap="square"/>
-								</svg>
+								<link rel="stylesheet" href="player.css"/>
+								<div>
+									<slot name="name" class="typography-body-medium-700">Player</slot>
+									<veyndan-checker class="flat"></veyndan-checker>
+									<div class="points score">
+										<span class="typography-body-large-700">
+											<slot name="points-achieved">-</slot><span class="typography-label-small-700">/<slot name="points-required">-</slot></span>
+										</span>
+										<span class="typography-label-small-400">points</span>
+									</div>
+									<div class="pip score">
+										<slot name="pips" class="typography-body-large-700">-</slot>
+										<span class="typography-label-small-400">pips</span>
+									</div>
+								</div>
 							</template>
 
-							<div id="outer-board" class="half">
-									<div class="quadrant">
-										<veyndan-point data-point="13"></veyndan-point>
-										<veyndan-point data-point="14"></veyndan-point>
-										<veyndan-point data-point="15"></veyndan-point>
-										<veyndan-point data-point="16"></veyndan-point>
-										<veyndan-point data-point="17"></veyndan-point>
-										<veyndan-point data-point="18"></veyndan-point>
-									</div>
-									<div class="quadrant">
-										<veyndan-point data-point="7"></veyndan-point>
-										<veyndan-point data-point="8"></veyndan-point>
-										<veyndan-point data-point="9"></veyndan-point>
-										<veyndan-point data-point="10"></veyndan-point>
-										<veyndan-point data-point="11"></veyndan-point>
-										<veyndan-point data-point="12"></veyndan-point>
-									</div>
-							</div>
-							<div class="bar"></div>
-							<div id="inner-board" class="half">
-									<div class="quadrant">
-										<veyndan-point data-point="19"></veyndan-point>
-										<veyndan-point data-point="20"></veyndan-point>
-										<veyndan-point data-point="21"></veyndan-point>
-										<veyndan-point data-point="22"></veyndan-point>
-										<veyndan-point data-point="23"></veyndan-point>
-										<veyndan-point data-point="24"></veyndan-point>
-									</div>
-									<div class="quadrant">
-										<veyndan-point data-point="1"></veyndan-point>
-										<veyndan-point data-point="2"></veyndan-point>
-										<veyndan-point data-point="3"></veyndan-point>
-										<veyndan-point data-point="4"></veyndan-point>
-										<veyndan-point data-point="5"></veyndan-point>
-										<veyndan-point data-point="6"></veyndan-point>
-									</div>
-							</div>
-							<div id="sidebar">
-								<div class="hold" data-player="2">
-									<veyndan-checker class="upright"></veyndan-checker>
-									<veyndan-checker class="upright"></veyndan-checker>
-								</div>
-								<div id="doubling-cube-face" class="typography-body-medium-700">64</div>
-								<div class="hold" data-player="1">
-									<veyndan-checker class="upright"></veyndan-checker>
-									<veyndan-checker class="upright"></veyndan-checker>
-								</div>
-							</div>
+							<veyndan-player data-player="1">
+								<span slot="name" contenteditable="true" spellcheck="false">Player 1</span>
+								<span slot="points-achieved">3</span>
+								<span slot="points-required">5</span>
+								<span slot="pips">167</span>
+							</veyndan-player>
+							<veyndan-player data-player="2">
+								<span slot="name" contenteditable="true" spellcheck="false">Player 2</span>
+								<span slot="points-achieved">1</span>
+								<span slot="points-required">5</span>
+								<span slot="pips">167</span>
+							</veyndan-player>
 						</div>
-						<div id="controls">
-							<div>
-								<button id="double" class="typography-body-small-700"  type="button">Double</button>
-								<button id="undo" class="typography-body-small-700" type="button" hidden="hidden">Undo</button>
-								<button id="confirm" class="typography-body-small-700"  type="button" hidden="hidden">Confirm</button>
-							</div>
-							<div>
-								<button id="roll-dice" class="typography-body-small-700"  type="button">Roll Dice</button>
-								<div id="dice-container">
-									<svg id="dice-swap" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960"><path d="M280-160 80-360l200-200 56 57-103 103h287v80H233l103 103-56 57Zm400-240-56-57 103-103H440v-80h287L624-743l56-57 200 200-200 200Z"/></svg>
-									<ol id="dice"></ol>
+						<div id="timer">
+							<span class="reserve-bank typography-body-small-700">02:00</span>
+							<span id="move" class="typography-body-medium-700">12</span>
+							<span class="reserve-bank typography-body-small-700">02:00</span>
+						</div>
+
+						<div class="foreignObject">
+							<div id="board">
+								<template id="point">
+									<link rel="stylesheet" href="index.css"/>
+									<link rel="stylesheet" href="point.css"/>
+									<svg>
+										<!-- The point should have dimensions 1:4, so exactly 4 stacked checkers can fill a point -->
+										<polyline points="2,0 16,126 30,0" stroke-width="4" stroke-linejoin="round" stroke-linecap="square"/>
+									</svg>
+								</template>
+
+								<div id="outer-board" class="half">
+										<div class="quadrant">
+											<veyndan-point data-point="13"></veyndan-point>
+											<veyndan-point data-point="14"></veyndan-point>
+											<veyndan-point data-point="15"></veyndan-point>
+											<veyndan-point data-point="16"></veyndan-point>
+											<veyndan-point data-point="17"></veyndan-point>
+											<veyndan-point data-point="18"></veyndan-point>
+										</div>
+										<div class="quadrant">
+											<veyndan-point data-point="7"></veyndan-point>
+											<veyndan-point data-point="8"></veyndan-point>
+											<veyndan-point data-point="9"></veyndan-point>
+											<veyndan-point data-point="10"></veyndan-point>
+											<veyndan-point data-point="11"></veyndan-point>
+											<veyndan-point data-point="12"></veyndan-point>
+										</div>
+								</div>
+								<div class="bar"></div>
+								<div id="inner-board" class="half">
+										<div class="quadrant">
+											<veyndan-point data-point="19"></veyndan-point>
+											<veyndan-point data-point="20"></veyndan-point>
+											<veyndan-point data-point="21"></veyndan-point>
+											<veyndan-point data-point="22"></veyndan-point>
+											<veyndan-point data-point="23"></veyndan-point>
+											<veyndan-point data-point="24"></veyndan-point>
+										</div>
+										<div class="quadrant">
+											<veyndan-point data-point="1"></veyndan-point>
+											<veyndan-point data-point="2"></veyndan-point>
+											<veyndan-point data-point="3"></veyndan-point>
+											<veyndan-point data-point="4"></veyndan-point>
+											<veyndan-point data-point="5"></veyndan-point>
+											<veyndan-point data-point="6"></veyndan-point>
+										</div>
+								</div>
+								<div id="sidebar">
+									<div class="hold" data-player="2">
+										<veyndan-checker class="upright"></veyndan-checker>
+										<veyndan-checker class="upright"></veyndan-checker>
+									</div>
+									<div id="doubling-cube-face" class="typography-body-medium-700">64</div>
+									<div class="hold" data-player="1">
+										<veyndan-checker class="upright"></veyndan-checker>
+										<veyndan-checker class="upright"></veyndan-checker>
+									</div>
 								</div>
 							</div>
+							<div id="controls">
+								<div>
+									<button id="double" class="typography-body-small-700"  type="button">Double</button>
+									<button id="undo" class="typography-body-small-700" type="button" hidden="hidden">Undo</button>
+									<button id="confirm" class="typography-body-small-700"  type="button" hidden="hidden">Confirm</button>
+								</div>
+								<div>
+									<button id="roll-dice" class="typography-body-small-700"  type="button">Roll Dice</button>
+									<div id="dice-container">
+										<svg id="dice-swap" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960"><path d="M280-160 80-360l200-200 56 57-103 103h287v80H233l103 103-56 57Zm400-240-56-57 103-103H440v-80h287L624-743l56-57 200 200-200 200Z"/></svg>
+										<ol id="dice"></ol>
+									</div>
+								</div>
+							</div>
+							<div id="checkers"></div>
+							<div id="drop-points"></div>
 						</div>
-						<div id="checkers"></div>
-						<div id="drop-points"></div>
+
+						<label id="play-mode">
+							Play Mode
+							<select>
+								<option value="opposite">Opposite</option>
+								<option value="side-by-side">Side-By-Side</option>
+							</select>
+						</label>
 					</div>
 				</foreignObject>
 			</svg>
-
-			<label id="play-mode">
-				Play Mode
-				<select>
-					<option value="opposite">Opposite</option>
-					<option value="side-by-side">Side-By-Side</option>
-				</select>
-			</label>
 		</main>
 	</body>
 </html>
