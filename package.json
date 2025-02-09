@@ -9,6 +9,7 @@
 	"devDependencies": {
 		"@types/tape": "5.8.1",
 		"stylelint": "16.14.1",
+		"stylelint-use-nesting": "^6.0.0",
 		"tape": "5.9.0",
 		"typescript": "5.7.3",
 		"vite": "6.1.0"

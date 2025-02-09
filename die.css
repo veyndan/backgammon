@@ -82,10 +82,6 @@
 	opacity: .5;
 }
 
-:host(.rolling) .motion-lines {
-	visibility: visible;
-}
-
 .motion-lines {
 	visibility: hidden;
 	position: absolute;
@@ -105,5 +101,9 @@
 		bottom: 0;
 		right: 0;
 		rotate: .5turn;
+	}
+
+	:host(.rolling) & {
+		visibility: visible;
 	}
 }
