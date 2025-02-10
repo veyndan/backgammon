@@ -1,4 +1,4 @@
-/* stylelint-disable csstools/use-nesting */
+/* stylelint-disable csstools/use-nesting -- https://github.com/csstools/stylelint-use-nesting/issues/23 */
 :host {
 	inline-size: var(--checker-diameter);
 	color: var(--player-current-checker-text-color);

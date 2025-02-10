@@ -4,5 +4,8 @@
 	],
 	"rules": {
 		"csstools/use-nesting": "always"
-	}
+	},
+	"reportDescriptionlessDisables": true,
+	"reportInvalidScopeDisables": true,
+	"reportNeedlessDisables": true
 }
