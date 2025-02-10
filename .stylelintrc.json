@@ -1,8 +1,11 @@
 {
 	"plugins": [
+		"stylelint-plugin-logical-css",
 		"stylelint-use-nesting"
 	],
 	"rules": {
+		"plugin/use-logical-properties-and-values": [true, { "severity": "error" }],
+		"plugin/use-logical-units": [true, { "severity": "error"}],
 		"csstools/use-nesting": "always"
 	},
 	"reportDescriptionlessDisables": true,
