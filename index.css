@@ -68,13 +68,12 @@
 	}
 
 	.surface {
-		background: var(--surface);
 		color: var(--on-surface);
+		background: var(--surface);
 	}
 }
 
 :root {
-	color-scheme: light dark;
 	--bar-width: 38px;
 	--checker-radius: 16px;
 	--checker-diameter: calc(var(--checker-radius) * 2);
@@ -90,6 +89,8 @@
 	--point-max: 24;
 	--point-width: var(--checker-diameter);
 	--point-height: calc(var(--checker-diameter) * 4);
+
+	color-scheme: light dark;
 }
 
 html {
@@ -98,15 +99,16 @@ html {
 }
 
 body {
-	block-size: 100%;
 	display: flex;
 	flex-direction: column;
-	padding: 16px;
 	gap: 8px;
 
+	block-size: 100%;
+	padding: 16px;
+
 	& > :not(main) > * {
-		padding-inline: 1rem;
 		margin-inline: auto;
+		padding-inline: 1rem;
 	}
 }
 
@@ -115,9 +117,11 @@ header > nav {
 		display: flex;
 		flex-wrap: wrap;
 		gap: 1em;
-		list-style-type: none;
+
 		padding-inline: 0;
+
 		font-weight: bold;
+		list-style-type: none;
 
 		& > li:first-child:has(> a[href="/index.html"]) {
 			margin-inline-end: auto;
@@ -156,18 +160,21 @@ button {
 
 #players {
 	display: flex;
-	writing-mode: sideways-lr;
 	gap: 8px;
+	writing-mode: sideways-lr;
 }
 
 #timer {
 	display: flex;
-	align-items: center;
-	writing-mode: sideways-lr;
 	gap: 8px;
+	align-items: center;
+
 	padding-block: 4px;
 	padding-inline: 14px;
 	border-radius: 8px;
+
+	writing-mode: sideways-lr;
+
 	background: var(--surface-container-high);
 
 	& > #move {
@@ -205,28 +212,36 @@ main:has(#play-mode > select > option[value="side-by-side"]:checked) {
 	--checker-diameter: calc(var(--checker-radius) * 2);
 	--gap: 1px;
 	--padding: 2px;
-	inline-size: var(--hold-width);
-	block-size: calc(var(--checkers-per-player) * var(--checker-thickness) + 2 * var(--padding) + (var(--checkers-per-player) - 1) * var(--gap));
+
 	display: flex;
 	flex-direction: column-reverse;
-	justify-content: end;
 	gap: var(--gap);
+	justify-content: end;
+
+	inline-size: var(--hold-width);
+	block-size: calc(var(--checkers-per-player) * var(--checker-thickness) + 2 * var(--padding) + (var(--checkers-per-player) - 1) * var(--gap));
 	padding: var(--padding);
-	background: var(--secondary-container);
 	border-radius: 4px;
+
+	background: var(--secondary-container);
 }
 
 #doubling-cube-face {
 	--die-side-length: 28px;
-	inline-size: var(--die-side-length);
-	block-size: var(--die-side-length);
+
+	rotate: .25turn;
+
 	display: flex;
 	align-items: center;
 	justify-content: center;
+
+	inline-size: var(--die-side-length);
+	block-size: var(--die-side-length);
 	border-radius: 4px;
-	rotate: .25turn;
-	background: var(--secondary-container);
+
 	color: var(--on-secondary-container);
+
+	background: var(--secondary-container);
 }
 
 main {
@@ -241,36 +256,39 @@ main {
 		margin-inline: 8px;
 
 		& > foreignObject {
-			block-size: 100%;
 			inline-size: 100%;
+			block-size: 100%;
 
 			& > .main {
-				inline-size: calc(70px + 8px + 26px + 16px + 2 * var(--half-width) + var(--bar-width) + 24px + var(--hold-width) + 16px + 26px);
-				block-size: calc(var(--half-height) + 40px);
-				flex:1;
 				overflow: auto;
 				display: flex;
-				justify-content: center;
-				align-items: center;
+				flex:1;
 				gap: 8px;
+				align-items: center;
+				justify-content: center;
+
+				inline-size: calc(70px + 8px + 26px + 16px + 2 * var(--half-width) + var(--bar-width) + 24px + var(--hold-width) + 16px + 26px);
+				block-size: calc(var(--half-height) + 40px);
 
 				& > .foreignObject {
-					block-size: 100%;
-					inline-size: 100%;
 					display: grid;
-					grid-template-rows: 20px var(--half-height) 20px;
 					grid-template-columns: var(--half-width) var(--bar-width) var(--half-width) var(--hold-width);
+					grid-template-rows: 20px var(--half-height) 20px;
 					column-gap: 8px;
+
+					inline-size: 100%;
+					block-size: 100%;
 					margin-inline: 8px;
 
 					& > #board {
 						display: contents;
 
 						& > .half {
-							grid-row: 2;
 							display: flex;
+							grid-row: 2;
 							flex-direction: column;
 							justify-content: space-between;
+
 							background: var(--primary-container);
 							clip-path: fill-box inset(0 round 8px);
 
@@ -302,16 +320,16 @@ main {
 						}
 
 						& > .bar {
-							grid-row: 2;
 							grid-column: 2;
-							background: var(--secondary-container);
+							grid-row: 2;
 							border-radius: 8px;
+							background: var(--secondary-container);
 						}
 
 						& > #sidebar {
-							grid-row: 2;
-							grid-column: 4;
 							display: flex;
+							grid-column: 4;
+							grid-row: 2;
 							flex-direction: column;
 							align-items: center;
 							justify-content: space-evenly;
@@ -319,32 +337,34 @@ main {
 					}
 
 					& > #controls {
-						grid-row: 2;
-						grid-column: 1 / span 3;
-						align-self: center;
-						display: flex;
-						justify-content: space-between;
 						z-index: 1;
 
+						display: flex;
+						grid-column: 1 / span 3;
+						grid-row: 2;
+						align-self: center;
+						justify-content: space-between;
+
 						& > div {
-							inline-size: var(--half-width);
 							display: flex;
+							gap: 8px;
 							align-items: center;
 							justify-content: center;
-							gap: 8px;
+
+							inline-size: var(--half-width);
 						}
 					}
 
 					& > #checkers {
 						pointer-events: none;
-						grid-row: 2;
 						grid-column: 1 / span 3;
+						grid-row: 2;
 					}
 
 					& > #drop-points {
 						pointer-events: none;
-						grid-row: 1 / -1;
 						grid-column: 1 / span 3;
+						grid-row: 1 / -1;
 					}
 				}
 			}
@@ -371,12 +391,9 @@ main {
 
 /*noinspection CssInvalidFunction*/
 .drop-point {
-	position: absolute;
 	--drop-point-diameter: 12px;
-	block-size: var(--drop-point-diameter);
-	aspect-ratio: 1;
-	border-radius: 50%;
-	background: darkorange;
+
+	position: absolute;
 	translate:
 		calc(
 			var(--translate-x) + (var(--checker-diameter) - var(--drop-point-diameter)) / 2
@@ -384,15 +401,24 @@ main {
 		calc(
 			var(--is-bottom-point) * (var(--half-height) + 28px)
 		);
+
+	aspect-ratio: 1;
+	block-size: var(--drop-point-diameter);
+	border-radius: 50%;
+
+	background: darkorange;
 }
 
 /*noinspection CssInvalidFunction*/
 #checkers > * {
 	pointer-events: auto;
+
 	position: absolute;
+
 	display: flex;
 	align-items: center;
 	justify-content: center;
+
 	transition: translate .3s;
 
 	&:not([data-permissible-destination-points="[]"]) {
@@ -401,9 +427,9 @@ main {
 		}
 
 		&.dragging {
-			transition: filter .3s;
 			cursor: move;
 			filter: drop-shadow(2px 4px 4px hsl(from var(--surface) h s l / .3));
+			transition: filter .3s;
 		}
 	}
 
@@ -412,10 +438,10 @@ main {
 	}
 
 	& > text {
-		fill: currentColor;
 		user-select: none;
 		dominant-baseline: central;
 		text-anchor: middle;
+		fill: currentColor;
 
 		/* Hide node from accessibility tree when empty. */
 		&:empty {
@@ -438,6 +464,10 @@ main {
 	&:not([data-hit]) {
 		--top-point-translate-y: calc(var(--checker-diameter) * min(var(--point-stack-index), ((5 - 1) * var(--point-stack-index)) / max(var(--point-stack-count) - 1, 1)));
 		--bottom-point-translate-y: calc((var(--half-height) - var(--top-point-translate-y) - var(--checker-diameter)));
+
+		--top-point-mask-position-vertical: calc(150% + -1 * round(down, calc(var(--point-stack-count) / 6), 1) * (1 - round(down, calc((var(--point-stack-index) + 1) / var(--point-stack-count)), 1)) * (105% - ((4 / max(var(--point-stack-count) - 1, 1)) * 100%)));
+		--bottom-point-mask-position-vertical: calc(100% - var(--top-point-mask-position-vertical));
+
 		translate:
 			var(--translate-x)
 			calc(
@@ -445,8 +475,7 @@ main {
 				+ var(--is-bottom-point) * var(--bottom-point-translate-y)
 			);
 
-		--top-point-mask-position-vertical: calc(150% + -1 * round(down, calc(var(--point-stack-count) / 6), 1) * (1 - round(down, calc((var(--point-stack-index) + 1) / var(--point-stack-count)), 1)) * (105% - ((4 / max(var(--point-stack-count) - 1, 1)) * 100%)));
-		--bottom-point-mask-position-vertical: calc(100% - var(--top-point-mask-position-vertical));
+		mask-composite: subtract;
 		mask-image:
 			radial-gradient(
 				black var(--checker-radius),
@@ -457,20 +486,22 @@ main {
 				black var(--checker-radius),
 				transparent var(--checker-radius)
 			);
-		mask-composite: subtract;
 	}
 }
 
 #controls button {
+	--surface: var(--player-current-checker-background);
+	--color: var(--player-current-checker-text-color);
+	--alpha: 1;
+
 	padding-block: 10.5px;
 	padding-inline: 21px;
 	border: none;
 	border-radius: 8px;
-	--surface: var(--player-current-checker-background);
-	--color: var(--player-current-checker-text-color);
-	--alpha: 1;
-	background: hsl(from var(--surface) h s l / var(--alpha));
+
 	color: hsl(from var(--color) h s l / var(--alpha));
+
+	background: hsl(from var(--surface) h s l / var(--alpha));
 
 	&:disabled {
 		--alpha: .5;
@@ -487,16 +518,17 @@ main {
 }
 
 #dice-container {
-	inline-size: 100%;
 	display: none;
 	flex-direction: column;
 	align-items: center;
+
+	inline-size: 100%;
 	margin-block-end: 16px;
 
 	#dice-swap {
-		visibility: hidden;
 		block-size: 12px;
 		margin-block: -1px;
+		visibility: hidden;
 	}
 
 	&:has(#dice :not(.rolling):first-child:nth-last-child(2)) {
@@ -511,13 +543,15 @@ main {
 #dice {
 	display: flex;
 	justify-content: center;
+
 	margin: 0;
 	padding: 0;
+
 	list-style-type: none;
 
 	veyndan-die {
-		flex: 0 1 calc(var(--die-side-length) + 14px);
 		overflow: hidden;
+		flex: 0 1 calc(var(--die-side-length) + 14px);
 		margin-inline: -2px;
 
 		&:nth-child(n + 3) {

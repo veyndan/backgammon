@@ -1,21 +1,23 @@
 :host {
-	background: var(--surface-container-high);
 	border-radius: 8px;
+	background: var(--surface-container-high);
 	transition: background-color 400ms;
 
 	& > div {
 		display: grid;
 		grid-template-columns: 1fr auto;
 		gap: 8px 12px;
+
 		padding-block: 8px;
 		padding-inline: 12px;
 	}
 }
 
 veyndan-checker {
-	justify-self: end;
 	--checker-radius: 8px;
 	--checker-diameter: calc(var(--checker-radius) * 2);
+
+	justify-self: end;
 }
 
 .score {
@@ -26,10 +28,10 @@ veyndan-checker {
 
 .points {
 	& > span:first-of-type > span {
-		color: var(--on-surface-variable);
-		vertical-align: top;
 		padding-inline-start: 1px;
 		line-height: 2;
+		color: var(--on-surface-variable);
+		vertical-align: top;
 	}
 }
 

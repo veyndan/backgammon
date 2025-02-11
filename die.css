@@ -1,29 +1,35 @@
 :host {
 	position: relative;
-	inline-size: calc(var(--die-side-length) + 14px);
-	block-size: calc(var(--die-side-length) + 14px);
+
 	display: flex;
 	align-items: center;
 	justify-content: center;
+
+	inline-size: calc(var(--die-side-length) + 14px);
+	block-size: calc(var(--die-side-length) + 14px);
 }
 
 .pips {
-	position: relative;
-	inline-size: var(--die-side-length);
-	block-size: var(--die-side-length);
-	display: grid;
 	--pip-diameter: 8px;
+
+	position: relative;
+
+	display: grid;
 	grid-template: repeat(3, var(--pip-diameter)) / repeat(3, var(--pip-diameter));
+	gap: 1px;
 	align-content: center;
 	justify-content: center;
-	gap: 1px;
-	background: var(--player-current-checker-background);
+
+	inline-size: var(--die-side-length);
+	block-size: var(--die-side-length);
 	border-radius: 4px;
+
+	background: var(--player-current-checker-background);
 
 	.pip {
 		border-radius: 50%;
-		background: var(--player-current-checker-text-color);
 		visibility: hidden;
+		background: var(--player-current-checker-text-color);
 	}
 }
 
@@ -83,8 +89,8 @@
 }
 
 .motion-lines {
-	visibility: hidden;
 	position: absolute;
+	visibility: hidden;
 
 	& > path {
 		fill: none;
