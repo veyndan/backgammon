@@ -11,6 +11,6 @@
 }
 
 :host(.upright) {
-	block-size: var(--checker-thickness);
+	inline-size: var(--checker-thickness);
 	border-radius: 2px;
 }

@@ -214,12 +214,11 @@ main:has(#play-mode > select > option[value="side-by-side"]:checked) {
 	--padding: 2px;
 
 	display: flex;
-	flex-direction: column-reverse;
+	flex-direction: row-reverse;
 	gap: var(--gap);
-	justify-content: end;
 
-	inline-size: var(--hold-width);
-	block-size: calc(var(--checkers-per-player) * var(--checker-thickness) + 2 * var(--padding) + (var(--checkers-per-player) - 1) * var(--gap));
+	inline-size: calc(var(--checkers-per-player) * var(--checker-thickness) + 2 * var(--padding) + (var(--checkers-per-player) - 1) * var(--gap));
+	block-size: var(--hold-width);
 	padding: var(--padding);
 	border-radius: 4px;
 
@@ -228,8 +227,6 @@ main:has(#play-mode > select > option[value="side-by-side"]:checked) {
 
 #doubling-cube-face {
 	--die-side-length: 28px;
-
-	rotate: .25turn;
 
 	display: flex;
 	align-items: center;
@@ -330,9 +327,10 @@ main {
 							display: flex;
 							grid-column: 4;
 							grid-row: 2;
-							flex-direction: column;
 							align-items: center;
 							justify-content: space-evenly;
+
+							writing-mode: sideways-rl;
 						}
 					}
 
