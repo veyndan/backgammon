@@ -1,11 +1,6 @@
-:host {
-	inline-size: var(--point-width);
-	block-size: var(--point-height);
-}
-
 svg {
-	inline-size: inherit;
-	block-size: inherit;
+	inline-size: 100%;
+	block-size: 100%;
 }
 
 polyline {
