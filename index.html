@@ -7,6 +7,64 @@
 		<link rel="stylesheet" href="index.css"/>
 		<script src="index.js" type="module"></script>
 	</head>
+
+	<template id="checker">
+		<link rel="stylesheet" href="index.css"/>
+		<link rel="stylesheet" href="checker.css"/>
+		<div class="typography-label-large-700">
+			<slot name="text"></slot>
+		</div>
+	</template>
+	<template id="die">
+		<link rel="stylesheet" href="index.css"/>
+		<link rel="stylesheet" href="die.css"/>
+		<svg class="motion-lines" width="12px" height="12px">
+			<path d="M2,6 A14,14 0 0 1 6,2" stroke-width="1"/>
+			<path d="M3,10 A14,14 0 0 1 10,3" stroke-width="2"/>
+		</svg>
+		<svg class="motion-lines" width="12px" height="12px">
+			<path d="M2,6 A14,14 0 0 1 6,2" stroke-width="1"/>
+			<path d="M3,10 A14,14 0 0 1 10,3" stroke-width="2"/>
+		</svg>
+		<div class="pips">
+			<div class="pip"></div>
+			<div class="pip"></div>
+			<div class="pip"></div>
+			<div class="pip"></div>
+			<div class="pip"></div>
+			<div class="pip"></div>
+			<div class="pip"></div>
+			<div class="pip"></div>
+			<div class="pip"></div>
+		</div>
+	</template>
+	<template id="player">
+		<link rel="stylesheet" href="index.css"/>
+		<link rel="stylesheet" href="player.css"/>
+		<div>
+			<slot name="name" class="typography-body-medium-700">Player</slot>
+			<veyndan-checker class="flat"></veyndan-checker>
+			<div class="points score">
+				<span class="typography-body-large-700">
+					<slot name="points-achieved">-</slot><span class="typography-label-small-700">/<slot name="points-required">-</slot></span>
+				</span>
+				<span class="typography-label-small-400">points</span>
+			</div>
+			<div class="pip score">
+				<slot name="pips" class="typography-body-large-700">-</slot>
+				<span class="typography-label-small-400">pips</span>
+			</div>
+		</div>
+	</template>
+	<template id="point">
+		<link rel="stylesheet" href="index.css"/>
+		<link rel="stylesheet" href="point.css"/>
+		<svg>
+			<!-- The point should have dimensions 1:4, so exactly 4 stacked checkers can fill a point -->
+			<polyline points="2,0 16,126 30,0" stroke-width="4" stroke-linejoin="round" stroke-linecap="square"/>
+		</svg>
+	</template>
+
 	<body class="surface">
 		<header>
 			<nav>
@@ -20,57 +78,7 @@
 			<svg viewBox="0 0 640 420">
 				<foreignObject>
 					<div class="main">
-						<template id="checker">
-							<link rel="stylesheet" href="index.css"/>
-							<link rel="stylesheet" href="checker.css"/>
-							<div class="typography-label-large-700">
-								<slot name="text"></slot>
-							</div>
-						</template>
-						<template id="die">
-							<link rel="stylesheet" href="index.css"/>
-							<link rel="stylesheet" href="die.css"/>
-							<svg class="motion-lines" width="12px" height="12px">
-								<path d="M2,6 A14,14 0 0 1 6,2" stroke-width="1"/>
-								<path d="M3,10 A14,14 0 0 1 10,3" stroke-width="2"/>
-							</svg>
-							<svg class="motion-lines" width="12px" height="12px">
-								<path d="M2,6 A14,14 0 0 1 6,2" stroke-width="1"/>
-								<path d="M3,10 A14,14 0 0 1 10,3" stroke-width="2"/>
-							</svg>
-							<div class="pips">
-								<div class="pip"></div>
-								<div class="pip"></div>
-								<div class="pip"></div>
-								<div class="pip"></div>
-								<div class="pip"></div>
-								<div class="pip"></div>
-								<div class="pip"></div>
-								<div class="pip"></div>
-								<div class="pip"></div>
-							</div>
-						</template>
-
 						<div id="players">
-							<template id="player">
-								<link rel="stylesheet" href="index.css"/>
-								<link rel="stylesheet" href="player.css"/>
-								<div>
-									<slot name="name" class="typography-body-medium-700">Player</slot>
-									<veyndan-checker class="flat"></veyndan-checker>
-									<div class="points score">
-										<span class="typography-body-large-700">
-											<slot name="points-achieved">-</slot><span class="typography-label-small-700">/<slot name="points-required">-</slot></span>
-										</span>
-										<span class="typography-label-small-400">points</span>
-									</div>
-									<div class="pip score">
-										<slot name="pips" class="typography-body-large-700">-</slot>
-										<span class="typography-label-small-400">pips</span>
-									</div>
-								</div>
-							</template>
-
 							<veyndan-player data-player="1">
 								<span slot="name" contenteditable="true" spellcheck="false">Player 1</span>
 								<span slot="points-achieved">3</span>
@@ -92,15 +100,6 @@
 
 						<div class="foreignObject">
 							<div id="board">
-								<template id="point">
-									<link rel="stylesheet" href="index.css"/>
-									<link rel="stylesheet" href="point.css"/>
-									<svg>
-										<!-- The point should have dimensions 1:4, so exactly 4 stacked checkers can fill a point -->
-										<polyline points="2,0 16,126 30,0" stroke-width="4" stroke-linejoin="round" stroke-linecap="square"/>
-									</svg>
-								</template>
-
 								<div id="outer-board" class="half">
 										<div class="quadrant">
 											<veyndan-point data-point="13"></veyndan-point>
