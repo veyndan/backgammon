@@ -8,7 +8,7 @@
 	},
 	"devDependencies": {
 		"@types/tape": "5.8.1",
-		"stylelint": "16.17.0",
+		"stylelint": "16.18.0",
 		"stylelint-config-clean-order": "7.0.0",
 		"stylelint-declaration-block-no-ignored-properties": "2.8.0",
 		"stylelint-plugin-logical-css": "^1.2.1",
