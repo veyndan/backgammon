@@ -74,21 +74,30 @@
 }
 
 :root {
-	--bar-width: 38px;
-	--checker-radius: 16px;
-	--checker-diameter: calc(var(--checker-radius) * 2);
-	--checker-thickness: 5px;
+	--bar-width-unitless: 38;
+	--checker-diameter-unitless: calc(var(--checker-radius-unitless) * 2);
+	--checker-radius-unitless: 16;
+	--checker-thickness-unitless: 5;
 	--checkers-per-player: 15;
-	--die-side-length: 36px;
-	--half-width: calc(var(--point-width) * 6);
-	--half-height: calc(var(--point-height) * 2 + var(--checker-diameter) * 2 + var(--die-side-length) + 24px);
-	--hold-width: calc(var(--checker-diameter));
+	--die-side-length-unitless: 36;
+	--half-height-unitless: calc(var(--point-height-unitless) * 2 + var(--checker-diameter-unitless) * 2 + var(--die-side-length-unitless) + 24);
+	--half-width-unitless: calc(var(--point-width-unitless) * 6);
+	--hold-width-unitless: calc(var(--checker-diameter-unitless));
 	--point-count: 24;
-	--point-per-side: calc(var(--point-count) / 2);
-	--point-min: 1;
+	--point-height-unitless: calc(var(--checker-diameter-unitless) * 4);
 	--point-max: 24;
-	--point-width: var(--checker-diameter);
-	--point-height: calc(var(--checker-diameter) * 4);
+	--point-min: 1;
+	--point-per-side: calc(var(--point-count) / 2);
+	--point-width-unitless: var(--checker-diameter-unitless);
+
+	--bar-width-px: calc(var(--bar-width-unitless) * 1px);
+	--checker-diameter-px: calc(var(--checker-diameter-unitless) * 1px);
+	--checker-radius-px: calc(var(--checker-radius-unitless) * 1px);
+	--checker-thickness-px: calc(var(--checker-thickness-unitless) * 1px);
+	--die-side-length-px: calc(var(--die-side-length-unitless) * 1px);
+	--half-height-px: calc(var(--half-height-unitless) * 1px);
+	--half-width-px: calc(var(--half-width-unitless) * 1px);
+	--hold-width-px: calc(var(--hold-width-unitless) * 1px);
 
 	color-scheme: light dark;
 }
@@ -218,8 +227,8 @@ main:has(#play-mode > select > option[value="side-by-side"]:checked) {
 }
 
 .hold {
-	--checker-radius: 14px;
-	--checker-diameter: calc(var(--checker-radius) * 2);
+	--checker-radius-px: 14px;
+	--checker-diameter-px: calc(var(--checker-radius-px) * 2);
 	--gap: 1px;
 	--padding: 2px;
 
@@ -227,8 +236,8 @@ main:has(#play-mode > select > option[value="side-by-side"]:checked) {
 	flex-direction: row-reverse;
 	gap: var(--gap);
 
-	inline-size: calc(var(--checkers-per-player) * var(--checker-thickness) + 2 * var(--padding) + (var(--checkers-per-player) - 1) * var(--gap));
-	block-size: var(--hold-width);
+	inline-size: calc(var(--checkers-per-player) * var(--checker-thickness-px) + 2 * var(--padding) + (var(--checkers-per-player) - 1) * var(--gap));
+	block-size: var(--hold-width-px);
 	padding: var(--padding);
 	border-radius: 4px;
 
@@ -236,14 +245,14 @@ main:has(#play-mode > select > option[value="side-by-side"]:checked) {
 }
 
 #doubling-cube-face {
-	--die-side-length: 28px;
+	--die-side-length-px: 28px;
 
 	display: flex;
 	align-items: center;
 	justify-content: center;
 
-	inline-size: var(--die-side-length);
-	block-size: var(--die-side-length);
+	inline-size: var(--die-side-length-px);
+	block-size: var(--die-side-length-px);
 	border-radius: 4px;
 
 	color: var(--on-secondary-container);
@@ -270,8 +279,7 @@ main {
 			& > .main {
 				overflow: auto;
 				display: grid;
-				grid-template-columns: auto auto var(--half-width) var(--bar-width) var(--half-width) var(--hold-width) auto;
-				grid-template-rows: 20px var(--half-height) 20px;
+				grid-template-rows: 12px auto 12px;
 				gap: 8px;
 				align-items: stretch;
 				justify-content: center;
@@ -287,6 +295,9 @@ main {
 						grid-row: 2;
 						flex-direction: column;
 						justify-content: space-between;
+
+						aspect-ratio: var(--half-width-unitless) / var(--half-height-unitless);
+						block-size: var(--half-height-px);
 
 						background: var(--primary-container);
 						clip-path: fill-box inset(0 round 8px);
@@ -321,7 +332,11 @@ main {
 					& > .bar {
 						grid-column: 4;
 						grid-row: 2;
+
+						aspect-ratio: var(--bar-width-unitless) / var(--half-height-unitless);
+						block-size: var(--half-height-px);
 						border-radius: 8px;
+
 						background: var(--secondary-container);
 					}
 
@@ -351,7 +366,7 @@ main {
 						align-items: center;
 						justify-content: center;
 
-						inline-size: var(--half-width);
+						inline-size: var(--half-width-px);
 					}
 				}
 
@@ -382,9 +397,9 @@ main {
 	--is-right-point: round(down, abs(calc((var(--point-max) + var(--point-min)) / 2) - var(--point)) / 6, 1);
 	--translate-x:
 		calc(
-			var(--is-top-point) * (var(--checker-diameter) * rem(var(--point) - 1, var(--point-per-side)))
-			+ var(--is-bottom-point) * (2 * var(--half-width) - var(--checker-diameter) * (rem(var(--point) - 1, var(--point-per-side)) + 1))
-			+ var(--is-right-point) * (var(--bar-width) + 16px)
+			var(--is-top-point) * (var(--checker-diameter-px) * rem(var(--point) - 1, var(--point-per-side)))
+			+ var(--is-bottom-point) * (2 * var(--half-width-px) - var(--checker-diameter-px) * (rem(var(--point) - 1, var(--point-per-side)) + 1))
+			+ var(--is-right-point) * (var(--bar-width-px) + 16px)
 		);
 }
 
@@ -395,10 +410,10 @@ main {
 	position: absolute;
 	translate:
 		calc(
-			var(--translate-x) + (var(--checker-diameter) - var(--drop-point-diameter)) / 2
+			var(--translate-x) + (var(--checker-diameter-px) - var(--drop-point-diameter)) / 2
 		)
 		calc(
-			var(--is-bottom-point) * (var(--half-height) + 28px)
+			var(--is-bottom-point) * (var(--half-height-px) + 28px)
 		);
 
 	aspect-ratio: 1;
@@ -449,20 +464,20 @@ main {
 	}
 
 	&[data-hit] {
-		translate: calc(var(--half-width) + 8px + (var(--bar-width) - var(--checker-diameter)) / 2) var(--translate-y);
+		translate: calc(var(--half-width-px) + 8px + (var(--bar-width-px) - var(--checker-diameter-px)) / 2) var(--translate-y);
 
 		&[data-player="1"] {
-			--translate-y: calc(var(--checker-diameter) * 2.5);
+			--translate-y: calc(var(--checker-diameter-px) * 2.5);
 		}
 
 		&[data-player="2"] {
-			--translate-y: calc(var(--half-height) - var(--checker-diameter) * 3.5);
+			--translate-y: calc(var(--half-height-px) - var(--checker-diameter-px) * 3.5);
 		}
 	}
 
 	&:not([data-hit]) {
-		--top-point-translate-y: calc(var(--checker-diameter) * min(var(--point-stack-index), ((5 - 1) * var(--point-stack-index)) / max(var(--point-stack-count) - 1, 1)));
-		--bottom-point-translate-y: calc((var(--half-height) - var(--top-point-translate-y) - var(--checker-diameter)));
+		--top-point-translate-y: calc(var(--checker-diameter-px) * min(var(--point-stack-index), ((5 - 1) * var(--point-stack-index)) / max(var(--point-stack-count) - 1, 1)));
+		--bottom-point-translate-y: calc((var(--half-height-px) - var(--top-point-translate-y) - var(--checker-diameter-px)));
 
 		--top-point-mask-position-vertical: calc(150% + -1 * round(down, calc(var(--point-stack-count) / 6), 1) * (1 - round(down, calc((var(--point-stack-index) + 1) / var(--point-stack-count)), 1)) * (105% - ((4 / max(var(--point-stack-count) - 1, 1)) * 100%)));
 		--bottom-point-mask-position-vertical: calc(100% - var(--top-point-mask-position-vertical));
@@ -477,13 +492,13 @@ main {
 		mask-composite: subtract;
 		mask-image:
 			radial-gradient(
-				black var(--checker-radius),
-				transparent var(--checker-radius)
+				black var(--checker-radius-px),
+				transparent var(--checker-radius-px)
 			),
 			radial-gradient(
 				circle at center calc(var(--is-top-point) * var(--top-point-mask-position-vertical) + var(--is-bottom-point) * var(--bottom-point-mask-position-vertical)),
-				black var(--checker-radius),
-				transparent var(--checker-radius)
+				black var(--checker-radius-px),
+				transparent var(--checker-radius-px)
 			);
 	}
 }
@@ -550,7 +565,7 @@ main {
 
 	veyndan-die {
 		overflow: hidden;
-		flex: 0 1 calc(var(--die-side-length) + 14px);
+		flex: 0 1 calc(var(--die-side-length-px) + 14px);
 		margin-inline: -2px;
 
 		&:nth-child(n + 3) {
@@ -575,6 +590,6 @@ main {
 		margin-inline: 0;
 	}
 	to {
-		flex: 0 1 calc(var(--die-side-length) + 14px);
+		flex: 0 1 calc(var(--die-side-length-px) + 14px);
 	}
 }

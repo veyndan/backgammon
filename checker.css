@@ -1,16 +1,16 @@
 /* stylelint-disable csstools/use-nesting -- https://github.com/csstools/stylelint-use-nesting/issues/23 */
 :host {
-	inline-size: var(--checker-diameter);
+	inline-size: var(--checker-diameter-px);
 	color: var(--player-current-checker-text-color);
 	background: var(--player-current-checker-background);
 }
 
 :host(.flat) {
-	block-size: var(--checker-diameter);
-	clip-path: circle(var(--checker-radius));
+	block-size: var(--checker-diameter-px);
+	clip-path: circle(var(--checker-radius-px));
 }
 
 :host(.upright) {
-	inline-size: var(--checker-thickness);
+	inline-size: var(--checker-thickness-px);
 	border-radius: 2px;
 }

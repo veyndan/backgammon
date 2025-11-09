@@ -5,8 +5,8 @@
 	align-items: center;
 	justify-content: center;
 
-	inline-size: calc(var(--die-side-length) + 14px);
-	block-size: calc(var(--die-side-length) + 14px);
+	inline-size: calc(var(--die-side-length-px) + 14px);
+	block-size: calc(var(--die-side-length-px) + 14px);
 }
 
 .pips {
@@ -20,8 +20,8 @@
 	align-content: center;
 	justify-content: center;
 
-	inline-size: var(--die-side-length);
-	block-size: var(--die-side-length);
+	inline-size: var(--die-side-length-px);
+	block-size: var(--die-side-length-px);
 	border-radius: 4px;
 
 	background: var(--player-current-checker-background);

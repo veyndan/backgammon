@@ -14,8 +14,8 @@
 }
 
 veyndan-checker {
-	--checker-radius: 8px;
-	--checker-diameter: calc(var(--checker-radius) * 2);
+	--checker-radius-px: 8px;
+	--checker-diameter-px: calc(var(--checker-radius-px) * 2);
 
 	justify-self: end;
 }
