@@ -210,8 +210,16 @@ main[data-player="2"] #players > veyndan-player[data-player="2"] {
 	background: var(--primary-container);
 }
 
-main[data-player="2"]:has(#play-mode > select > option[value="opposite"]:checked) > svg > foreignObject > .main > #controls {
+main[data-player="2"]:has(#play-mode > select > option[value="opposite"]:checked) > svg > foreignObject > .main > #controls > div {
 	rotate: .5turn;
+
+	&:first-of-type {
+		grid-column: 5;
+	}
+
+	&:last-of-type {
+		grid-column: 3;
+	}
 }
 
 main:has(#play-mode > select > option[value="side-by-side"]:checked) {
@@ -221,8 +229,14 @@ main:has(#play-mode > select > option[value="side-by-side"]:checked) {
 		writing-mode: unset;
 	}
 
-	&[data-player="1"] > svg > foreignObject > .main > #controls {
-		flex-direction: row-reverse;
+	&[data-player="1"] > svg > foreignObject > .main > #controls > div {
+		&:first-of-type {
+			grid-column: 5;
+		}
+
+		&:last-of-type {
+			grid-column: 3;
+		}
 	}
 }
 
@@ -355,21 +369,24 @@ main {
 				}
 
 				& > #controls {
-					z-index: 1;
-
-					display: flex;
-					grid-column: 3 / span 3;
-					grid-row: 2;
-					align-self: center;
-					justify-content: space-between;
+					display: contents;
 
 					& > div {
+						z-index: 1;
+
 						display: flex;
+						grid-row: 2;
 						gap: 8px;
 						align-items: center;
 						justify-content: center;
 
-						inline-size: var(--half-width-px);
+						&:first-of-type {
+							grid-column: 3;
+						}
+
+						&:last-of-type {
+							grid-column: 5;
+						}
 					}
 				}
 
