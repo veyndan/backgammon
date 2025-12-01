@@ -5,8 +5,8 @@
 	align-items: center;
 	justify-content: center;
 
-	inline-size: calc(var(--die-side-length-length) + 14px);
-	block-size: calc(var(--die-side-length-length) + 14px);
+	inline-size: calc(var(--die-side-length-length) + 3.0625cqmin);
+	block-size: calc(var(--die-side-length-length) + 3.0625cqmin);
 
 	& > .motion-lines {
 		position: absolute;
@@ -35,23 +35,23 @@
 	}
 
 	& > .pips {
-		--pip-diameter: 8px;
+		--pip-diameter: 1.75cqmin;
 
 		position: relative;
 
 		display: grid;
 		grid-template: repeat(3, var(--pip-diameter)) / repeat(3, var(--pip-diameter));
-		gap: 1px;
+		gap: .21875cqmin;
 		align-content: center;
 		justify-content: center;
 
 		inline-size: var(--die-side-length-length);
 		block-size: var(--die-side-length-length);
-		border-radius: 4px;
+		border-radius: .875cqmin;
 
 		background: var(--player-current-checker-background);
 
-		& > .pip {
+		.pip {
 			border-radius: 50%;
 			visibility: hidden;
 			background: var(--player-current-checker-text-color);
