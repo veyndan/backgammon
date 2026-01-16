@@ -11,5 +11,5 @@
 
 :host(.upright) {
 	inline-size: var(--checker-thickness-length);
-	border-radius: 2px;
+	border-radius: .125em;
 }
