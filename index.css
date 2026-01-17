@@ -10,27 +10,27 @@
 
 @layer typography {
 	.typography-body-large-700 {
-		font: 700 1.25em/1 system-ui;
+		font: 700 4.375cqmin/1 system-ui;
 	}
 
 	.typography-body-medium-700 {
-		font: 700 1.125em/1 system-ui;
+		font: 700 3.9375cqmin/1 system-ui;
 	}
 
 	.typography-body-small-700 {
-		font: 700 .75em/1 system-ui;
+		font: 700 2.625cqmin/1 system-ui;
 	}
 
 	.typography-label-large-700 {
-		font: 700 .875em/1.43 system-ui;
+		font: 700 3.0625cqmin/1.43 system-ui;
 	}
 
 	.typography-label-small-700 {
-		font: 700 .5em/1 system-ui;
+		font: 700 1.75cqmin/1 system-ui;
 	}
 
 	.typography-label-small-400 {
-		font: 400 .5em/1 system-ui;
+		font: 400 1.75cqmin/1 system-ui;
 	}
 }
 
@@ -90,14 +90,14 @@
 	--point-per-side: calc(var(--point-count) / 2);
 	--point-width-unitless: var(--checker-diameter-unitless);
 
-	--bar-width-length: calc(var(--bar-width-unitless) * .0625em);
-	--checker-diameter-length: calc(var(--checker-diameter-unitless) * .0625em);
-	--checker-radius-length: calc(var(--checker-radius-unitless) * .0625em);
-	--checker-thickness-length: calc(var(--checker-thickness-unitless) * .0625em);
-	--die-side-length-length: calc(var(--die-side-length-unitless) * .0625em);
-	--half-height-length: calc(var(--half-height-unitless) * .0625em);
-	--half-width-length: calc(var(--half-width-unitless) * .0625em);
-	--hold-width-length: calc(var(--hold-width-unitless) * .0625em);
+	--bar-width-length: calc(var(--bar-width-unitless) * .21875cqmin);
+	--checker-diameter-length: calc(var(--checker-diameter-unitless) * .21875cqmin);
+	--checker-radius-length: calc(var(--checker-radius-unitless) * .21875cqmin);
+	--checker-thickness-length: calc(var(--checker-thickness-unitless) * .21875cqmin);
+	--die-side-length-length: calc(var(--die-side-length-unitless) * .21875cqmin);
+	--half-height-length: calc(var(--half-height-unitless) * .21875cqmin);
+	--half-width-length: calc(var(--half-width-unitless) * .21875cqmin);
+	--hold-width-length: calc(var(--hold-width-unitless) * .21875cqmin);
 
 	color-scheme: light dark;
 }
@@ -181,32 +181,30 @@ main {
 
 .aspect-ratio-lock {
 	display: grid;
-	grid-template-rows: .75em auto .75em;
-	gap: .5em;
+	grid-template-rows: 2.625cqmin auto 2.625cqmin;
+	gap: 1.75cqmin;
 	align-items: stretch;
 	justify-content: center;
 
 	inline-size: 100%;
 	block-size: 100%;
-
-	font-size: 3.5cqb;
 }
 
 #players {
 	display: flex;
-	gap: .5em;
+	gap: 1.75cqmin;
 	align-self: center;
 }
 
 #timer {
 	display: flex;
-	gap: .5em;
+	gap: 1.75cqmin;
 	align-items: center;
 	align-self: center;
 
-	padding-block: .25em;
-	padding-inline: .875em;
-	border-radius: .5em;
+	padding-block: .875cqmin;
+	padding-inline: 3.0625cqmin;
+	border-radius: 1.75cqmin;
 
 	background: var(--surface-container-high);
 
@@ -216,15 +214,15 @@ main {
 }
 
 #play-mode {
-	gap: .375em;
+	gap: 1.3125cqmin;
 	align-items: center;
 	align-self: center;
 	justify-items: start;
 
-	block-size: 2em;
-	padding-inline: 1em .8em;
+	block-size: 7cqmin;
+	padding-inline: 3.5cqmin 2.8cqmin;
 	border: none;
-	border-radius: 1em;
+	border-radius: 3.5cqmin;
 
 	color: var(--on-surface);
 
@@ -238,11 +236,11 @@ main {
 	}
 
 	&::picker(select) {
-		inset-block-start: calc(anchor(outside) + .25em);
+		inset-block-start: calc(anchor(outside) + .875cqmin);
 		inset-inline-start: anchor(self-start);
 
-		border: .15em white solid;
-		border-radius: .5em;
+		border: .525cqmin white solid;
+		border-radius: 1.75cqmin;
 
 		color: var(--on-surface);
 
@@ -255,15 +253,15 @@ main {
 	}
 
 	& > button > svg {
-		inline-size: .75em;
-		block-size: .75em;
+		inline-size: 2.625cqmin;
+		block-size: 2.625cqmin;
 		fill: currentColor;
 	}
 
 	& > option {
-		gap: 1em;
-		padding-block: 1em;
-		padding-inline: 2em;
+		gap: 3.5cqmin;
+		padding-block: 3.5cqmin;
+		padding-inline: 7cqmin;
 
 		&::checkmark {
 			order: 1;
@@ -296,7 +294,7 @@ main:has(#play-mode > option[value="opposite"]:checked) {
 	}
 
 	.aspect-ratio-lock {
-		grid-template-rows: .75em auto .75em;
+		grid-template-rows: 2.625cqmin auto 2.625cqmin;
 
 		& > #board {
 			& > .half {
@@ -368,7 +366,7 @@ main:has(#play-mode > option[value="side-by-side"]:checked) {
 	}
 
 	.aspect-ratio-lock {
-		grid-template-rows: .75em auto auto auto .75em;
+		grid-template-rows: 2.625cqmin auto auto auto 2.625cqmin;
 
 		& > #board {
 			& > .half {
@@ -443,10 +441,10 @@ main:has(#play-mode > option[value="side-by-side"]:checked) {
 }
 
 .hold {
-	--checker-radius-length: .875em;
+	--checker-radius-length: 3.0625cqmin;
 	--checker-diameter-length: calc(var(--checker-radius-length) * 2);
-	--gap: .0625em;
-	--padding: .125em;
+	--gap: .21875cqmin;
+	--padding: .4375cqmin;
 
 	display: flex;
 	flex-direction: row-reverse;
@@ -455,13 +453,13 @@ main:has(#play-mode > option[value="side-by-side"]:checked) {
 	inline-size: calc(var(--checkers-per-player) * var(--checker-thickness-length) + 2 * var(--padding) + (var(--checkers-per-player) - 1) * var(--gap));
 	block-size: var(--hold-width-length);
 	padding: var(--padding);
-	border-radius: .25em;
+	border-radius: .875cqmin;
 
 	background: var(--secondary-container);
 }
 
 #doubling-cube-face {
-	--die-side-length-length: 1.75em;
+	--die-side-length-length: 6.125cqmin;
 
 	display: flex;
 	align-items: center;
@@ -469,7 +467,7 @@ main:has(#play-mode > option[value="side-by-side"]:checked) {
 
 	inline-size: var(--die-side-length-length);
 	block-size: var(--die-side-length-length);
-	border-radius: .25em;
+	border-radius: .875cqmin;
 
 	color: var(--on-secondary-container);
 
@@ -514,14 +512,14 @@ main {
 						justify-content: space-between;
 
 						aspect-ratio: var(--half-width-unitless) / var(--half-height-unitless);
-						max-inline-size: 100cqi;
+						max-inline-size: 100cqmin;
 						block-size: 100%;
 						min-block-size: 0;
 						max-block-size: 100cqb;
 
 						background: hotpink;
 						background: var(--primary-container);
-						clip-path: fill-box inset(0 round .5em);
+						clip-path: fill-box inset(0 round 1.75cqmin);
 
 						& > .quadrant {
 							display: flex;
@@ -546,7 +544,7 @@ main {
 						aspect-ratio: var(--bar-width-unitless) / var(--half-height-unitless);
 						block-size: 100%;
 						min-block-size: 0;
-						border-radius: .5em;
+						border-radius: 1.75cqmin;
 
 						background: var(--secondary-container);
 					}
@@ -566,7 +564,7 @@ main {
 						z-index: 1;
 
 						display: flex;
-						gap: .5em;
+						gap: 1.75cqmin;
 						align-items: center;
 						justify-content: center;
 					}
@@ -603,13 +601,13 @@ main {
 		calc(
 			var(--is-top-point) * (var(--checker-diameter-length) * rem(var(--point) - 1, var(--point-per-side)))
 			+ var(--is-bottom-point) * (2 * var(--half-width-length) - var(--checker-diameter-length) * (rem(var(--point) - 1, var(--point-per-side)) + 1))
-			+ var(--is-right-point) * (var(--bar-width-length) + 1em)
+			+ var(--is-right-point) * (var(--bar-width-length) + 3.5cqmin)
 		);
 }
 
 /*noinspection CssInvalidFunction*/
 .drop-point {
-	--drop-point-diameter: .75em;
+	--drop-point-diameter: 2.625cqmin;
 
 	position: absolute;
 	translate:
@@ -617,7 +615,7 @@ main {
 			var(--translate-x) + (var(--checker-diameter-length) - var(--drop-point-diameter)) / 2
 		)
 		calc(
-			var(--is-bottom-point) * (var(--half-height-length) + 1.75em)
+			var(--is-bottom-point) * (var(--half-height-length) + 6.125cqmin)
 		);
 
 	aspect-ratio: 1;
@@ -668,7 +666,7 @@ main {
 	}
 
 	&[data-hit] {
-		translate: calc(var(--half-width-length) + .5em + (var(--bar-width-length) - var(--checker-diameter-length)) / 2) var(--translate-y);
+		translate: calc(var(--half-width-length) + 1.75cqmin + (var(--bar-width-length) - var(--checker-diameter-length)) / 2) var(--translate-y);
 
 		&[data-player="1"] {
 			--translate-y: calc(var(--checker-diameter-length) * 2.5);
@@ -711,10 +709,10 @@ main {
 	--color: var(--player-current-checker-text-color);
 	--alpha: 1;
 
-	padding-block: calc(10.5em / 16);
-	padding-inline: calc(21em / 16);
+	padding-block: calc(36.75cqmin / 16);
+	padding-inline: calc(73.5cqmin / 16);
 	border: none;
-	border-radius: .5em;
+	border-radius: 1.75cqmin;
 
 	color: hsl(from var(--color) h s l / var(--alpha));
 
@@ -740,11 +738,11 @@ main {
 	align-items: center;
 
 	inline-size: 100%;
-	margin-block-end: 1em;
+	margin-block-end: 3.5cqmin;
 
 	#dice-swap {
-		block-size: .75em;
-		margin-block: -.0625em;
+		block-size: 2.625cqmin;
+		margin-block: -.21875cqmin;
 		visibility: hidden;
 	}
 
@@ -768,8 +766,8 @@ main {
 
 	veyndan-die {
 		overflow: hidden;
-		flex: 0 1 calc(var(--die-side-length-length) + .875em);
-		margin-inline: .125em;
+		flex: 0 1 calc(var(--die-side-length-length) + 3.0625cqmin);
+		margin-inline: .4375cqmin;
 
 		&:nth-child(n + 3) {
 			animation: .5s .2s backwards flex-grow,
@@ -793,6 +791,6 @@ main {
 		margin-inline: 0;
 	}
 	to {
-		flex: 0 1 calc(var(--die-side-length-length) + .875em);
+		flex: 0 1 calc(var(--die-side-length-length) + 3.0625cqmin);
 	}
 }

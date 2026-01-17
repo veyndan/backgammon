@@ -1,20 +1,20 @@
 :host {
-	border-radius: .5em;
+	border-radius: 1.75cqmin;
 	background: var(--surface-container-high);
 	transition: background-color 400ms;
 
 	& > div {
 		display: grid;
 		grid-template-columns: 1fr auto;
-		gap: .5em .75em;
+		gap: 1.75cqmin 2.625cqmin;
 
-		padding-block: .5em;
-		padding-inline: .75em;
+		padding-block: 1.75cqmin;
+		padding-inline: 2.625cqmin;
 	}
 }
 
 veyndan-checker {
-	--checker-radius-length: .5em;
+	--checker-radius-length: 1.75cqmin;
 	--checker-diameter-length: calc(var(--checker-radius-length) * 2);
 
 	justify-self: end;
@@ -28,7 +28,7 @@ veyndan-checker {
 
 .points {
 	& > span:first-of-type > span {
-		padding-inline-start: .0625em;
+		padding-inline-start: .21875cqmin;
 		line-height: 2;
 		color: var(--on-surface-variable);
 		vertical-align: top;
