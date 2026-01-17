@@ -80,7 +80,7 @@
 	--checker-thickness-unitless: 5;
 	--checkers-per-player: 15;
 	--die-side-length-unitless: 36;
-	--half-height-unitless: calc(var(--point-height-unitless) * 2 + var(--checker-diameter-unitless) * 2 + var(--die-side-length-unitless) + 24);
+	--half-height-unitless: calc(var(--point-height-unitless) * 2 + var(--checker-diameter-unitless) * 2 + var(--die-side-length-unitless) + 61);
 	--half-width-unitless: calc(var(--point-width-unitless) * 6);
 	--hold-width-unitless: calc(var(--checker-diameter-unitless));
 	--point-count: 24;
@@ -181,7 +181,6 @@ main {
 
 .aspect-ratio-lock {
 	display: grid;
-	grid-template-rows: 2.625cqmin auto 2.625cqmin;
 	gap: 1.75cqmin;
 	align-items: stretch;
 	justify-content: center;
@@ -294,6 +293,7 @@ main:has(#play-mode > option[value="opposite"]:checked) {
 	}
 
 	.aspect-ratio-lock {
+		/* The template rows must total to 100cqmin. Don't forget to also add the grid gaps! */
 		grid-template-rows: 2.625cqmin auto 2.625cqmin;
 
 		& > #board {
@@ -366,6 +366,7 @@ main:has(#play-mode > option[value="side-by-side"]:checked) {
 	}
 
 	.aspect-ratio-lock {
+		/* TODO The template rows must total to 100cqmin. Don't forget to also add the grid gaps! */
 		grid-template-rows: 2.625cqmin auto auto auto 2.625cqmin;
 
 		& > #board {
