@@ -6,9 +6,10 @@
 		"preview": "vite preview",
 		"test": "npx tsc && node --test"
 	},
+	"//": "Forcing stylelint version until https://github.com/kristerkari/stylelint-declaration-block-no-ignored-properties/issues/311 is fixed",
 	"devDependencies": {
 		"@types/tape": "5.8.1",
-		"stylelint": "17.0.0",
+		"stylelint": "^16.26.1",
 		"stylelint-config-clean-order": "8.0.0",
 		"stylelint-declaration-block-no-ignored-properties": "2.8.0",
 		"stylelint-plugin-logical-css": "1.2.3",
