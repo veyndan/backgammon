@@ -223,8 +223,6 @@ main[data-player="2"]:has(#play-mode > select > option[value="opposite"]:checked
 }
 
 main:has(#play-mode > select > option[value="side-by-side"]:checked) {
-	flex-direction: column;
-
 	#players, #timer, #play-mode {
 		writing-mode: unset;
 	}
