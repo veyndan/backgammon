@@ -90,14 +90,14 @@
 	--point-per-side: calc(var(--point-count) / 2);
 	--point-width-unitless: var(--checker-diameter-unitless);
 
-	--bar-width-px: calc(var(--bar-width-unitless) * 1px);
-	--checker-diameter-px: calc(var(--checker-diameter-unitless) * 1px);
-	--checker-radius-px: calc(var(--checker-radius-unitless) * 1px);
-	--checker-thickness-px: calc(var(--checker-thickness-unitless) * 1px);
-	--die-side-length-px: calc(var(--die-side-length-unitless) * 1px);
-	--half-height-px: calc(var(--half-height-unitless) * 1px);
-	--half-width-px: calc(var(--half-width-unitless) * 1px);
-	--hold-width-px: calc(var(--hold-width-unitless) * 1px);
+	--bar-width-length: calc(var(--bar-width-unitless) * 1px);
+	--checker-diameter-length: calc(var(--checker-diameter-unitless) * 1px);
+	--checker-radius-length: calc(var(--checker-radius-unitless) * 1px);
+	--checker-thickness-length: calc(var(--checker-thickness-unitless) * 1px);
+	--die-side-length-length: calc(var(--die-side-length-unitless) * 1px);
+	--half-height-length: calc(var(--half-height-unitless) * 1px);
+	--half-width-length: calc(var(--half-width-unitless) * 1px);
+	--hold-width-length: calc(var(--hold-width-unitless) * 1px);
 
 	color-scheme: light dark;
 }
@@ -241,8 +241,8 @@ main:has(#play-mode > select > option[value="side-by-side"]:checked) {
 }
 
 .hold {
-	--checker-radius-px: 14px;
-	--checker-diameter-px: calc(var(--checker-radius-px) * 2);
+	--checker-radius-length: 14px;
+	--checker-diameter-length: calc(var(--checker-radius-length) * 2);
 	--gap: 1px;
 	--padding: 2px;
 
@@ -250,8 +250,8 @@ main:has(#play-mode > select > option[value="side-by-side"]:checked) {
 	flex-direction: row-reverse;
 	gap: var(--gap);
 
-	inline-size: calc(var(--checkers-per-player) * var(--checker-thickness-px) + 2 * var(--padding) + (var(--checkers-per-player) - 1) * var(--gap));
-	block-size: var(--hold-width-px);
+	inline-size: calc(var(--checkers-per-player) * var(--checker-thickness-length) + 2 * var(--padding) + (var(--checkers-per-player) - 1) * var(--gap));
+	block-size: var(--hold-width-length);
 	padding: var(--padding);
 	border-radius: 4px;
 
@@ -259,14 +259,14 @@ main:has(#play-mode > select > option[value="side-by-side"]:checked) {
 }
 
 #doubling-cube-face {
-	--die-side-length-px: 28px;
+	--die-side-length-length: 28px;
 
 	display: flex;
 	align-items: center;
 	justify-content: center;
 
-	inline-size: var(--die-side-length-px);
-	block-size: var(--die-side-length-px);
+	inline-size: var(--die-side-length-length);
+	block-size: var(--die-side-length-length);
 	border-radius: 4px;
 
 	color: var(--on-secondary-container);
@@ -418,9 +418,9 @@ main {
 	--is-right-point: round(down, abs(calc((var(--point-max) + var(--point-min)) / 2) - var(--point)) / 6, 1);
 	--translate-x:
 		calc(
-			var(--is-top-point) * (var(--checker-diameter-px) * rem(var(--point) - 1, var(--point-per-side)))
-			+ var(--is-bottom-point) * (2 * var(--half-width-px) - var(--checker-diameter-px) * (rem(var(--point) - 1, var(--point-per-side)) + 1))
-			+ var(--is-right-point) * (var(--bar-width-px) + 16px)
+			var(--is-top-point) * (var(--checker-diameter-length) * rem(var(--point) - 1, var(--point-per-side)))
+			+ var(--is-bottom-point) * (2 * var(--half-width-length) - var(--checker-diameter-length) * (rem(var(--point) - 1, var(--point-per-side)) + 1))
+			+ var(--is-right-point) * (var(--bar-width-length) + 16px)
 		);
 }
 
@@ -431,10 +431,10 @@ main {
 	position: absolute;
 	translate:
 		calc(
-			var(--translate-x) + (var(--checker-diameter-px) - var(--drop-point-diameter)) / 2
+			var(--translate-x) + (var(--checker-diameter-length) - var(--drop-point-diameter)) / 2
 		)
 		calc(
-			var(--is-bottom-point) * (var(--half-height-px) + 28px)
+			var(--is-bottom-point) * (var(--half-height-length) + 28px)
 		);
 
 	aspect-ratio: 1;
@@ -485,20 +485,20 @@ main {
 	}
 
 	&[data-hit] {
-		translate: calc(var(--half-width-px) + 8px + (var(--bar-width-px) - var(--checker-diameter-px)) / 2) var(--translate-y);
+		translate: calc(var(--half-width-length) + 8px + (var(--bar-width-length) - var(--checker-diameter-length)) / 2) var(--translate-y);
 
 		&[data-player="1"] {
-			--translate-y: calc(var(--checker-diameter-px) * 2.5);
+			--translate-y: calc(var(--checker-diameter-length) * 2.5);
 		}
 
 		&[data-player="2"] {
-			--translate-y: calc(var(--half-height-px) - var(--checker-diameter-px) * 3.5);
+			--translate-y: calc(var(--half-height-length) - var(--checker-diameter-length) * 3.5);
 		}
 	}
 
 	&:not([data-hit]) {
-		--top-point-translate-y: calc(var(--checker-diameter-px) * min(var(--point-stack-index), ((5 - 1) * var(--point-stack-index)) / max(var(--point-stack-count) - 1, 1)));
-		--bottom-point-translate-y: calc((var(--half-height-px) - var(--top-point-translate-y) - var(--checker-diameter-px)));
+		--top-point-translate-y: calc(var(--checker-diameter-length) * min(var(--point-stack-index), ((5 - 1) * var(--point-stack-index)) / max(var(--point-stack-count) - 1, 1)));
+		--bottom-point-translate-y: calc((var(--half-height-length) - var(--top-point-translate-y) - var(--checker-diameter-length)));
 
 		--top-point-mask-position-vertical: calc(150% + -1 * round(down, calc(var(--point-stack-count) / 6), 1) * (1 - round(down, calc((var(--point-stack-index) + 1) / var(--point-stack-count)), 1)) * (105% - ((4 / max(var(--point-stack-count) - 1, 1)) * 100%)));
 		--bottom-point-mask-position-vertical: calc(100% - var(--top-point-mask-position-vertical));
@@ -511,13 +511,13 @@ main {
 			);
 		mask-image:
 			radial-gradient(
-				black var(--checker-radius-px),
-				transparent var(--checker-radius-px)
+				black var(--checker-radius-length),
+				transparent var(--checker-radius-length)
 			),
 			radial-gradient(
 				circle at center calc(var(--is-top-point) * var(--top-point-mask-position-vertical) + var(--is-bottom-point) * var(--bottom-point-mask-position-vertical)),
-				black var(--checker-radius-px),
-				transparent var(--checker-radius-px)
+				black var(--checker-radius-length),
+				transparent var(--checker-radius-length)
 			);
 		mask-composite: subtract;
 	}
@@ -585,7 +585,7 @@ main {
 
 	veyndan-die {
 		overflow: hidden;
-		flex: 0 1 calc(var(--die-side-length-px) + 14px);
+		flex: 0 1 calc(var(--die-side-length-length) + 14px);
 		margin-inline: -2px;
 
 		&:nth-child(n + 3) {
@@ -610,6 +610,6 @@ main {
 		margin-inline: 0;
 	}
 	to {
-		flex: 0 1 calc(var(--die-side-length-px) + 14px);
+		flex: 0 1 calc(var(--die-side-length-length) + 14px);
 	}
 }
