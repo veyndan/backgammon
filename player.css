@@ -10,31 +10,31 @@
 
 		padding-block: 8px;
 		padding-inline: 12px;
+
+		& > veyndan-checker {
+			--checker-radius-px: 8px;
+			--checker-diameter-px: calc(var(--checker-radius-px) * 2);
+
+			justify-self: end;
+		}
+
+		& > .score {
+			display: flex;
+			flex-direction: column;
+			justify-content: end;
+		}
+
+		& > .points {
+			& > span:first-of-type > span {
+				padding-inline-start: 1px;
+				line-height: 2;
+				color: var(--on-surface-variable);
+				vertical-align: top;
+			}
+		}
+
+		& > .pip {
+			align-items: end;
+		}
 	}
-}
-
-veyndan-checker {
-	--checker-radius-px: 8px;
-	--checker-diameter-px: calc(var(--checker-radius-px) * 2);
-
-	justify-self: end;
-}
-
-.score {
-	display: flex;
-	flex-direction: column;
-	justify-content: end;
-}
-
-.points {
-	& > span:first-of-type > span {
-		padding-inline-start: 1px;
-		line-height: 2;
-		color: var(--on-surface-variable);
-		vertical-align: top;
-	}
-}
-
-.pip {
-	align-items: end;
 }

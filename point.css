@@ -1,9 +1,9 @@
 svg {
 	inline-size: 100%;
 	block-size: 100%;
-}
 
-polyline {
-	fill: currentColor;
-	stroke: currentColor;
+	& > polyline {
+		fill: currentColor;
+		stroke: currentColor;
+	}
 }
