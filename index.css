@@ -191,6 +191,17 @@ html {
 			align-items: center;
 			justify-content: center;
 
+			&:has(> svg > foreignObject > .main > #play-mode > select > option[value="opposite"]:checked) {
+				& > svg > foreignObject > .main {
+					& > #players, & > #timer {
+						writing-mode: sideways-lr;
+					}
+					& > #play-mode {
+						writing-mode: sideways-rl;
+					}
+				}
+			}
+
 			&:has(> svg > foreignObject > .main > #play-mode > select > option[value="side-by-side"]:checked) {
 				&[data-player="1"] > svg > foreignObject > .main > #controls > div {
 					&:first-of-type {
@@ -199,12 +210,6 @@ html {
 
 					&:last-of-type {
 						grid-column: 3;
-					}
-				}
-
-				& > svg > foreignObject > .main {
-					& > #players, & > #timer, & > #play-mode {
-						writing-mode: unset;
 					}
 				}
 			}
@@ -269,8 +274,6 @@ html {
 							grid-row: 2;
 							gap: 8px;
 							align-self: center;
-
-							writing-mode: sideways-lr;
 						}
 
 						& > #timer {
@@ -284,8 +287,6 @@ html {
 							padding-block: 4px;
 							padding-inline: 14px;
 							border-radius: 8px;
-
-							writing-mode: sideways-lr;
 
 							background: var(--surface-container-high);
 
@@ -399,7 +400,6 @@ html {
 							grid-column: 7;
 							grid-row: 2;
 							align-self: center;
-							writing-mode: sideways-rl;
 						}
 
 						& > #controls {
