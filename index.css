@@ -102,50 +102,22 @@
 	color-scheme: light dark;
 }
 
-html {
-	block-size: 100dvb;
-	font: 16px/1.5 system-ui;
-}
-
-body {
-	display: flex;
-	flex-direction: column;
-	gap: 8px;
-
-	block-size: 100%;
-	padding: 16px;
-
-	& > :not(main) > * {
-		margin-inline: auto;
-		padding-inline: 1rem;
+@keyframes fade-in {
+	from {
+		opacity: 0;
+	}
+	to {
+		opacity: 1;
 	}
 }
 
-header > nav {
-	& > ul {
-		display: flex;
-		flex-wrap: wrap;
-		gap: 1em;
-
-		padding-inline: 0;
-
-		font-weight: bold;
-		list-style-type: none;
-
-		& > li:first-child:has(> a[href="/index.html"]) {
-			margin-inline-end: auto;
-		}
+@keyframes flex-grow {
+	from {
+		flex: 0;
+		margin-inline: 0;
 	}
-
-	a {
-		&:any-link {
-			color: LinkText;
-		}
-
-		&[aria-current="page"] {
-			color: inherit;
-			text-decoration: inherit;
-		}
+	to {
+		flex: 0 1 calc(var(--die-side-length-length) + 14px);
 	}
 }
 
@@ -167,447 +139,476 @@ button {
 	--player-current-checker-text-color: var(--surface-container-lowest);
 }
 
-#players {
-	display: flex;
-	grid-column: 1;
-	grid-row: 2;
-	gap: 8px;
-	align-self: center;
+html {
+	block-size: 100dvb;
+	font: 16px/1.5 system-ui;
 
-	writing-mode: sideways-lr;
-}
+	& > body {
+		display: flex;
+		flex-direction: column;
+		gap: 8px;
 
-#timer {
-	display: flex;
-	grid-column: 2;
-	grid-row: 2;
-	gap: 8px;
-	align-items: center;
-	align-self: center;
+		block-size: 100%;
+		padding: 16px;
 
-	padding-block: 4px;
-	padding-inline: 14px;
-	border-radius: 8px;
-
-	writing-mode: sideways-lr;
-
-	background: var(--surface-container-high);
-
-	& > #move {
-		color: var(--secondary);
-	}
-}
-
-#play-mode {
-	grid-column: 7;
-	grid-row: 2;
-	align-self: center;
-	writing-mode: sideways-rl;
-}
-
-main[data-player="1"] #players > veyndan-player[data-player="1"],
-main[data-player="2"] #players > veyndan-player[data-player="2"] {
-	background: var(--primary-container);
-}
-
-main[data-player="2"]:has(#play-mode > select > option[value="opposite"]:checked) > svg > foreignObject > .main > #controls > div {
-	rotate: .5turn;
-
-	&:first-of-type {
-		grid-column: 5;
-	}
-
-	&:last-of-type {
-		grid-column: 3;
-	}
-}
-
-main:has(#play-mode > select > option[value="side-by-side"]:checked) {
-	#players, #timer, #play-mode {
-		writing-mode: unset;
-	}
-
-	&[data-player="1"] > svg > foreignObject > .main > #controls > div {
-		&:first-of-type {
-			grid-column: 5;
+		& > :not(main) > * {
+			margin-inline: auto;
+			padding-inline: 1rem;
 		}
 
-		&:last-of-type {
-			grid-column: 3;
-		}
-	}
-}
+		& > header > nav {
+			& > ul {
+				display: flex;
+				flex-wrap: wrap;
+				gap: 1em;
 
-.hold {
-	--checker-radius-length: 14px;
-	--checker-diameter-length: calc(var(--checker-radius-length) * 2);
-	--gap: 1px;
-	--padding: 2px;
+				padding-inline: 0;
 
-	display: flex;
-	flex-direction: row-reverse;
-	gap: var(--gap);
+				font-weight: bold;
+				list-style-type: none;
 
-	inline-size: calc(var(--checkers-per-player) * var(--checker-thickness-length) + 2 * var(--padding) + (var(--checkers-per-player) - 1) * var(--gap));
-	block-size: var(--hold-width-length);
-	padding: var(--padding);
-	border-radius: 4px;
+				& > li:first-child:has(> a[href="/index.html"]) {
+					margin-inline-end: auto;
+				}
+			}
 
-	background: var(--secondary-container);
-}
-
-#doubling-cube-face {
-	--die-side-length-length: 28px;
-
-	display: flex;
-	align-items: center;
-	justify-content: center;
-
-	inline-size: var(--die-side-length-length);
-	block-size: var(--die-side-length-length);
-	border-radius: 4px;
-
-	color: var(--on-secondary-container);
-
-	background: var(--secondary-container);
-}
-
-main {
-	overflow: auto;
-	display: flex;
-	flex: 1;
-	align-items: center;
-	justify-content: center;
-
-	& > svg {
-		touch-action: none;
-		max-block-size: 100%;
-		margin-inline: 8px;
-
-		& > foreignObject {
-			inline-size: 100%;
-			block-size: 100%;
-
-			& > .main {
-				overflow: auto;
-				display: grid;
-				grid-template-rows: 12px auto 12px;
-				gap: 8px;
-				align-items: stretch;
-				justify-content: center;
-
-				block-size: 100%;
-				margin-inline: 8px;
-
-				/* TODO Add additional 8px spacing between board and timer & board and play mode. */
-				& > #board {
-					display: contents;
-
-					& > .half {
-						display: flex;
-						grid-row: 2;
-						flex-direction: column;
-						justify-content: space-between;
-
-						aspect-ratio: var(--half-width-unitless) / var(--half-height-unitless);
-						block-size: 100%;
-						min-block-size: 0;
-
-						background: var(--primary-container);
-						clip-path: fill-box inset(0 round 8px);
-
-						&#outer-board {
-							grid-column: 3;
-						}
-
-						&#inner-board {
-							grid-column: 5;
-						}
-
-						& > .quadrant {
-							display: flex;
-
-							& > veyndan-point {
-								&:nth-child(even) {
-									color: hsl(from var(--secondary) h s 50%);
-								}
-
-								&:nth-child(odd) {
-									color: var(--primary);
-								}
-							}
-
-							&:last-of-type {
-								transform: scale(-1, -1);
-							}
-						}
-					}
-
-					& > .bar {
-						grid-column: 4;
-						grid-row: 2;
-
-						aspect-ratio: var(--bar-width-unitless) / var(--half-height-unitless);
-						block-size: 100%;
-						min-block-size: 0;
-						border-radius: 8px;
-
-						background: var(--secondary-container);
-					}
-
-					& > #sidebar {
-						display: flex;
-						grid-column: 6;
-						grid-row: 2;
-						align-items: center;
-						justify-content: space-evenly;
-
-						writing-mode: sideways-rl;
-					}
+			a {
+				&:any-link {
+					color: LinkText;
 				}
 
-				& > #controls {
-					display: contents;
-
-					& > div {
-						z-index: 1;
-
-						display: flex;
-						grid-row: 2;
-						gap: 8px;
-						align-items: center;
-						justify-content: center;
-
-						&:first-of-type {
-							grid-column: 3;
-						}
-
-						&:last-of-type {
-							grid-column: 5;
-						}
-					}
-				}
-
-				& > #checkers {
-					pointer-events: none;
-					z-index: 2;
-					grid-column: 3 / span 3;
-					grid-row: 2;
-				}
-
-				& > #drop-points {
-					pointer-events: none;
-					grid-column: 3 / span 3;
-					grid-row: 1 / -1;
+				&[aria-current="page"] {
+					color: inherit;
+					text-decoration: inherit;
 				}
 			}
 		}
-	}
-}
 
-/*noinspection CssInvalidFunction*/
-.drop-point,
-#checkers > *:not([data-hit]) {
-	/* Returns 1 if the --point is in [1,12], else 0. */
-	--is-bottom-point: calc(1 - var(--is-top-point));
-	/* Returns 1 if the --point is in [13,24], else 0. */
-	--is-top-point: round(down, calc((var(--point) - 1) / var(--point-per-side)), 1);
-	/* Returns 1 if the --point is in [1,6] ∪ [19,24], else 0. */
-	--is-right-point: round(down, abs(calc((var(--point-max) + var(--point-min)) / 2) - var(--point)) / 6, 1);
-	--translate-x:
-		calc(
-			var(--is-top-point) * (var(--checker-diameter-length) * rem(var(--point) - 1, var(--point-per-side)))
-			+ var(--is-bottom-point) * (2 * var(--half-width-length) - var(--checker-diameter-length) * (rem(var(--point) - 1, var(--point-per-side)) + 1))
-			+ var(--is-right-point) * (var(--bar-width-length) + 16px)
-		);
-}
+		& > main {
+			overflow: auto;
+			display: flex;
+			flex: 1;
+			align-items: center;
+			justify-content: center;
 
-/*noinspection CssInvalidFunction*/
-.drop-point {
-	--drop-point-diameter: 12px;
+			&:has(> svg > foreignObject > .main > #play-mode > select > option[value="side-by-side"]:checked) {
+				&[data-player="1"] > svg > foreignObject > .main > #controls > div {
+					&:first-of-type {
+						grid-column: 5;
+					}
 
-	position: absolute;
-	translate:
-		calc(
-			var(--translate-x) + (var(--checker-diameter-length) - var(--drop-point-diameter)) / 2
-		)
-		calc(
-			var(--is-bottom-point) * (var(--half-height-length) + 28px)
-		);
+					&:last-of-type {
+						grid-column: 3;
+					}
+				}
 
-	aspect-ratio: 1;
-	block-size: var(--drop-point-diameter);
-	border-radius: 50%;
+				& > svg > foreignObject > .main {
+					& > #players, & > #timer, & > #play-mode {
+						writing-mode: unset;
+					}
+				}
+			}
 
-	background: darkorange;
-}
+			&[data-player="1"] > svg > foreignObject > .main > #players > veyndan-player[data-player="1"],
+			&[data-player="2"] > svg > foreignObject > .main > #players > veyndan-player[data-player="2"] {
+				background: var(--primary-container);
+			}
 
-/*noinspection CssInvalidFunction*/
-#checkers > * {
-	pointer-events: auto;
+			&[data-player="2"]:has(> svg > foreignObject > .main > #play-mode > select > option[value="opposite"]:checked) > svg > foreignObject > .main > #controls > div {
+				rotate: .5turn;
 
-	position: absolute;
+				&:first-of-type {
+					grid-column: 5;
+				}
 
-	display: flex;
-	align-items: center;
-	justify-content: center;
+				&:last-of-type {
+					grid-column: 3;
+				}
+			}
 
-	transition: translate .3s;
+			& > svg {
+				touch-action: none;
+				max-block-size: 100%;
+				margin-inline: 8px;
 
-	&:not([data-permissible-destination-points="[]"]) {
-		&:hover {
-			cursor: pointer;
+				& > foreignObject {
+					inline-size: 100%;
+					block-size: 100%;
+
+					& > .main {
+						overflow: auto;
+						display: grid;
+						grid-template-rows: 12px auto 12px;
+						gap: 8px;
+						align-items: stretch;
+						justify-content: center;
+
+						block-size: 100%;
+						margin-inline: 8px;
+
+						/*noinspection CssInvalidFunction*/
+						.drop-point,
+						#checkers > *:not([data-hit]) {
+							/* Returns 1 if the --point is in [1,12], else 0. */
+							--is-bottom-point: calc(1 - var(--is-top-point));
+							/* Returns 1 if the --point is in [13,24], else 0. */
+							--is-top-point: round(down, calc((var(--point) - 1) / var(--point-per-side)), 1);
+							/* Returns 1 if the --point is in [1,6] ∪ [19,24], else 0. */
+							--is-right-point: round(down, abs(calc((var(--point-max) + var(--point-min)) / 2) - var(--point)) / 6, 1);
+							--translate-x:
+								calc(
+									var(--is-top-point) * (var(--checker-diameter-length) * rem(var(--point) - 1, var(--point-per-side)))
+									+ var(--is-bottom-point) * (2 * var(--half-width-length) - var(--checker-diameter-length) * (rem(var(--point) - 1, var(--point-per-side)) + 1))
+									+ var(--is-right-point) * (var(--bar-width-length) + 16px)
+								);
+						}
+
+						& > #players {
+							display: flex;
+							grid-column: 1;
+							grid-row: 2;
+							gap: 8px;
+							align-self: center;
+
+							writing-mode: sideways-lr;
+						}
+
+						& > #timer {
+							display: flex;
+							grid-column: 2;
+							grid-row: 2;
+							gap: 8px;
+							align-items: center;
+							align-self: center;
+
+							padding-block: 4px;
+							padding-inline: 14px;
+							border-radius: 8px;
+
+							writing-mode: sideways-lr;
+
+							background: var(--surface-container-high);
+
+							& > #move {
+								color: var(--secondary);
+							}
+						}
+
+						/* TODO Add additional 8px spacing between board and timer & board and play mode. */
+						& > #board {
+							display: contents;
+
+							& > .half {
+								display: flex;
+								grid-row: 2;
+								flex-direction: column;
+								justify-content: space-between;
+
+								aspect-ratio: var(--half-width-unitless) / var(--half-height-unitless);
+								block-size: 100%;
+								min-block-size: 0;
+
+								background: var(--primary-container);
+								clip-path: fill-box inset(0 round 8px);
+
+								&#outer-board {
+									grid-column: 3;
+								}
+
+								&#inner-board {
+									grid-column: 5;
+								}
+
+								& > .quadrant {
+									display: flex;
+
+									&:last-of-type {
+										transform: scale(-1, -1);
+									}
+
+									& > veyndan-point {
+										&:nth-child(even) {
+											color: hsl(from var(--secondary) h s 50%);
+										}
+
+										&:nth-child(odd) {
+											color: var(--primary);
+										}
+									}
+								}
+							}
+
+							& > .bar {
+								grid-column: 4;
+								grid-row: 2;
+
+								aspect-ratio: var(--bar-width-unitless) / var(--half-height-unitless);
+								block-size: 100%;
+								min-block-size: 0;
+								border-radius: 8px;
+
+								background: var(--secondary-container);
+							}
+
+							& > #sidebar {
+								display: flex;
+								grid-column: 6;
+								grid-row: 2;
+								align-items: center;
+								justify-content: space-evenly;
+
+								writing-mode: sideways-rl;
+
+								& > .hold {
+									--checker-radius-length: 14px;
+									--checker-diameter-length: calc(var(--checker-radius-length) * 2);
+									--gap: 1px;
+									--padding: 2px;
+
+									display: flex;
+									flex-direction: row-reverse;
+									gap: var(--gap);
+
+									inline-size: calc(var(--checkers-per-player) * var(--checker-thickness-length) + 2 * var(--padding) + (var(--checkers-per-player) - 1) * var(--gap));
+									block-size: var(--hold-width-length);
+									padding: var(--padding);
+									border-radius: 4px;
+
+									background: var(--secondary-container);
+								}
+
+								& > #doubling-cube-face {
+									--die-side-length-length: 28px;
+
+									display: flex;
+									align-items: center;
+									justify-content: center;
+
+									inline-size: var(--die-side-length-length);
+									block-size: var(--die-side-length-length);
+									border-radius: 4px;
+
+									color: var(--on-secondary-container);
+
+									background: var(--secondary-container);
+								}
+							}
+						}
+
+						& > #play-mode {
+							grid-column: 7;
+							grid-row: 2;
+							align-self: center;
+							writing-mode: sideways-rl;
+						}
+
+						& > #controls {
+							display: contents;
+
+							& > div {
+								z-index: 1;
+
+								display: flex;
+								grid-row: 2;
+								gap: 8px;
+								align-items: center;
+								justify-content: center;
+
+								&:first-of-type {
+									grid-column: 3;
+								}
+
+								&:last-of-type {
+									grid-column: 5;
+								}
+
+								& > button {
+									--surface: var(--player-current-checker-background);
+									--color: var(--player-current-checker-text-color);
+									--alpha: 1;
+
+									padding-block: 10.5px;
+									padding-inline: 21px;
+									border: none;
+									border-radius: 8px;
+
+									color: hsl(from var(--color) h s l / var(--alpha));
+
+									background: hsl(from var(--surface) h s l / var(--alpha));
+
+									&:disabled {
+										--alpha: .5;
+									}
+
+									&:hover:not(:disabled) {
+										--alpha: .85;
+									}
+
+									&#confirm {
+										--surface: hsl(149 83% 28%);
+										--color: hsl(0 0% 100%);
+									}
+								}
+
+								& > #dice-container {
+									display: none;
+									flex-direction: column;
+									align-items: center;
+
+									inline-size: 100%;
+									margin-block-end: 16px;
+
+									&:has(> #dice > veyndan-die:not(.rolling):first-child:nth-last-child(2)) {
+										cursor: pointer;
+
+										& > #dice-swap {
+											visibility: visible;
+										}
+									}
+
+									& > #dice-swap {
+										block-size: 12px;
+										margin-block: -1px;
+										visibility: hidden;
+									}
+
+									& > #dice {
+										display: flex;
+										justify-content: center;
+
+										margin: 0;
+										padding: 0;
+
+										list-style-type: none;
+
+										& > veyndan-die {
+											overflow: hidden;
+											flex: 0 1 calc(var(--die-side-length-length) + 14px);
+											margin-inline: -2px;
+
+											&:nth-child(n + 3) {
+												animation: .5s .2s backwards flex-grow,
+												.2s .8125s backwards fade-in;
+											}
+										}
+									}
+								}
+							}
+						}
+
+						& > #checkers {
+							pointer-events: none;
+							z-index: 2;
+							grid-column: 3 / span 3;
+							grid-row: 2;
+
+							/*noinspection CssInvalidFunction*/
+							& > veyndan-checker {
+								pointer-events: auto;
+
+								position: absolute;
+
+								display: flex;
+								align-items: center;
+								justify-content: center;
+
+								transition: translate .3s;
+
+								&:not([data-permissible-destination-points="[]"]) {
+									&:hover {
+										cursor: pointer;
+									}
+
+									&.dragging {
+										cursor: move;
+										filter: drop-shadow(2px 4px 4px hsl(from var(--surface) h s l / .3));
+										transition: filter .3s;
+									}
+								}
+
+								&[data-permissible-destination-points="[]"]:hover {
+									cursor: not-allowed;
+								}
+
+								& > text {
+									user-select: none;
+									dominant-baseline: central;
+									text-anchor: middle;
+									fill: currentColor;
+
+									/* Hide node from accessibility tree when empty. */
+									&:empty {
+										display: none;
+									}
+								}
+
+								&[data-hit] {
+									translate: calc(var(--half-width-length) + 8px + (var(--bar-width-length) - var(--checker-diameter-length)) / 2) var(--translate-y);
+
+									&[data-player="1"] {
+										--translate-y: calc(var(--checker-diameter-length) * 2.5);
+									}
+
+									&[data-player="2"] {
+										--translate-y: calc(var(--half-height-length) - var(--checker-diameter-length) * 3.5);
+									}
+								}
+
+								&:not([data-hit]) {
+									--top-point-translate-y: calc(var(--checker-diameter-length) * min(var(--point-stack-index), ((5 - 1) * var(--point-stack-index)) / max(var(--point-stack-count) - 1, 1)));
+									--bottom-point-translate-y: calc((var(--half-height-length) - var(--top-point-translate-y) - var(--checker-diameter-length)));
+
+									--top-point-mask-position-vertical: calc(150% + -1 * round(down, calc(var(--point-stack-count) / 6), 1) * (1 - round(down, calc((var(--point-stack-index) + 1) / var(--point-stack-count)), 1)) * (105% - ((4 / max(var(--point-stack-count) - 1, 1)) * 100%)));
+									--bottom-point-mask-position-vertical: calc(100% - var(--top-point-mask-position-vertical));
+
+									translate:
+										var(--translate-x)
+										calc(
+											var(--is-top-point) * var(--top-point-translate-y)
+											+ var(--is-bottom-point) * var(--bottom-point-translate-y)
+										);
+									mask-image:
+										radial-gradient(
+											black var(--checker-radius-length),
+											transparent var(--checker-radius-length)
+										),
+										radial-gradient(
+											circle at center calc(var(--is-top-point) * var(--top-point-mask-position-vertical) + var(--is-bottom-point) * var(--bottom-point-mask-position-vertical)),
+											black var(--checker-radius-length),
+											transparent var(--checker-radius-length)
+										);
+									mask-composite: subtract;
+								}
+							}
+						}
+
+						& > #drop-points {
+							pointer-events: none;
+							grid-column: 3 / span 3;
+							grid-row: 1 / -1;
+
+							& > .drop-point {
+								--drop-point-diameter: 12px;
+
+								position: absolute;
+								translate:
+									calc(
+										var(--translate-x) + (var(--checker-diameter-length) - var(--drop-point-diameter)) / 2
+									)
+									calc(
+										var(--is-bottom-point) * (var(--half-height-length) + 28px)
+									);
+
+								aspect-ratio: 1;
+								block-size: var(--drop-point-diameter);
+								border-radius: 50%;
+
+								background: darkorange;
+							}
+						}
+					}
+				}
+			}
 		}
-
-		&.dragging {
-			cursor: move;
-			filter: drop-shadow(2px 4px 4px hsl(from var(--surface) h s l / .3));
-			transition: filter .3s;
-		}
-	}
-
-	&[data-permissible-destination-points="[]"]:hover {
-		cursor: not-allowed;
-	}
-
-	& > text {
-		user-select: none;
-		dominant-baseline: central;
-		text-anchor: middle;
-		fill: currentColor;
-
-		/* Hide node from accessibility tree when empty. */
-		&:empty {
-			display: none;
-		}
-	}
-
-	&[data-hit] {
-		translate: calc(var(--half-width-length) + 8px + (var(--bar-width-length) - var(--checker-diameter-length)) / 2) var(--translate-y);
-
-		&[data-player="1"] {
-			--translate-y: calc(var(--checker-diameter-length) * 2.5);
-		}
-
-		&[data-player="2"] {
-			--translate-y: calc(var(--half-height-length) - var(--checker-diameter-length) * 3.5);
-		}
-	}
-
-	&:not([data-hit]) {
-		--top-point-translate-y: calc(var(--checker-diameter-length) * min(var(--point-stack-index), ((5 - 1) * var(--point-stack-index)) / max(var(--point-stack-count) - 1, 1)));
-		--bottom-point-translate-y: calc((var(--half-height-length) - var(--top-point-translate-y) - var(--checker-diameter-length)));
-
-		--top-point-mask-position-vertical: calc(150% + -1 * round(down, calc(var(--point-stack-count) / 6), 1) * (1 - round(down, calc((var(--point-stack-index) + 1) / var(--point-stack-count)), 1)) * (105% - ((4 / max(var(--point-stack-count) - 1, 1)) * 100%)));
-		--bottom-point-mask-position-vertical: calc(100% - var(--top-point-mask-position-vertical));
-
-		translate:
-			var(--translate-x)
-			calc(
-				var(--is-top-point) * var(--top-point-translate-y)
-				+ var(--is-bottom-point) * var(--bottom-point-translate-y)
-			);
-		mask-image:
-			radial-gradient(
-				black var(--checker-radius-length),
-				transparent var(--checker-radius-length)
-			),
-			radial-gradient(
-				circle at center calc(var(--is-top-point) * var(--top-point-mask-position-vertical) + var(--is-bottom-point) * var(--bottom-point-mask-position-vertical)),
-				black var(--checker-radius-length),
-				transparent var(--checker-radius-length)
-			);
-		mask-composite: subtract;
-	}
-}
-
-#controls button {
-	--surface: var(--player-current-checker-background);
-	--color: var(--player-current-checker-text-color);
-	--alpha: 1;
-
-	padding-block: 10.5px;
-	padding-inline: 21px;
-	border: none;
-	border-radius: 8px;
-
-	color: hsl(from var(--color) h s l / var(--alpha));
-
-	background: hsl(from var(--surface) h s l / var(--alpha));
-
-	&:disabled {
-		--alpha: .5;
-	}
-
-	&:hover:not(:disabled) {
-		--alpha: .85;
-	}
-
-	&#confirm {
-		--surface: hsl(149 83% 28%);
-		--color: hsl(0 0% 100%);
-	}
-}
-
-#dice-container {
-	display: none;
-	flex-direction: column;
-	align-items: center;
-
-	inline-size: 100%;
-	margin-block-end: 16px;
-
-	#dice-swap {
-		block-size: 12px;
-		margin-block: -1px;
-		visibility: hidden;
-	}
-
-	&:has(#dice :not(.rolling):first-child:nth-last-child(2)) {
-		cursor: pointer;
-
-		#dice-swap {
-			visibility: visible;
-		}
-	}
-}
-
-#dice {
-	display: flex;
-	justify-content: center;
-
-	margin: 0;
-	padding: 0;
-
-	list-style-type: none;
-
-	veyndan-die {
-		overflow: hidden;
-		flex: 0 1 calc(var(--die-side-length-length) + 14px);
-		margin-inline: -2px;
-
-		&:nth-child(n + 3) {
-			animation: .5s .2s backwards flex-grow,
-				.2s .8125s backwards fade-in;
-		}
-	}
-}
-
-@keyframes fade-in {
-	from {
-		opacity: 0;
-	}
-	to {
-		opacity: 1;
-	}
-}
-
-@keyframes flex-grow {
-	from {
-		flex: 0;
-		margin-inline: 0;
-	}
-	to {
-		flex: 0 1 calc(var(--die-side-length-length) + 14px);
 	}
 }
