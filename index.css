@@ -192,6 +192,18 @@ html {
 			justify-content: center;
 
 			&:has(> svg > foreignObject > .main > #play-mode > select > option[value="opposite"]:checked) {
+				&[data-player="2"] > svg > foreignObject > .main > #controls > div {
+					rotate: .5turn;
+
+					&:first-of-type {
+						grid-column: 5;
+					}
+
+					&:last-of-type {
+						grid-column: 3;
+					}
+				}
+
 				& > svg > foreignObject > .main {
 					& > #players, & > #timer {
 						writing-mode: sideways-lr;
@@ -217,18 +229,6 @@ html {
 			&[data-player="1"] > svg > foreignObject > .main > #players > veyndan-player[data-player="1"],
 			&[data-player="2"] > svg > foreignObject > .main > #players > veyndan-player[data-player="2"] {
 				background: var(--primary-container);
-			}
-
-			&[data-player="2"]:has(> svg > foreignObject > .main > #play-mode > select > option[value="opposite"]:checked) > svg > foreignObject > .main > #controls > div {
-				rotate: .5turn;
-
-				&:first-of-type {
-					grid-column: 5;
-				}
-
-				&:last-of-type {
-					grid-column: 3;
-				}
 			}
 
 			& > svg {
