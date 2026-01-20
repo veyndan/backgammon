@@ -243,7 +243,10 @@ html {
 					& > .backgammon {
 						overflow: auto;
 						display: grid;
-						grid-template-rows: 12px auto 12px;
+						grid-template:
+							".       .     drop-points-top    drop-points-top    drop-points-top    .       .         " 12px
+							"players timer outer-board        bar                inner-board        sidebar play-mode " auto
+							".       .     drop-points-bottom drop-points-bottom drop-points-bottom .       .         " 12px;
 						gap: 8px;
 						align-items: stretch;
 						justify-content: center;
@@ -270,16 +273,14 @@ html {
 
 						& > #players {
 							display: flex;
-							grid-column: 1;
-							grid-row: 2;
+							grid-area: players;
 							gap: 8px;
 							align-self: center;
 						}
 
 						& > #timer {
 							display: flex;
-							grid-column: 2;
-							grid-row: 2;
+							grid-area: timer;
 							gap: 8px;
 							align-items: center;
 							align-self: center;
@@ -301,7 +302,6 @@ html {
 
 							& > .half {
 								display: flex;
-								grid-row: 2;
 								flex-direction: column;
 								justify-content: space-between;
 
@@ -313,11 +313,11 @@ html {
 								clip-path: fill-box inset(0 round 8px);
 
 								&#outer-board {
-									grid-column: 3;
+									grid-area: outer-board;
 								}
 
 								&#inner-board {
-									grid-column: 5;
+									grid-area: inner-board;
 								}
 
 								& > .quadrant {
@@ -340,8 +340,7 @@ html {
 							}
 
 							& > .bar {
-								grid-column: 4;
-								grid-row: 2;
+								grid-area: bar;
 
 								aspect-ratio: var(--bar-width-unitless) / var(--half-height-unitless);
 								block-size: 100%;
@@ -353,8 +352,7 @@ html {
 
 							& > #sidebar {
 								display: flex;
-								grid-column: 6;
-								grid-row: 2;
+								grid-area: sidebar;
 								align-items: center;
 								justify-content: space-evenly;
 
@@ -397,8 +395,7 @@ html {
 						}
 
 						& > #play-mode {
-							grid-column: 7;
-							grid-row: 2;
+							grid-area: play-mode;
 							align-self: center;
 						}
 
@@ -499,8 +496,7 @@ html {
 						& > #checkers {
 							pointer-events: none;
 							z-index: 2;
-							grid-column: 3 / span 3;
-							grid-row: 2;
+							grid-area: outer-board / outer-board / inner-board / inner-board;
 
 							/*noinspection CssInvalidFunction*/
 							& > veyndan-checker {
@@ -584,8 +580,7 @@ html {
 
 						& > #drop-points {
 							pointer-events: none;
-							grid-column: 3 / span 3;
-							grid-row: 1 / -1;
+							grid-area: drop-points-top / drop-points-top / drop-points-bottom / drop-points-bottom;
 
 							& > .drop-point {
 								--drop-point-diameter: 12px;
