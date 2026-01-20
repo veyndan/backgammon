@@ -5,7 +5,7 @@
 }
 
 :host(.flat) {
-	block-size: var(--checker-diameter-length);
+	aspect-ratio: 1;
 	clip-path: circle(var(--checker-radius-length));
 }
 

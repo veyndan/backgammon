@@ -306,7 +306,6 @@ html {
 								justify-content: space-between;
 
 								aspect-ratio: var(--half-width-unitless) / var(--half-height-unitless);
-								block-size: 100%;
 								min-block-size: 0;
 
 								background: var(--primary-container);
@@ -341,12 +340,8 @@ html {
 
 							& > .bar {
 								grid-area: bar;
-
 								aspect-ratio: var(--bar-width-unitless) / var(--half-height-unitless);
-								block-size: 100%;
-								min-block-size: 0;
 								border-radius: 8px;
-
 								background: var(--secondary-container);
 							}
 
