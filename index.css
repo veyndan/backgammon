@@ -191,8 +191,8 @@ html {
 			align-items: center;
 			justify-content: center;
 
-			&:has(> svg > foreignObject > .main > #play-mode > select > option[value="opposite"]:checked) {
-				&[data-player="2"] > svg > foreignObject > .main > #controls > div {
+			&:has(> svg > foreignObject > .backgammon > #play-mode > select > option[value="opposite"]:checked) {
+				&[data-player="2"] > svg > foreignObject > .backgammon > #controls > div {
 					rotate: .5turn;
 
 					&:first-of-type {
@@ -204,7 +204,7 @@ html {
 					}
 				}
 
-				& > svg > foreignObject > .main {
+				& > svg > foreignObject > .backgammon {
 					& > #players, & > #timer {
 						writing-mode: sideways-lr;
 					}
@@ -214,8 +214,8 @@ html {
 				}
 			}
 
-			&:has(> svg > foreignObject > .main > #play-mode > select > option[value="side-by-side"]:checked) {
-				&[data-player="1"] > svg > foreignObject > .main > #controls > div {
+			&:has(> svg > foreignObject > .backgammon > #play-mode > select > option[value="side-by-side"]:checked) {
+				&[data-player="1"] > svg > foreignObject > .backgammon > #controls > div {
 					&:first-of-type {
 						grid-column: 5;
 					}
@@ -226,8 +226,8 @@ html {
 				}
 			}
 
-			&[data-player="1"] > svg > foreignObject > .main > #players > veyndan-player[data-player="1"],
-			&[data-player="2"] > svg > foreignObject > .main > #players > veyndan-player[data-player="2"] {
+			&[data-player="1"] > svg > foreignObject > .backgammon > #players > veyndan-player[data-player="1"],
+			&[data-player="2"] > svg > foreignObject > .backgammon > #players > veyndan-player[data-player="2"] {
 				background: var(--primary-container);
 			}
 
@@ -240,7 +240,7 @@ html {
 					inline-size: 100%;
 					block-size: 100%;
 
-					& > .main {
+					& > .backgammon {
 						overflow: auto;
 						display: grid;
 						grid-template-rows: 12px auto 12px;
