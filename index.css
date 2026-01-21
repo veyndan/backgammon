@@ -196,6 +196,16 @@ html {
 			margin-block: auto;
 
 			&:has(> .backgammon > .aspect-ratio-lock > #play-mode > option[value="opposite"]:checked) {
+				&[data-player="1"] > .backgammon > .aspect-ratio-lock > #board > #controls > div {
+					&:first-of-type {
+						grid-area: controls-left;
+					}
+
+					&:last-of-type {
+						grid-area: controls-right;
+					}
+				}
+
 				&[data-player="2"] > .backgammon > .aspect-ratio-lock > #board > #controls > div {
 					rotate: .5turn;
 
@@ -224,16 +234,6 @@ html {
 							writing-mode: sideways-lr;
 						}
 
-						& > #board > #controls > div {
-							&:first-of-type {
-								grid-area: controls-left;
-							}
-
-							&:last-of-type {
-								grid-area: controls-right;
-							}
-						}
-
 						& > #play-mode {
 							writing-mode: sideways-rl;
 
@@ -256,6 +256,16 @@ html {
 					}
 				}
 
+				&[data-player="2"] > .backgammon > .aspect-ratio-lock > #board > #controls > div {
+					&:first-of-type {
+						grid-area: controls-left;
+					}
+
+					&:last-of-type {
+						grid-area: controls-right;
+					}
+				}
+
 				& > .backgammon {
 					aspect-ratio: 20 / 25;
 
@@ -272,16 +282,6 @@ html {
 
 						& > #timer {
 							justify-self: center;
-						}
-
-						& > #board > #controls > div {
-							&:first-of-type {
-								grid-area: controls-left;
-							}
-
-							&:last-of-type {
-								grid-area: controls-right;
-							}
 						}
 
 						& > #play-mode {
