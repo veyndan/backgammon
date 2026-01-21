@@ -75,6 +75,8 @@
 
 :root {
 	--bar-width-unitless: 38;
+	/* TODO Convert "24" to calculation of 2 * drop point height. */
+	--board-height-unitless: calc(var(--half-height-unitless) + 24);
 	--checker-diameter-unitless: calc(var(--checker-radius-unitless) * 2);
 	--checker-radius-unitless: 16;
 	--checker-thickness-unitless: 5;
@@ -91,6 +93,7 @@
 	--point-width-unitless: var(--checker-diameter-unitless);
 
 	--bar-width-length: calc(var(--bar-width-unitless) * .21875cqmin);
+	--board-height-length: calc(var(--board-height-unitless) * .21875cqmin);
 	--checker-diameter-length: calc(var(--checker-diameter-unitless) * .21875cqmin);
 	--checker-radius-length: calc(var(--checker-radius-unitless) * .21875cqmin);
 	--checker-thickness-length: calc(var(--checker-thickness-unitless) * .21875cqmin);
@@ -193,11 +196,11 @@ html {
 					rotate: .5turn;
 
 					&:first-of-type {
-						grid-column: 5;
+						grid-column: 3;
 					}
 
 					&:last-of-type {
-						grid-column: 3;
+						grid-column: 1;
 					}
 				}
 
@@ -206,20 +209,18 @@ html {
 
 					& > .aspect-ratio-lock {
 						grid-template:
-							".       .     drop-points-top          drop-points-top         drop-points-top          .       .         " 2.625cqb
-							"players timer outer-board              bar                     inner-board              sidebar play-mode " var(--half-height-length)
-							".       .     drop-points-bottom       drop-points-bottom      drop-points-bottom       .       .         " 2.625cqb /
-							auto     auto  var(--half-width-length) var(--bar-width-length) var(--half-width-length) auto    auto      ;
+							"players timer board play-mode " var(--board-height-length) /
+							auto     auto  auto  auto      ;
 
 						& > #board > #controls > div {
 							grid-row: 2;
 
 							&:first-of-type {
-								grid-column: 3;
+								grid-column: 1;
 							}
 
 							&:last-of-type {
-								grid-column: 5;
+								grid-column: 3;
 							}
 						}
 
@@ -248,12 +249,10 @@ html {
 
 					& > .aspect-ratio-lock {
 						grid-template:
-							".         players                  players                 players                  .       " auto
-							".         timer                    timer                   timer                    .       " auto
-							".         drop-points-top          drop-points-top         drop-points-top          .       " 2.625cqb
-							"play-mode outer-board              bar                     inner-board              sidebar " var(--half-height-length)
-							".         drop-points-bottom       drop-points-bottom      drop-points-bottom       .       " 2.625cqb /
-							auto       var(--half-width-length) var(--bar-width-length) var(--half-width-length) auto    ;
+							"players   players " auto
+							"timer     timer   " auto
+							"play-mode board   " var(--board-height-length) /
+							auto       auto    ;
 
 						& > #players {
 							justify-self: center;
@@ -264,14 +263,14 @@ html {
 						}
 
 						& > #board > #controls > div {
-							grid-row: 4;
+							grid-row: 2;
 
 							&:first-of-type {
-								grid-column: 2;
+								grid-column: 1;
 							}
 
 							&:last-of-type {
-								grid-column: 4;
+								grid-column: 3;
 							}
 						}
 
@@ -287,11 +286,11 @@ html {
 
 				&[data-player="1"] > .backgammon > .aspect-ratio-lock > #board > #controls > div {
 					&:first-of-type {
-						grid-column: 4;
+						grid-column: 3;
 					}
 
 					&:last-of-type {
-						grid-column: 2;
+						grid-column: 1;
 					}
 				}
 			}
@@ -341,7 +340,14 @@ html {
 
 					/* TODO Add additional 8px spacing between board and timer & board and play mode. */
 					& > #board {
-						display: contents;
+						display: grid;
+						grid-area: board;
+						grid-template:
+							"drop-points-top         drop-points-top         drop-points-top          .        " 2.625cqb
+							"outer-board             bar                     inner-board               sidebar " var(--half-height-length)
+							"drop-points-bottom      drop-points-bottom      drop-points-bottom       .        " 2.625cqb /
+							var(--half-width-length) var(--bar-width-length) var(--half-width-length)   auto   ;
+						column-gap: inherit;
 
 						/*noinspection CssInvalidFunction*/
 						.drop-point,
