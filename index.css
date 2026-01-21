@@ -189,7 +189,7 @@ html {
 			margin-block: auto;
 
 			&:has(> .backgammon > .aspect-ratio-lock > #play-mode > option[value="opposite"]:checked) {
-				&[data-player="2"] > .backgammon > .aspect-ratio-lock > #controls > div {
+				&[data-player="2"] > .backgammon > .aspect-ratio-lock > #board > #controls > div {
 					rotate: .5turn;
 
 					&:first-of-type {
@@ -211,7 +211,7 @@ html {
 							".       .     drop-points-bottom       drop-points-bottom      drop-points-bottom       .       .         " 2.625cqb /
 							auto     auto  var(--half-width-length) var(--bar-width-length) var(--half-width-length) auto    auto      ;
 
-						& > #controls > div {
+						& > #board > #controls > div {
 							grid-row: 2;
 
 							&:first-of-type {
@@ -263,7 +263,7 @@ html {
 							justify-self: center;
 						}
 
-						& > #controls > div {
+						& > #board > #controls > div {
 							grid-row: 4;
 
 							&:first-of-type {
@@ -285,7 +285,7 @@ html {
 					}
 				}
 
-				&[data-player="1"] > .backgammon > .aspect-ratio-lock > #controls > div {
+				&[data-player="1"] > .backgammon > .aspect-ratio-lock > #board > #controls > div {
 					&:first-of-type {
 						grid-column: 4;
 					}
@@ -448,6 +448,91 @@ html {
 							}
 						}
 
+						& > #controls {
+							display: contents;
+
+							& > div {
+								z-index: 1;
+
+								display: flex;
+								gap: 1.75cqmin;
+								align-items: center;
+								justify-content: center;
+
+								& > button {
+									--surface: var(--player-current-checker-background);
+									--color: var(--player-current-checker-text-color);
+									--alpha: 1;
+
+									padding-block: calc(36.75cqmin / 16);
+									padding-inline: calc(73.5cqmin / 16);
+									border: none;
+									border-radius: 1.75cqmin;
+
+									color: hsl(from var(--color) h s l / var(--alpha));
+
+									background: hsl(from var(--surface) h s l / var(--alpha));
+
+									&:disabled {
+										--alpha: .5;
+									}
+
+									&:hover:not(:disabled) {
+										--alpha: .85;
+									}
+
+									&#confirm {
+										--surface: hsl(149 83% 28%);
+										--color: hsl(0 0% 100%);
+									}
+								}
+
+								& > #dice-container {
+									display: none;
+									flex-direction: column;
+									align-items: center;
+
+									inline-size: 100%;
+									margin-block-end: 3.5cqmin;
+
+									&:has(> #dice > veyndan-die:not(.rolling):first-child:nth-last-child(2)) {
+										cursor: pointer;
+
+										& > #dice-swap {
+											visibility: visible;
+										}
+									}
+
+									& > #dice-swap {
+										block-size: 2.625cqmin;
+										margin-block: -.21875cqmin;
+										visibility: hidden;
+									}
+
+									& > #dice {
+										display: flex;
+										justify-content: center;
+
+										margin: 0;
+										padding: 0;
+
+										list-style-type: none;
+
+										& > veyndan-die {
+											overflow: hidden;
+											flex: 0 1 calc(var(--die-side-length-length) + 3.0625cqmin);
+											margin-inline: .4375cqmin;
+
+											&:nth-child(n + 3) {
+												animation: .5s .2s backwards flex-grow,
+												.2s .8125s backwards fade-in;
+											}
+										}
+									}
+								}
+							}
+						}
+
 						& > #checkers {
 							pointer-events: none;
 							z-index: 2;
@@ -587,91 +672,6 @@ html {
 
 							&::checkmark {
 								order: 1;
-							}
-						}
-					}
-
-					& > #controls {
-						display: contents;
-
-						& > div {
-							z-index: 1;
-
-							display: flex;
-							gap: 1.75cqmin;
-							align-items: center;
-							justify-content: center;
-
-							& > button {
-								--surface: var(--player-current-checker-background);
-								--color: var(--player-current-checker-text-color);
-								--alpha: 1;
-
-								padding-block: calc(36.75cqmin / 16);
-								padding-inline: calc(73.5cqmin / 16);
-								border: none;
-								border-radius: 1.75cqmin;
-
-								color: hsl(from var(--color) h s l / var(--alpha));
-
-								background: hsl(from var(--surface) h s l / var(--alpha));
-
-								&:disabled {
-									--alpha: .5;
-								}
-
-								&:hover:not(:disabled) {
-									--alpha: .85;
-								}
-
-								&#confirm {
-									--surface: hsl(149 83% 28%);
-									--color: hsl(0 0% 100%);
-								}
-							}
-
-							& > #dice-container {
-								display: none;
-								flex-direction: column;
-								align-items: center;
-
-								inline-size: 100%;
-								margin-block-end: 3.5cqmin;
-
-								&:has(> #dice > veyndan-die:not(.rolling):first-child:nth-last-child(2)) {
-									cursor: pointer;
-
-									& > #dice-swap {
-										visibility: visible;
-									}
-								}
-
-								& > #dice-swap {
-									block-size: 2.625cqmin;
-									margin-block: -.21875cqmin;
-									visibility: hidden;
-								}
-
-								& > #dice {
-									display: flex;
-									justify-content: center;
-
-									margin: 0;
-									padding: 0;
-
-									list-style-type: none;
-
-									& > veyndan-die {
-										overflow: hidden;
-										flex: 0 1 calc(var(--die-side-length-length) + 3.0625cqmin);
-										margin-inline: .4375cqmin;
-
-										&:nth-child(n + 3) {
-											animation: .5s .2s backwards flex-grow,
-											.2s .8125s backwards fade-in;
-										}
-									}
-								}
 							}
 						}
 					}
