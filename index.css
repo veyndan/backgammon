@@ -81,8 +81,9 @@
 	--checker-radius-unitless: 16;
 	--checker-thickness-unitless: 5;
 	--checkers-per-player: 15;
+	--controls-height-unitless: calc(var(--die-side-length-unitless) + 61);
 	--die-side-length-unitless: 36;
-	--half-height-unitless: calc(var(--point-height-unitless) * 2 + var(--checker-diameter-unitless) * 2 + var(--die-side-length-unitless) + 61);
+	--half-height-unitless: calc(var(--quadrant-height-unitless) * 2 + var(--controls-height-unitless));
 	--half-width-unitless: calc(var(--point-width-unitless) * 6);
 	--hold-width-unitless: calc(var(--checker-diameter-unitless));
 	--point-count: 24;
@@ -91,16 +92,19 @@
 	--point-min: 1;
 	--point-per-side: calc(var(--point-count) / 2);
 	--point-width-unitless: var(--checker-diameter-unitless);
+	--quadrant-height-unitless: calc(var(--point-height-unitless) + var(--checker-diameter-unitless));
 
 	--bar-width-length: calc(var(--bar-width-unitless) * .21875cqmin);
 	--board-height-length: calc(var(--board-height-unitless) * .21875cqmin);
 	--checker-diameter-length: calc(var(--checker-diameter-unitless) * .21875cqmin);
 	--checker-radius-length: calc(var(--checker-radius-unitless) * .21875cqmin);
 	--checker-thickness-length: calc(var(--checker-thickness-unitless) * .21875cqmin);
+	--controls-height-length: calc(var(--controls-height-unitless) * .21875cqmin);
 	--die-side-length-length: calc(var(--die-side-length-unitless) * .21875cqmin);
 	--half-height-length: calc(var(--half-height-unitless) * .21875cqmin);
 	--half-width-length: calc(var(--half-width-unitless) * .21875cqmin);
 	--hold-width-length: calc(var(--hold-width-unitless) * .21875cqmin);
+	--quadrant-height-length: calc(var(--quadrant-height-unitless) * .21875cqmin);
 
 	color-scheme: light dark;
 }
@@ -196,11 +200,11 @@ html {
 					rotate: .5turn;
 
 					&:first-of-type {
-						grid-column: 3;
+						grid-area: controls-right;
 					}
 
 					&:last-of-type {
-						grid-column: 1;
+						grid-area: controls-left;
 					}
 				}
 
@@ -221,14 +225,12 @@ html {
 						}
 
 						& > #board > #controls > div {
-							grid-row: 2;
-
 							&:first-of-type {
-								grid-column: 1;
+								grid-area: controls-left;
 							}
 
 							&:last-of-type {
-								grid-column: 3;
+								grid-area: controls-right;
 							}
 						}
 
@@ -246,11 +248,11 @@ html {
 			&:has(> .backgammon > .aspect-ratio-lock > #play-mode > option[value="side-by-side"]:checked) {
 				&[data-player="1"] > .backgammon > .aspect-ratio-lock > #board > #controls > div {
 					&:first-of-type {
-						grid-column: 3;
+						grid-area: controls-right;
 					}
 
 					&:last-of-type {
-						grid-column: 1;
+						grid-area: controls-left;
 					}
 				}
 
@@ -273,14 +275,12 @@ html {
 						}
 
 						& > #board > #controls > div {
-							grid-row: 2;
-
 							&:first-of-type {
-								grid-column: 1;
+								grid-area: controls-left;
 							}
 
 							&:last-of-type {
-								grid-column: 3;
+								grid-area: controls-right;
 							}
 						}
 
@@ -343,10 +343,12 @@ html {
 						display: grid;
 						grid-area: board;
 						grid-template:
-							"drop-points-top         drop-points-top         drop-points-top          .        " 2.625cqb
-							"outer-board             bar                     inner-board               sidebar " var(--half-height-length)
-							"drop-points-bottom      drop-points-bottom      drop-points-bottom       .        " 2.625cqb /
-							var(--half-width-length) var(--bar-width-length) var(--half-width-length)   auto   ;
+							"drop-points-top         drop-points-top         drop-points-top          .       " 2.625cqb
+							"quadrant-13-18          bar                     quadrant-19-24           sidebar " var(--quadrant-height-length)
+							"controls-left           bar                     controls-right           sidebar " var(--controls-height-length)
+							"quadrant-7-12           bar                     quadrant-1-6             sidebar " var(--quadrant-height-length)
+							"drop-points-bottom      drop-points-bottom      drop-points-bottom       .       " 2.625cqb /
+							var(--half-width-length) var(--bar-width-length) var(--half-width-length) auto    ;
 						column-gap: inherit;
 
 						/*noinspection CssInvalidFunction*/
@@ -378,11 +380,11 @@ html {
 							clip-path: fill-box inset(0 round 1.75cqmin);
 
 							&#outer-board {
-								grid-area: outer-board
+								grid-area: quadrant-13-18 / quadrant-13-18 / quadrant-7-12 / quadrant-7-12;
 							}
 
 							&#inner-board {
-								grid-area: inner-board
+								grid-area: quadrant-19-24 / quadrant-19-24 / quadrant-1-6 / quadrant-1-6;
 							}
 
 							& > .quadrant {
@@ -542,7 +544,7 @@ html {
 						& > #checkers {
 							pointer-events: none;
 							z-index: 2;
-							grid-area: outer-board / outer-board / inner-board / inner-board;
+							grid-area: quadrant-13-18 / quadrant-13-18 / quadrant-1-6 / quadrant-1-6;
 
 							/*noinspection CssInvalidFunction*/
 							& > veyndan-checker {
