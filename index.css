@@ -447,6 +447,91 @@ html {
 								background: var(--secondary-container);
 							}
 						}
+
+						& > #checkers {
+							pointer-events: none;
+							z-index: 2;
+							grid-area: outer-board / outer-board / inner-board / inner-board;
+
+							/*noinspection CssInvalidFunction*/
+							& > veyndan-checker {
+								pointer-events: auto;
+
+								position: absolute;
+
+								display: flex;
+								align-items: center;
+								justify-content: center;
+
+								transition: translate .3s;
+
+								&:not([data-permissible-destination-points="[]"]) {
+									&:hover {
+										cursor: pointer;
+									}
+
+									&.dragging {
+										cursor: move;
+										filter: drop-shadow(2px 4px 4px hsl(from var(--surface) h s l / .3));
+										transition: filter .3s;
+									}
+								}
+
+								&[data-permissible-destination-points="[]"]:hover {
+									cursor: not-allowed;
+								}
+
+								& > text {
+									user-select: none;
+									dominant-baseline: central;
+									text-anchor: middle;
+									fill: currentColor;
+
+									/* Hide node from accessibility tree when empty. */
+									&:empty {
+										display: none;
+									}
+								}
+
+								&[data-hit] {
+									translate: calc(var(--half-width-length) + 1.75cqmin + (var(--bar-width-length) - var(--checker-diameter-length)) / 2) var(--translate-y);
+
+									&[data-player="1"] {
+										--translate-y: calc(var(--checker-diameter-length) * 2.5);
+									}
+
+									&[data-player="2"] {
+										--translate-y: calc(var(--half-height-length) - var(--checker-diameter-length) * 3.5);
+									}
+								}
+
+								&:not([data-hit]) {
+									--top-point-translate-y: calc(var(--checker-diameter-length) * min(var(--point-stack-index), ((5 - 1) * var(--point-stack-index)) / max(var(--point-stack-count) - 1, 1)));
+									--bottom-point-translate-y: calc((var(--half-height-length) - var(--top-point-translate-y) - var(--checker-diameter-length)));
+
+									--top-point-mask-position-vertical: calc(150% + -1 * round(down, calc(var(--point-stack-count) / 6), 1) * (1 - round(down, calc((var(--point-stack-index) + 1) / var(--point-stack-count)), 1)) * (105% - ((4 / max(var(--point-stack-count) - 1, 1)) * 100%)));
+									--bottom-point-mask-position-vertical: calc(100% - var(--top-point-mask-position-vertical));
+
+									translate:
+										var(--translate-x)
+										calc(
+											var(--is-top-point) * var(--top-point-translate-y)
+											+ var(--is-bottom-point) * var(--bottom-point-translate-y)
+										);
+									mask-image:
+										radial-gradient(
+											black var(--checker-radius-length),
+											transparent var(--checker-radius-length)
+										),
+										radial-gradient(
+											circle at center calc(var(--is-top-point) * var(--top-point-mask-position-vertical) + var(--is-bottom-point) * var(--bottom-point-mask-position-vertical)),
+											black var(--checker-radius-length),
+											transparent var(--checker-radius-length)
+										);
+									mask-composite: subtract;
+								}
+							}
+						}
 					}
 
 					& > #play-mode {
@@ -587,91 +672,6 @@ html {
 										}
 									}
 								}
-							}
-						}
-					}
-
-					& > #checkers {
-						pointer-events: none;
-						z-index: 2;
-						grid-area: outer-board / outer-board / inner-board / inner-board;
-
-						/*noinspection CssInvalidFunction*/
-						& > veyndan-checker {
-							pointer-events: auto;
-
-							position: absolute;
-
-							display: flex;
-							align-items: center;
-							justify-content: center;
-
-							transition: translate .3s;
-
-							&:not([data-permissible-destination-points="[]"]) {
-								&:hover {
-									cursor: pointer;
-								}
-
-								&.dragging {
-									cursor: move;
-									filter: drop-shadow(2px 4px 4px hsl(from var(--surface) h s l / .3));
-									transition: filter .3s;
-								}
-							}
-
-							&[data-permissible-destination-points="[]"]:hover {
-								cursor: not-allowed;
-							}
-
-							& > text {
-								user-select: none;
-								dominant-baseline: central;
-								text-anchor: middle;
-								fill: currentColor;
-
-								/* Hide node from accessibility tree when empty. */
-								&:empty {
-									display: none;
-								}
-							}
-
-							&[data-hit] {
-								translate: calc(var(--half-width-length) + 1.75cqmin + (var(--bar-width-length) - var(--checker-diameter-length)) / 2) var(--translate-y);
-
-								&[data-player="1"] {
-									--translate-y: calc(var(--checker-diameter-length) * 2.5);
-								}
-
-								&[data-player="2"] {
-									--translate-y: calc(var(--half-height-length) - var(--checker-diameter-length) * 3.5);
-								}
-							}
-
-							&:not([data-hit]) {
-								--top-point-translate-y: calc(var(--checker-diameter-length) * min(var(--point-stack-index), ((5 - 1) * var(--point-stack-index)) / max(var(--point-stack-count) - 1, 1)));
-								--bottom-point-translate-y: calc((var(--half-height-length) - var(--top-point-translate-y) - var(--checker-diameter-length)));
-
-								--top-point-mask-position-vertical: calc(150% + -1 * round(down, calc(var(--point-stack-count) / 6), 1) * (1 - round(down, calc((var(--point-stack-index) + 1) / var(--point-stack-count)), 1)) * (105% - ((4 / max(var(--point-stack-count) - 1, 1)) * 100%)));
-								--bottom-point-mask-position-vertical: calc(100% - var(--top-point-mask-position-vertical));
-
-								translate:
-									var(--translate-x)
-									calc(
-										var(--is-top-point) * var(--top-point-translate-y)
-										+ var(--is-bottom-point) * var(--bottom-point-translate-y)
-									);
-								mask-image:
-									radial-gradient(
-										black var(--checker-radius-length),
-										transparent var(--checker-radius-length)
-									),
-									radial-gradient(
-										circle at center calc(var(--is-top-point) * var(--top-point-mask-position-vertical) + var(--is-bottom-point) * var(--bottom-point-mask-position-vertical)),
-										black var(--checker-radius-length),
-										transparent var(--checker-radius-length)
-									);
-								mask-composite: subtract;
 							}
 						}
 					}
