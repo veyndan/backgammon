@@ -212,6 +212,14 @@ html {
 							"players timer board play-mode " var(--board-height-length) /
 							auto     auto  auto  auto      ;
 
+						& > #players {
+							writing-mode: sideways-lr;
+						}
+
+						& > #timer {
+							writing-mode: sideways-lr;
+						}
+
 						& > #board > #controls > div {
 							grid-row: 2;
 
@@ -222,14 +230,6 @@ html {
 							&:last-of-type {
 								grid-column: 3;
 							}
-						}
-
-						& > #players {
-							writing-mode: sideways-lr;
-						}
-
-						& > #timer {
-							writing-mode: sideways-lr;
 						}
 
 						& > #play-mode {
@@ -243,7 +243,17 @@ html {
 				}
 			}
 
-			&:has(#play-mode > option[value="side-by-side"]:checked) {
+			&:has(> .backgammon > .aspect-ratio-lock > #play-mode > option[value="side-by-side"]:checked) {
+				&[data-player="1"] > .backgammon > .aspect-ratio-lock > #board > #controls > div {
+					&:first-of-type {
+						grid-column: 3;
+					}
+
+					&:last-of-type {
+						grid-column: 1;
+					}
+				}
+
 				& > .backgammon {
 					aspect-ratio: 20 / 25;
 
@@ -281,16 +291,6 @@ html {
 								rotate: .75turn;
 							}
 						}
-					}
-				}
-
-				&[data-player="1"] > .backgammon > .aspect-ratio-lock > #board > #controls > div {
-					&:first-of-type {
-						grid-column: 3;
-					}
-
-					&:last-of-type {
-						grid-column: 1;
 					}
 				}
 			}
