@@ -428,8 +428,8 @@ html {
 								align-items: center;
 								justify-content: center;
 
+								aspect-ratio: 1;
 								inline-size: calc(var(--die-side-length-unitless) * .21875cqmin);
-								block-size: calc(var(--die-side-length-unitless) * .21875cqmin);
 								border-radius: .875cqmin;
 
 								color: var(--on-secondary-container);
@@ -675,8 +675,8 @@ html {
 						}
 
 						& > button > svg {
+							aspect-ratio: 1;
 							inline-size: 2.625cqmin;
-							block-size: 2.625cqmin;
 							fill: currentColor;
 						}
 
