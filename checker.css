@@ -1,15 +1,15 @@
 :host {
-	inline-size: var(--checker-diameter-length);
+	inline-size: calc(var(--checker-diameter-unitless) * .21875cqmin);
 	color: var(--player-current-checker-text-color);
 	background: var(--player-current-checker-background);
 }
 
 :host(.flat) {
 	aspect-ratio: 1;
-	clip-path: circle(var(--checker-radius-length));
+	border-radius: 50%;
 }
 
 :host(.upright) {
-	inline-size: var(--checker-thickness-length);
+	inline-size: calc(var(--checker-thickness-unitless) * .21875cqmin);
 	border-radius: .4375cqmin;
 }

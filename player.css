@@ -12,8 +12,8 @@
 		padding-inline: 2.625cqmin;
 
 		& > veyndan-checker {
-			--checker-radius-length: 1.75cqmin;
-			--checker-diameter-length: calc(var(--checker-radius-length) * 2);
+			--checker-radius-unitless: 8;
+			--checker-diameter-unitless: calc(var(--checker-radius-unitless) * 2);
 
 			justify-self: end;
 		}

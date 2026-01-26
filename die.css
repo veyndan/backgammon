@@ -5,8 +5,8 @@
 	align-items: center;
 	justify-content: center;
 
-	inline-size: calc(var(--die-side-length-length) + 3.0625cqmin);
-	block-size: calc(var(--die-side-length-length) + 3.0625cqmin);
+	inline-size: calc(var(--die-side-length-unitless) * .21875cqmin + 3.0625cqmin);
+	block-size: calc(var(--die-side-length-unitless) * .21875cqmin + 3.0625cqmin);
 
 	& > .motion-lines {
 		position: absolute;
@@ -45,8 +45,8 @@
 		align-content: center;
 		justify-content: center;
 
-		inline-size: var(--die-side-length-length);
-		block-size: var(--die-side-length-length);
+		inline-size: calc(var(--die-side-length-unitless) * .21875cqmin);
+		block-size: calc(var(--die-side-length-unitless) * .21875cqmin);
 		border-radius: .875cqmin;
 
 		background: var(--player-current-checker-background);
