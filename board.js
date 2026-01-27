@@ -27,9 +27,9 @@ export default class Board {
 	}
 
 	/**
-	 * @param {Player} player 
-	 * @param {Position} position 
-	 * @param {number} offset 
+	 * @param {Player} player
+	 * @param {Position} position
+	 * @param {number} offset
 	 * @return {?Board}
 	 */
 	move(player, position, offset) {
