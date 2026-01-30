@@ -1,3 +1,5 @@
+"use strict";
+
 import Board from "./board.js";
 import {CheckerElement, CheckerLegacy} from "./checker.js";
 import {Bar, Point, Position} from "./position.js";

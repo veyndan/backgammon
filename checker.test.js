@@ -1,3 +1,5 @@
+"use strict";
+
 import test from 'tape';
 import {CheckerLegacy} from './checker.js';
 import {Bar, Point} from "./position.js";

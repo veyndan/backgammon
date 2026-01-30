@@ -1,3 +1,5 @@
+"use strict";
+
 customElements.define(
 	"veyndan-point",
 	class extends HTMLElement {

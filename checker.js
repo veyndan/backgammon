@@ -1,3 +1,5 @@
+"use strict";
+
 import {Point, Position} from "./position.js";
 import Player from "./player.js";
 

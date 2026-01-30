@@ -1,3 +1,5 @@
+"use strict";
+
 const ONE_VALUE = `1`;
 const TWO_VALUE = `2`;
 

@@ -1,3 +1,5 @@
+"use strict";
+
 import test from 'tape';
 import {Bar, Point} from "./position.js";
 import Player from "./player.js";

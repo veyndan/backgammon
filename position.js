@@ -1,3 +1,5 @@
+"use strict";
+
 export class Position {}
 
 export class Bar extends Position {

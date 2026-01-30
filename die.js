@@ -1,3 +1,5 @@
+"use strict";
+
 export default class DieElement extends HTMLElement {
 	constructor() {
 		super();
