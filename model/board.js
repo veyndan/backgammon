@@ -1,6 +1,6 @@
 "use strict";
 
-import { Bar, Point, Position } from "./position.js";
+import { Point, Position } from "./position.js";
 import Player from "./player.js";
 
 export default class Board {

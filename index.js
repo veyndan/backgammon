@@ -1,12 +1,15 @@
 "use strict";
 
-import Board from "./board.js";
-import {CheckerElement, CheckerLegacy} from "./checker.js";
-import {Bar, Point, Position} from "./position.js";
-import Player from "./player.js";
-import "./point.js"
+import Board from "./model/board.js";
+import {CheckerLegacy} from "./model/checker.js";
+import Player from "./model/player.js";
+import {Bar, Point, Position} from "./model/position.js";
+// noinspection ES6UnusedImports
+import CheckerElement from "./checker.js";
 // noinspection ES6UnusedImports
 import DieElement from "./die.js";
+import "./player.js"
+import "./point.js"
 
 /**
  * https://rwaldron.github.io/proposal-math-extensions/#sec-math.clamp
