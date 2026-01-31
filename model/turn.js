@@ -7,13 +7,11 @@ import { Position } from "./position.js";
 export default class Turn {
 	/**
 	 * @param {Player} player
+	 * @param {Touch[]} touches
 	 */
-	constructor(player) {
-		this.player = player;
-		/**
-		 * @type {Touch[]}
-		 */
-		this.touches = [];
+	constructor(player, touches = []) {
+		this.player = Object.freeze(player);
+		this.touches = Object.freeze(touches);
 		Object.freeze(this);
 	}
 }
@@ -23,7 +21,7 @@ export class Touch {
 	 * @param {Move[]} moves
 	 */
 	constructor(moves) {
-		this.moves = moves;
+		this.moves = Object.freeze(moves);
 		Object.freeze(this);
 	}
 }
@@ -35,9 +33,9 @@ export class Move {
 	 * @param {Position} to
 	 */
 	constructor(player, from, to) {
-		this.player = player;
-		this.from = from;
-		this.to = to;
+		this.player = Object.freeze(player);
+		this.from = Object.freeze(from);
+		this.to = Object.freeze(to);
 		Object.freeze(this);
 	}
 }

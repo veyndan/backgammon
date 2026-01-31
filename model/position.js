@@ -20,7 +20,7 @@ export class Point extends Position {
 		if (value < MIN_POINT_VALUE || value > MAX_POINT_VALUE) {
 			throw new RangeError(`The point must be between ${MIN_POINT_VALUE} and ${MAX_POINT_VALUE}.`);
 		}
-		this.value = value;
+		this.value = Object.freeze(value);
 		Object.freeze(this);
 	}
 

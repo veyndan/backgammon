@@ -18,7 +18,7 @@ export default class Board {
 	 *
 	 */
 	constructor(mailbox) {
-		this.mailbox = mailbox;
+		this.mailbox = Object.freeze(mailbox);
 		Object.freeze(this);
 	}
 

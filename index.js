@@ -290,7 +290,8 @@ confirmElement.addEventListener(`click`, () => {
 });
 
 undoElement.addEventListener(`click`, () => {
-	const lastTouch = game.turn.touches.pop();
+	const lastTouch = game.turn.touches.at(-1);
+	game = game.undoTouch();
 	lastTouch.moves.forEach(move => {
 		/** @type {CheckerOnBoardElement} */
 		let lastMovedCheckerElement;
@@ -458,7 +459,7 @@ checkersElement.addEventListener(`click`, event => {
 		opponentCheckerOnPointCheckerElement.position = new Bar();
 		moves.push(new Move(opponentCheckerOnPointCheckerElement.player, oldOpponentPosition, opponentCheckerOnPointCheckerElement.position));
 	}
-	game.turn.touches.push(new Touch(moves));
+	game = game.touch(new Touch(moves));
 });
 checkersElement.addEventListener(`pointerover`, event => {
 	const checkerElementTarget = (/** @type {Element} */ (event.target)).closest(`#checkers > :not([data-permissible-destination-points="[]"])`);
@@ -604,7 +605,7 @@ checkersElement.addEventListener('pointerdown', event => {
 				opponentCheckerOnPointCheckerElement.position = new Bar();
 				moves.push(new Move(opponentCheckerOnPointCheckerElement.player, oldOpponentPosition, opponentCheckerOnPointCheckerElement.position));
 			}
-			game.turn.touches.push(new Touch(moves));
+			game = game.touch(new Touch(moves));
 		}
 		document.getElementById(`drop-points`).replaceChildren();
 		checkerElement.target.classList.remove(`dragging`);

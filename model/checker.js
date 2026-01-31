@@ -9,8 +9,8 @@ export default class Checker {
 	 * @param {Position} position
 	 */
 	constructor(player, position) {
-		this.player = player;
-		this.position = position;
+		this.player = Object.freeze(player);
+		this.position = Object.freeze(position);
 		Object.freeze(this);
 	}
 

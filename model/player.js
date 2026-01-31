@@ -8,7 +8,7 @@ export default class Player {
 		if (![ONE_VALUE, TWO_VALUE].includes(value)) {
 			throw new RangeError(`The argument must be "${ONE_VALUE}" or "${TWO_VALUE}".`);
 		}
-		this.value = value;
+		this.value = Object.freeze(value);
 		Object.freeze(this);
 	}
 
