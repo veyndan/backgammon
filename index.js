@@ -2,6 +2,7 @@
 
 import Board from "./model/board.js";
 import Checker from "./model/checker.js";
+import Game from "./model/game.js";
 import Turn, {Move, Touch} from "./model/turn.js";
 import Player from "./model/player.js";
 import {Bar, Point, Position} from "./model/position.js";
@@ -25,9 +26,7 @@ Math.clamp = function (x, lower, upper) {
 	return Math.min(Math.max(x, lower), upper);
 };
 
-const board = Board.startingPosition();
-
-let turn = new Turn(Player.One);
+const game = new Game(Board.startingPosition(), new Turn(Player.One));
 
 class CheckerOnBoardElement {
 	/**
@@ -188,7 +187,7 @@ const doubleElement = /** @type {HTMLButtonElement} */ (document.getElementById(
 const rollDiceElement = /** @type {HTMLButtonElement} */ (document.getElementById(`roll-dice`));
 const undoElement = /** @type {HTMLButtonElement} */ (document.getElementById(`undo`));
 
-const checkerElements = board.mailbox.flatMap((pointValue, point) => {
+const checkerElements = game.board.mailbox.flatMap((pointValue, point) => {
 	const pointStackCount = Math.abs(pointValue);
 	return Array.from(Array(pointStackCount), (_, index) => index)
 		.map(pointStackIndex => {
@@ -286,12 +285,12 @@ confirmElement.addEventListener(`click`, () => {
 	rollDiceElement.hidden = false;
 	confirmElement.hidden = true;
 	undoElement.hidden = true;
-	turn = new Turn(turn.player.value === Player.One.value ? Player.Two : Player.One);
-	mainElement.dataset[`player`] = turn.player.value;
+	game.turn = new Turn(game.turn.player.value === Player.One.value ? Player.Two : Player.One);
+	mainElement.dataset[`player`] = game.turn.player.value;
 });
 
 undoElement.addEventListener(`click`, () => {
-	const lastTouch = turn.touches.pop();
+	const lastTouch = game.turn.touches.pop();
 	lastTouch.moves.forEach(move => {
 		/** @type {CheckerOnBoardElement} */
 		let lastMovedCheckerElement;
@@ -373,7 +372,7 @@ diceContainerElement.addEventListener(`click`, () => {
 
 function updateMovabilityOfCheckers() {
 	const dieElements = Array.from(/** @type {NodeListOf<DieElement>} */ (document.querySelectorAll(`#dice veyndan-die:not([data-played-at])`)));
-	const checkerElements = Array.from(/** @type {NodeListOf<CheckerElement>} */ (document.querySelectorAll(`#checkers > [data-player="${turn.player.value}"]`)))
+	const checkerElements = Array.from(/** @type {NodeListOf<CheckerElement>} */ (document.querySelectorAll(`#checkers > [data-player="${game.turn.player.value}"]`)))
 		.map(value => new CheckerOnBoardElement(value));
 	const positionNameToCheckerElements = Map.groupBy(checkerElements, checkerElement => checkerElement.position.constructor.name);
 	if (positionNameToCheckerElements.has(Bar.name)) {
@@ -459,7 +458,7 @@ checkersElement.addEventListener(`click`, event => {
 		opponentCheckerOnPointCheckerElement.position = new Bar();
 		moves.push(new Move(opponentCheckerOnPointCheckerElement.player, oldOpponentPosition, opponentCheckerOnPointCheckerElement.position));
 	}
-	turn.touches.push(new Touch(moves));
+	game.turn.touches.push(new Touch(moves));
 });
 checkersElement.addEventListener(`pointerover`, event => {
 	const checkerElementTarget = (/** @type {Element} */ (event.target)).closest(`#checkers > :not([data-permissible-destination-points="[]"])`);
@@ -605,7 +604,7 @@ checkersElement.addEventListener('pointerdown', event => {
 				opponentCheckerOnPointCheckerElement.position = new Bar();
 				moves.push(new Move(opponentCheckerOnPointCheckerElement.player, oldOpponentPosition, opponentCheckerOnPointCheckerElement.position));
 			}
-			turn.touches.push(new Touch(moves));
+			game.turn.touches.push(new Touch(moves));
 		}
 		document.getElementById(`drop-points`).replaceChildren();
 		checkerElement.target.classList.remove(`dragging`);
