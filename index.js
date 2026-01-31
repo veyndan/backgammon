@@ -285,7 +285,7 @@ confirmElement.addEventListener(`click`, () => {
 	rollDiceElement.hidden = false;
 	confirmElement.hidden = true;
 	undoElement.hidden = true;
-	game.turn = new Turn(game.turn.player.value === Player.One.value ? Player.Two : Player.One);
+	game.changeTurn();
 	mainElement.dataset[`player`] = game.turn.player.value;
 });
 
