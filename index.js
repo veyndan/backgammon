@@ -2,6 +2,7 @@
 
 import Board from "./model/board.js";
 import Checker from "./model/checker.js";
+import Turn, {Move, Touch} from "./model/turn.js";
 import Player from "./model/player.js";
 import {Bar, Point, Position} from "./model/position.js";
 // noinspection ES6UnusedImports
@@ -25,41 +26,6 @@ Math.clamp = function (x, lower, upper) {
 };
 
 const board = Board.startingPosition();
-
-class Move {
-	/**
-	 * @param {Player} player
-	 * @param {Position} from
-	 * @param {Position} to
-	 */
-	constructor(player, from, to) {
-		this.player = player;
-		this.from = from;
-		this.to = to;
-	}
-}
-
-class Touch {
-	/**
-	 * @param {Move[]} moves
-	 */
-	constructor(moves) {
-		this.moves = moves;
-	}
-}
-
-class Turn {
-	/**
-	 * @param {Player} player
-	 */
-	constructor(player) {
-		this.player = player;
-		/**
-		 * @type {Touch[]}
-		 */
-		this.touches = [];
-	}
-}
 
 let turn = new Turn(Player.One);
 
