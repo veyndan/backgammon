@@ -1,7 +1,7 @@
 "use strict";
 
 import Board from "./model/board.js";
-import {CheckerLegacy} from "./model/checker.js";
+import Checker from "./model/checker.js";
 import Player from "./model/player.js";
 import {Bar, Point, Position} from "./model/position.js";
 // noinspection ES6UnusedImports
@@ -415,7 +415,7 @@ function updateMovabilityOfCheckers() {
 			.forEach(checkerElement => {
 				checkerElement.permissibleDestinationPoints = /** @type {Set<Point>} */ (new Set(
 					dieElements
-						.map(dieElement => new CheckerLegacy(checkerElement.player, checkerElement.position).moveBy(dieElement.value))
+						.map(dieElement => new Checker(checkerElement.player, checkerElement.position).moveBy(dieElement.value))
 						.filter(potentialCheckerMovement => potentialCheckerMovement !== null)
 						.map(potentialCheckerMovement => potentialCheckerMovement.position)
 						.filter(potentialDestinationPosition => {
@@ -438,7 +438,7 @@ function updateMovabilityOfCheckers() {
 			.forEach(checkerElement => {
 				checkerElement.permissibleDestinationPoints = /** @type {Set<Point>} */ (new Set(
 					dieElements
-						.map(dieElement => new CheckerLegacy(checkerElement.player, checkerElement.position).moveBy(dieElement.value))
+						.map(dieElement => new Checker(checkerElement.player, checkerElement.position).moveBy(dieElement.value))
 						.filter(potentialCheckerMovement => potentialCheckerMovement !== null)
 						.map(potentialCheckerMovement => potentialCheckerMovement.position)
 						.filter(potentialDestinationPosition => {
@@ -468,7 +468,7 @@ checkersElement.addEventListener(`click`, event => {
 		.find(dieElement =>
 			Array.from(checkerElement.permissibleDestinationPoints)
 				.some(permissibleDestinationPoint => {
-					const potentialDestinationChecker = new CheckerLegacy(checkerElement.player, checkerElement.position).moveBy(dieElement.value);
+					const potentialDestinationChecker = new Checker(checkerElement.player, checkerElement.position).moveBy(dieElement.value);
 					if (potentialDestinationChecker === null) return false;
 					if (potentialDestinationChecker.position instanceof Point) {
 						return potentialDestinationChecker.position.value === permissibleDestinationPoint.value;
@@ -479,7 +479,7 @@ checkersElement.addEventListener(`click`, event => {
 		);
 	dieElement.playedAt = Date.now();
 	const oldPosition = checkerElement.position;
-	checkerElement.position = new CheckerLegacy(checkerElement.player, checkerElement.position).moveBy(dieElement.value).position;
+	checkerElement.position = new Checker(checkerElement.player, checkerElement.position).moveBy(dieElement.value).position;
 	const moves = [
 		new Move(checkerElement.player, oldPosition, checkerElement.position),
 	];
@@ -616,7 +616,7 @@ checkersElement.addEventListener('pointerdown', event => {
 		const point = pointFromCoordinates(coord);
 		const dieElement = Array.from(/** @type {NodeListOf<DieElement>} */ (document.querySelectorAll(`#dice veyndan-die:not([data-played-at])`)))
 			.find(unplayedDieElement => {
-				const potentialDestinationChecker = new CheckerLegacy(checkerElement.player, checkerElement.position).moveBy(unplayedDieElement.value);
+				const potentialDestinationChecker = new Checker(checkerElement.player, checkerElement.position).moveBy(unplayedDieElement.value);
 				if (potentialDestinationChecker === null) return false;
 				if (potentialDestinationChecker.position instanceof Point) {
 					return Array.from(checkerElement.permissibleDestinationPoints).map(permissibleDestinationPoint => permissibleDestinationPoint.value).includes(potentialDestinationChecker.position.value) && point !== null && potentialDestinationChecker.position.value === point.value;
