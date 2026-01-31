@@ -9,6 +9,7 @@ export default class Player {
 			throw new RangeError(`The argument must be "${ONE_VALUE}" or "${TWO_VALUE}".`);
 		}
 		this.value = value;
+		Object.freeze(this);
 	}
 
 	static get One() {

@@ -26,7 +26,7 @@ Math.clamp = function (x, lower, upper) {
 	return Math.min(Math.max(x, lower), upper);
 };
 
-const game = new Game(Board.startingPosition(), new Turn(Player.One));
+let game = new Game(Board.startingPosition(), new Turn(Player.One));
 
 class CheckerOnBoardElement {
 	/**
@@ -285,7 +285,7 @@ confirmElement.addEventListener(`click`, () => {
 	rollDiceElement.hidden = false;
 	confirmElement.hidden = true;
 	undoElement.hidden = true;
-	game.changeTurn();
+	game = game.changeTurn();
 	mainElement.dataset[`player`] = game.turn.player.value;
 });
 

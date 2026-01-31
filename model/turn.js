@@ -14,6 +14,7 @@ export default class Turn {
 		 * @type {Touch[]}
 		 */
 		this.touches = [];
+		Object.freeze(this);
 	}
 }
 
@@ -23,6 +24,7 @@ export class Touch {
 	 */
 	constructor(moves) {
 		this.moves = moves;
+		Object.freeze(this);
 	}
 }
 
@@ -36,5 +38,6 @@ export class Move {
 		this.player = player;
 		this.from = from;
 		this.to = to;
+		Object.freeze(this);
 	}
 }

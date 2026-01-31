@@ -11,6 +11,7 @@ export default class Checker {
 	constructor(player, position) {
 		this.player = player;
 		this.position = position;
+		Object.freeze(this);
 	}
 
 	/**
