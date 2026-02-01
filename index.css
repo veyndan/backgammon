@@ -540,13 +540,13 @@ html {
 
 								transition: translate .3s;
 
-								&:not([data-permissible-destination-points="[]"]) {
+								&[data-movable] {
 									&:hover {
 										cursor: pointer;
 									}
 								}
 
-								&[data-permissible-destination-points="[]"]:hover {
+								&:not([data-movable]):hover {
 									cursor: not-allowed;
 								}
 

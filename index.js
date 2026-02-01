@@ -38,20 +38,21 @@ class CheckerOnBoardElement {
 	}
 
 	/**
-	 * @return {Set<Point>}
+	 * @return {boolean}
 	 */
-	get permissibleDestinationPoints() {
-		return new Set(
-			(/** @type {number[]} */ (JSON.parse(this.target.dataset[`permissibleDestinationPoints`])))
-				.map(value => new Point(value)),
-		);
+	get isMovable() {
+		return `movable` in this.target.dataset;
 	}
 
 	/**
-	 * @param {Set<Point>} value
+	 * @param {boolean} value
 	 */
-	set permissibleDestinationPoints(value) {
-		this.target.dataset[`permissibleDestinationPoints`] = JSON.stringify(Array.from(value).map(point => point.value));
+	set isMovable(value) {
+		if (value) {
+			this.target.dataset[`movable`] = ``;
+		} else {
+			delete this.target.dataset[`movable`];
+		}
 	}
 
 	/**
@@ -198,7 +199,6 @@ const checkerElements = game.board.mailbox.flatMap((pointValue, point) => {
 			checkerElement.dataset[`point`] = `${point}`;
 			checkerElement.dataset[`pointStackIndex`] = `${pointStackIndex}`;
 			checkerElement.dataset[`pointStackCount`] = `${pointStackCount}`;
-			checkerElement.dataset[`permissibleDestinationPoints`] = `[]`;
 			checkerElement.style.setProperty(`--point`, `${point}`);
 			checkerElement.style.setProperty(`--point-stack-index`, `${pointStackIndex}`);
 			checkerElement.style.setProperty(`--point-stack-count`, `${pointStackCount}`);
@@ -374,52 +374,48 @@ function updateMovabilityOfCheckers() {
 	if (positionNameToCheckerElements.has(Bar.name)) {
 		positionNameToCheckerElements.get(Bar.name)
 			.forEach(checkerElement => {
-				checkerElement.permissibleDestinationPoints = /** @type {Set<Point>} */ (new Set(
-					game.playableDice
-						.flatMap(die => {
-							try {
-								return [new Advancement(checkerElement.player, die, checkerElement.position).to];
-							} catch (error) {
-								if (error instanceof RangeError) {
-									return [];
-								} else {
-									throw error;
-								}
+				checkerElement.isMovable = game.playableDice
+					.flatMap(die => {
+						try {
+							return [new Advancement(checkerElement.player, die, checkerElement.position).to];
+						} catch (error) {
+							if (error instanceof RangeError) {
+								return [];
+							} else {
+								throw error;
 							}
-						})
-						.filter(potentialDestinationPosition => {
-							/** @type {NodeListOf<CheckerElement>} */
-							const potentialDestinationCheckers = document.querySelectorAll(`#checkers > [data-point="${potentialDestinationPosition.value}"]`);
-							return potentialDestinationCheckers.length <= 1 || new CheckerOnBoardElement(potentialDestinationCheckers[0]).player.value === checkerElement.player.value;
-						}),
-				));
+						}
+					})
+					.some(potentialDestinationPosition => {
+						/** @type {NodeListOf<CheckerElement>} */
+						const potentialDestinationCheckers = document.querySelectorAll(`#checkers > [data-point="${potentialDestinationPosition.value}"]`);
+						return potentialDestinationCheckers.length <= 1 || new CheckerOnBoardElement(potentialDestinationCheckers[0]).player.value === checkerElement.player.value;
+					});
 			});
 		(positionNameToCheckerElements.get(Point.name) ?? [])
 			.forEach(checkerElement => {
-				checkerElement.permissibleDestinationPoints = new Set();
+				checkerElement.isMovable = false;
 			});
 	} else {
 		(positionNameToCheckerElements.get(Point.name) ?? [])
 			.forEach(checkerElement => {
-				checkerElement.permissibleDestinationPoints = /** @type {Set<Point>} */ (new Set(
-					game.playableDice
-						.flatMap(die => {
-							try {
-								return [new Advancement(checkerElement.player, die, checkerElement.position).to];
-							} catch (error) {
-								if (error instanceof RangeError) {
-									return [];
-								} else {
-									throw error;
-								}
+				checkerElement.isMovable = game.playableDice
+					.flatMap(die => {
+						try {
+							return [new Advancement(checkerElement.player, die, checkerElement.position).to];
+						} catch (error) {
+							if (error instanceof RangeError) {
+								return [];
+							} else {
+								throw error;
 							}
-						})
-						.filter(potentialDestinationPosition => {
-							/** @type {NodeListOf<CheckerElement>} */
-							const potentialDestinationCheckers = document.querySelectorAll(`#checkers > [data-point="${potentialDestinationPosition.value}"]`);
-							return potentialDestinationCheckers.length <= 1 || new CheckerOnBoardElement(potentialDestinationCheckers[0]).player.value === checkerElement.player.value;
-						}),
-				));
+						}
+					})
+					.some(potentialDestinationPosition => {
+						/** @type {NodeListOf<CheckerElement>} */
+						const potentialDestinationCheckers = document.querySelectorAll(`#checkers > [data-point="${potentialDestinationPosition.value}"]`);
+						return potentialDestinationCheckers.length <= 1 || new CheckerOnBoardElement(potentialDestinationCheckers[0]).player.value === checkerElement.player.value;
+					});
 			});
 	}
 }
@@ -432,7 +428,7 @@ checkersElement.addEventListener(`click`, event => {
 		return;
 	}
 	const checkerElement = new CheckerOnBoardElement((/** @type {SVGUseElement} */ (event.target)).closest(`#checkers > *`));
-	if (checkerElement.permissibleDestinationPoints.size === 0) return;
+	if (!checkerElement.isMovable) return;
 	const dieElement = Array.from(/** @type {NodeListOf<DieElement>} */ (document.querySelectorAll(`#dice veyndan-die:not([data-played-at])`)))
 		.find(dieElement => {
 				try {
