@@ -4,6 +4,9 @@ const ONE_VALUE = `1`;
 const TWO_VALUE = `2`;
 
 export default class Player {
+	/**
+	 * @param {ONE_VALUE|TWO_VALUE} value
+	 */
 	constructor(value) {
 		if (![ONE_VALUE, TWO_VALUE].includes(value)) {
 			throw new RangeError(`The argument must be "${ONE_VALUE}" or "${TWO_VALUE}".`);

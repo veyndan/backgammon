@@ -57,7 +57,7 @@ class CheckerOnBoardElement {
 	 * @return {Player}
 	 */
 	get player() {
-		return new Player(this.target.dataset[`player`]);
+		return new Player(/** @type {`1`|`2`} */ (this.target.dataset[`player`]));
 	}
 
 	/**
