@@ -26,7 +26,7 @@ Math.clamp = function (x, lower, upper) {
 	return Math.min(Math.max(x, lower), upper);
 };
 
-let game = new Game(Board.startingPosition(), new Turn(Player.One));
+let game = new Game(Board.startingPosition(), new Turn(Player.One, []));
 
 class CheckerOnBoardElement {
 	/**

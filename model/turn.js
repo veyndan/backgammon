@@ -9,7 +9,7 @@ export default class Turn {
 	 * @param {Player} player
 	 * @param {Touch[]} touches
 	 */
-	constructor(player, touches = []) {
+	constructor(player, touches) {
 		this.player = Object.freeze(player);
 		this.touches = Object.freeze(touches);
 		Object.freeze(this);
@@ -19,7 +19,7 @@ export default class Turn {
 	 * @return {Turn}
 	 */
 	get other() {
-		return new Turn(this.player.other);
+		return new Turn(this.player.other, []);
 	}
 
 	/**
