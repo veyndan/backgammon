@@ -2,19 +2,16 @@
 
 // noinspection ES6UnusedImports
 import Player from "./player.js";
-import {Bar, Point, Position} from "./position.js";
+import {Point, Position} from "./position.js";
 
-export default class Move {
+class Move {
 	/**
 	 * @param {Player} player
 	 * @param {Position} from
-	 * @param {Position} to
 	 */
-	constructor(player, from, to) {
+	constructor(player, from) {
 		this.player = Object.freeze(player);
 		this.from = Object.freeze(from);
-		this.to = Object.freeze(to);
-		Object.freeze(this);
 	}
 }
 
@@ -25,7 +22,8 @@ export class Advancement extends Move {
 	 * @param {Point} to
 	 */
 	constructor(player, from, to) {
-		super(player, from, to);
+		super(player, from);
+		this.to = Object.freeze(to);
 		Object.freeze(this);
 	}
 }
@@ -36,7 +34,7 @@ export class Hit extends Move {
 	 * @param {Point} from
 	 */
 	constructor(player, from) {
-		super(player, from, new Bar());
+		super(player, from);
 		Object.freeze(this);
 	}
 }

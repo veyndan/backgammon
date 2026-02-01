@@ -3,7 +3,7 @@
 // noinspection ES6UnusedImports
 import Dice, {Die} from "./dice.js";
 // noinspection ES6UnusedImports
-import Move, {Advancement, Hit } from "./move.js";
+import {Advancement, Hit } from "./move.js";
 // noinspection ES6UnusedImports
 import Player from "./player.js";
 
@@ -73,7 +73,8 @@ export class Touch {
 	 */
 	constructor(die, advancement, hit) {
 		this.die = Object.freeze(die);
-		this.moves = Object.freeze(/** @type {Move[]} */ ([advancement].concat(hit !== null ? [hit] : [])));
+		this.advancement = Object.freeze(advancement);
+		this.hit = Object.freeze(hit);
 		Object.freeze(this);
 	}
 }

@@ -294,20 +294,14 @@ confirmElement.addEventListener(`click`, () => {
 undoElement.addEventListener(`click`, () => {
 	const lastTouch = game.turn.touches.at(-1);
 	game = game.withUndoneTouch();
-	lastTouch.moves.forEach(move => {
-		/** @type {CheckerOnBoardElement} */
-		let lastMovedCheckerElement;
-		if (move.to instanceof Point) {
-			lastMovedCheckerElement = Array.from(/** @type {NodeListOf<CheckerElement>} */ (document.querySelectorAll(`#checkers > [data-point="${move.to.value}"]`)))
-				.map(target => new CheckerOnBoardElement(target))
-				.find(checkerElement => checkerElement.pointStackIndex === checkerElement.pointStackCount - 1);
-		} else if (move.to instanceof Bar) {
-			lastMovedCheckerElement = new CheckerOnBoardElement(document.querySelector(`#checkers > [data-player="${move.player.value}"][data-hit]`));
-		} else {
-			throw Error();
-		}
-		lastMovedCheckerElement.position = move.from;
-	});
+	let lastMovedCheckerElement = Array.from(/** @type {NodeListOf<CheckerElement>} */ (document.querySelectorAll(`#checkers > [data-point="${lastTouch.advancement.to.value}"]`)))
+		.map(target => new CheckerOnBoardElement(target))
+		.find(checkerElement => checkerElement.pointStackIndex === checkerElement.pointStackCount - 1);
+	lastMovedCheckerElement.position = lastTouch.advancement.from;
+	if (lastTouch.hit !== null) {
+		let lastMovedCheckerElement = new CheckerOnBoardElement(document.querySelector(`#checkers > [data-player="${lastTouch.hit.player.value}"][data-hit]`));
+		lastMovedCheckerElement.position = lastTouch.hit.from;
+	}
 	const lastPlayedDieElement = Array.from(/** @type {NodeListOf<DieElement>} */ (document.querySelectorAll(`#dice veyndan-die[data-played-at]`)))
 		.reduce((mostRecentlyPlayedDieElement, dieElement) => mostRecentlyPlayedDieElement.playedAt > dieElement.playedAt ? mostRecentlyPlayedDieElement : dieElement);
 	lastPlayedDieElement.playedAt = undefined;
