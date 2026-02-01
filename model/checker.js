@@ -18,7 +18,7 @@ export default class Checker {
 	 * @param {number} offset
 	 * @return {?Checker}
 	 */
-	moveBy(offset) {
+	withMoveBy(offset) {
 		if (this.position instanceof Point) {
 			const potentialPoint = this.position.value + (this.player.value === Player.One.value ? -offset : offset);
 			if (potentialPoint < Point.MIN.value || potentialPoint > Point.MAX.value) {

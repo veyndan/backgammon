@@ -20,7 +20,7 @@ export default class Game {
 	/**
 	 * @return {Game}
 	 */
-	changeTurn() {
+	withChangedTurn() {
 		return new Game(this.board, new Turn(this.turn.player.value === Player.One.value ? Player.Two : Player.One));
 	}
 
@@ -28,14 +28,14 @@ export default class Game {
 	 * @param {Touch} value
 	 * @return {Game}
 	 */
-	touch(value) {
+	withTouch(value) {
 		return new Game(this.board, new Turn(this.turn.player, this.turn.touches.concat(value)));
 	}
 
 	/**
 	 * @return {Game}
 	 */
-	undoTouch() {
+	withUndoneTouch() {
 		return new Game(this.board, new Turn(this.turn.player, this.turn.touches.slice(0, -1)));
 	}
 }

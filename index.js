@@ -285,13 +285,13 @@ confirmElement.addEventListener(`click`, () => {
 	rollDiceElement.hidden = false;
 	confirmElement.hidden = true;
 	undoElement.hidden = true;
-	game = game.changeTurn();
+	game = game.withChangedTurn();
 	mainElement.dataset[`player`] = game.turn.player.value;
 });
 
 undoElement.addEventListener(`click`, () => {
 	const lastTouch = game.turn.touches.at(-1);
-	game = game.undoTouch();
+	game = game.withUndoneTouch();
 	lastTouch.moves.forEach(move => {
 		/** @type {CheckerOnBoardElement} */
 		let lastMovedCheckerElement;
@@ -381,7 +381,7 @@ function updateMovabilityOfCheckers() {
 			.forEach(checkerElement => {
 				checkerElement.permissibleDestinationPoints = /** @type {Set<Point>} */ (new Set(
 					dieElements
-						.map(dieElement => new Checker(checkerElement.player, checkerElement.position).moveBy(dieElement.value))
+						.map(dieElement => new Checker(checkerElement.player, checkerElement.position).withMoveBy(dieElement.value))
 						.filter(potentialCheckerMovement => potentialCheckerMovement !== null)
 						.map(potentialCheckerMovement => potentialCheckerMovement.position)
 						.filter(potentialDestinationPosition => {
@@ -404,7 +404,7 @@ function updateMovabilityOfCheckers() {
 			.forEach(checkerElement => {
 				checkerElement.permissibleDestinationPoints = /** @type {Set<Point>} */ (new Set(
 					dieElements
-						.map(dieElement => new Checker(checkerElement.player, checkerElement.position).moveBy(dieElement.value))
+						.map(dieElement => new Checker(checkerElement.player, checkerElement.position).withMoveBy(dieElement.value))
 						.filter(potentialCheckerMovement => potentialCheckerMovement !== null)
 						.map(potentialCheckerMovement => potentialCheckerMovement.position)
 						.filter(potentialDestinationPosition => {
@@ -434,7 +434,7 @@ checkersElement.addEventListener(`click`, event => {
 		.find(dieElement =>
 			Array.from(checkerElement.permissibleDestinationPoints)
 				.some(permissibleDestinationPoint => {
-					const potentialDestinationChecker = new Checker(checkerElement.player, checkerElement.position).moveBy(dieElement.value);
+					const potentialDestinationChecker = new Checker(checkerElement.player, checkerElement.position).withMoveBy(dieElement.value);
 					if (potentialDestinationChecker === null) return false;
 					if (potentialDestinationChecker.position instanceof Point) {
 						return potentialDestinationChecker.position.value === permissibleDestinationPoint.value;
@@ -445,7 +445,7 @@ checkersElement.addEventListener(`click`, event => {
 		);
 	dieElement.playedAt = Date.now();
 	const oldPosition = checkerElement.position;
-	checkerElement.position = new Checker(checkerElement.player, checkerElement.position).moveBy(dieElement.value).position;
+	checkerElement.position = new Checker(checkerElement.player, checkerElement.position).withMoveBy(dieElement.value).position;
 	const moves = [
 		new Move(checkerElement.player, oldPosition, checkerElement.position),
 	];
@@ -459,7 +459,7 @@ checkersElement.addEventListener(`click`, event => {
 		opponentCheckerOnPointCheckerElement.position = new Bar();
 		moves.push(new Move(opponentCheckerOnPointCheckerElement.player, oldOpponentPosition, opponentCheckerOnPointCheckerElement.position));
 	}
-	game = game.touch(new Touch(moves));
+	game = game.withTouch(new Touch(moves));
 });
 checkersElement.addEventListener(`pointerover`, event => {
 	const checkerElementTarget = (/** @type {Element} */ (event.target)).closest(`#checkers > :not([data-permissible-destination-points="[]"])`);
@@ -582,7 +582,7 @@ checkersElement.addEventListener('pointerdown', event => {
 		const point = pointFromCoordinates(coord);
 		const dieElement = Array.from(/** @type {NodeListOf<DieElement>} */ (document.querySelectorAll(`#dice veyndan-die:not([data-played-at])`)))
 			.find(unplayedDieElement => {
-				const potentialDestinationChecker = new Checker(checkerElement.player, checkerElement.position).moveBy(unplayedDieElement.value);
+				const potentialDestinationChecker = new Checker(checkerElement.player, checkerElement.position).withMoveBy(unplayedDieElement.value);
 				if (potentialDestinationChecker === null) return false;
 				if (potentialDestinationChecker.position instanceof Point) {
 					return Array.from(checkerElement.permissibleDestinationPoints).map(permissibleDestinationPoint => permissibleDestinationPoint.value).includes(potentialDestinationChecker.position.value) && point !== null && potentialDestinationChecker.position.value === point.value;
@@ -605,7 +605,7 @@ checkersElement.addEventListener('pointerdown', event => {
 				opponentCheckerOnPointCheckerElement.position = new Bar();
 				moves.push(new Move(opponentCheckerOnPointCheckerElement.player, oldOpponentPosition, opponentCheckerOnPointCheckerElement.position));
 			}
-			game = game.touch(new Touch(moves));
+			game = game.withTouch(new Touch(moves));
 		}
 		document.getElementById(`drop-points`).replaceChildren();
 		checkerElement.target.classList.remove(`dragging`);

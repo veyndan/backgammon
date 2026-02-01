@@ -35,7 +35,7 @@ export default class Board {
 	 * @param {number} offset
 	 * @return {?Board}
 	 */
-	move(player, position, offset) {
+	withMove(player, position, offset) {
 		const positionValue = position instanceof Point
 			? position.value
 			: (player.value === Player.One.value ? 25 : 0);
