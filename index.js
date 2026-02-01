@@ -2,6 +2,7 @@
 
 import Board from "./model/board.js";
 import Checker from "./model/checker.js";
+import Dice, {Die} from "./model/dice.js";
 import Game from "./model/game.js";
 import Turn, {Move, Touch} from "./model/turn.js";
 import Player from "./model/player.js";
@@ -26,7 +27,7 @@ Math.clamp = function (x, lower, upper) {
 	return Math.min(Math.max(x, lower), upper);
 };
 
-let game = new Game(Board.startingPosition(), new Turn(Player.One, []));
+let game = new Game(Board.startingPosition(), new Turn(Player.One, [], null));
 
 class CheckerOnBoardElement {
 	/**
@@ -356,6 +357,7 @@ rollDiceElement.addEventListener(`click`, () => {
 					if (firstDieElement.value === secondDieElement.value) {
 						diceElement.append(firstDieElement.cloneNode(true), secondDieElement.cloneNode(true));
 					}
+					game = game.withDice(new Dice(new Die(firstDieElement.value), new Die(secondDieElement.value)));
 					updateMovabilityOfCheckers();
 				}
 			},
@@ -372,7 +374,6 @@ diceContainerElement.addEventListener(`click`, () => {
 });
 
 function updateMovabilityOfCheckers() {
-	const dieElements = Array.from(/** @type {NodeListOf<DieElement>} */ (document.querySelectorAll(`#dice veyndan-die:not([data-played-at])`)));
 	const checkerElements = Array.from(/** @type {NodeListOf<CheckerElement>} */ (document.querySelectorAll(`#checkers > [data-player="${game.turn.player.value}"]`)))
 		.map(value => new CheckerOnBoardElement(value));
 	const positionNameToCheckerElements = Map.groupBy(checkerElements, checkerElement => checkerElement.position.constructor.name);
@@ -380,8 +381,8 @@ function updateMovabilityOfCheckers() {
 		positionNameToCheckerElements.get(Bar.name)
 			.forEach(checkerElement => {
 				checkerElement.permissibleDestinationPoints = /** @type {Set<Point>} */ (new Set(
-					dieElements
-						.map(dieElement => new Checker(checkerElement.player, checkerElement.position).withMoveBy(dieElement.value))
+					game.playableDice
+						.map(die => new Checker(checkerElement.player, checkerElement.position).withMoveBy(die.value))
 						.filter(potentialCheckerMovement => potentialCheckerMovement !== null)
 						.map(potentialCheckerMovement => potentialCheckerMovement.position)
 						.filter(potentialDestinationPosition => {
@@ -403,8 +404,8 @@ function updateMovabilityOfCheckers() {
 		(positionNameToCheckerElements.get(Point.name) ?? [])
 			.forEach(checkerElement => {
 				checkerElement.permissibleDestinationPoints = /** @type {Set<Point>} */ (new Set(
-					dieElements
-						.map(dieElement => new Checker(checkerElement.player, checkerElement.position).withMoveBy(dieElement.value))
+					game.playableDice
+						.map(die => new Checker(checkerElement.player, checkerElement.position).withMoveBy(die.value))
 						.filter(potentialCheckerMovement => potentialCheckerMovement !== null)
 						.map(potentialCheckerMovement => potentialCheckerMovement.position)
 						.filter(potentialDestinationPosition => {
@@ -459,7 +460,7 @@ checkersElement.addEventListener(`click`, event => {
 		opponentCheckerOnPointCheckerElement.position = new Bar();
 		moves.push(new Move(opponentCheckerOnPointCheckerElement.player, oldOpponentPosition, opponentCheckerOnPointCheckerElement.position));
 	}
-	game = game.withTouch(new Touch(moves));
+	game = game.withTouch(new Touch(new Die(dieElement.value), moves));
 });
 checkersElement.addEventListener(`pointerover`, event => {
 	const checkerElementTarget = (/** @type {Element} */ (event.target)).closest(`#checkers > :not([data-permissible-destination-points="[]"])`);
@@ -605,7 +606,7 @@ checkersElement.addEventListener('pointerdown', event => {
 				opponentCheckerOnPointCheckerElement.position = new Bar();
 				moves.push(new Move(opponentCheckerOnPointCheckerElement.player, oldOpponentPosition, opponentCheckerOnPointCheckerElement.position));
 			}
-			game = game.withTouch(new Touch(moves));
+			game = game.withTouch(new Touch(new Die(dieElement.value), moves));
 		}
 		document.getElementById(`drop-points`).replaceChildren();
 		checkerElement.target.classList.remove(`dragging`);

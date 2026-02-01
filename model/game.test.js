@@ -8,13 +8,13 @@ import Turn from "./turn.js";
 
 test(`withChangedTurn`, function (t) {
 	t.test(String(Player.One), function (t) {
-		const game = new Game(Board.startingPosition(), new Turn(Player.One, []));
-		t.deepEqual(game.withChangedTurn(), new Game(Board.startingPosition(), new Turn(Player.Two, [])));
+		const game = new Game(Board.startingPosition(), new Turn(Player.One, [], null));
+		t.deepEqual(game.withChangedTurn(), new Game(Board.startingPosition(), new Turn(Player.Two, [], null)));
 		t.end();
 	});
 	t.test(String(Player.Two), function (t) {
-		const game = new Game(Board.startingPosition(), new Turn(Player.Two, []));
-		t.deepEqual(game.withChangedTurn(), new Game(Board.startingPosition(), new Turn(Player.One, [])));
+		const game = new Game(Board.startingPosition(), new Turn(Player.Two, [], null));
+		t.deepEqual(game.withChangedTurn(), new Game(Board.startingPosition(), new Turn(Player.One, [], null)));
 		t.end();
 	});
 });

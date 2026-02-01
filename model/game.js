@@ -3,6 +3,8 @@
 // noinspection ES6UnusedImports
 import Board from "./board.js";
 // noinspection ES6UnusedImports
+import Dice, { Die } from "./dice.js";
+// noinspection ES6UnusedImports
 import Turn, {Touch} from "./turn.js";
 
 export default class Game {
@@ -14,6 +16,21 @@ export default class Game {
 		this.board = Object.freeze(board);
 		this.turn = Object.freeze(turn);
 		Object.freeze(this);
+	}
+
+	/**
+	 * @return {Readonly<Die[]>}
+	 */
+	get playableDice() {
+		return this.turn.playableDice;
+	}
+
+	/**
+	 * @param {Dice} value
+	 * @return {Game}
+	 */
+	withDice(value) {
+		return new Game(this.board, this.turn.withDice(value));
 	}
 
 	/**
