@@ -3,8 +3,9 @@
 // noinspection ES6UnusedImports
 import Dice, {Die} from "./dice.js";
 // noinspection ES6UnusedImports
+import Move, {Advancement, Hit } from "./move.js";
+// noinspection ES6UnusedImports
 import Player from "./player.js";
-import { Position } from "./position.js";
 
 export default class Turn {
 	/** @type {Dice} */
@@ -67,25 +68,12 @@ export default class Turn {
 export class Touch {
 	/**
 	 * @param {Die} die
-	 * @param {Move[]} moves
+	 * @param {Advancement} advancement
+	 * @param {?Hit} hit
 	 */
-	constructor(die, moves) {
+	constructor(die, advancement, hit) {
 		this.die = Object.freeze(die);
-		this.moves = Object.freeze(moves);
-		Object.freeze(this);
-	}
-}
-
-export class Move {
-	/**
-	 * @param {Player} player
-	 * @param {Position} from
-	 * @param {Position} to
-	 */
-	constructor(player, from, to) {
-		this.player = Object.freeze(player);
-		this.from = Object.freeze(from);
-		this.to = Object.freeze(to);
+		this.moves = Object.freeze(/** @type {Move[]} */ ([advancement].concat(hit !== null ? [hit] : [])));
 		Object.freeze(this);
 	}
 }

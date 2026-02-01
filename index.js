@@ -4,7 +4,8 @@ import Board from "./model/board.js";
 import Checker from "./model/checker.js";
 import Dice, {Die} from "./model/dice.js";
 import Game from "./model/game.js";
-import Turn, {Move, Touch} from "./model/turn.js";
+import {Advancement, Hit} from "./model/move.js";
+import Turn, {Touch} from "./model/turn.js";
 import Player from "./model/player.js";
 import {Bar, Point, Position} from "./model/position.js";
 // noinspection ES6UnusedImports
@@ -447,9 +448,7 @@ checkersElement.addEventListener(`click`, event => {
 	dieElement.playedAt = Date.now();
 	const oldPosition = checkerElement.position;
 	checkerElement.position = new Checker(checkerElement.player, checkerElement.position).withMoveBy(dieElement.value).position;
-	const moves = [
-		new Move(checkerElement.player, oldPosition, checkerElement.position),
-	];
+	const move = new Advancement(checkerElement.player, oldPosition, checkerElement.position);
 	// noinspection JSUnresolvedReference
 	/** @type {CheckerElement} */
 		// @ts-ignore
@@ -458,9 +457,10 @@ checkersElement.addEventListener(`click`, event => {
 		const opponentCheckerOnPointCheckerElement = new CheckerOnBoardElement(opponentCheckerOnPointElement);
 		const oldOpponentPosition = opponentCheckerOnPointCheckerElement.position;
 		opponentCheckerOnPointCheckerElement.position = new Bar();
-		moves.push(new Move(opponentCheckerOnPointCheckerElement.player, oldOpponentPosition, opponentCheckerOnPointCheckerElement.position));
+		game = game.withTouch(new Touch(new Die(dieElement.value), move, new Hit(opponentCheckerOnPointCheckerElement.player, oldOpponentPosition)));
+	} else {
+		game = game.withTouch(new Touch(new Die(dieElement.value), move, null));
 	}
-	game = game.withTouch(new Touch(new Die(dieElement.value), moves));
 });
 checkersElement.addEventListener(`pointerover`, event => {
 	const checkerElementTarget = (/** @type {Element} */ (event.target)).closest(`#checkers > :not([data-permissible-destination-points="[]"])`);
@@ -595,18 +595,17 @@ checkersElement.addEventListener('pointerdown', event => {
 			dieElement.playedAt = Date.now();
 			const oldPosition = checkerElement.position;
 			checkerElement.position = point;
-			const moves = [
-				new Move(checkerElement.player, oldPosition, checkerElement.position),
-			];
+			const move = new Advancement(checkerElement.player, oldPosition, checkerElement.position);
 			/** @type {CheckerElement} */
 			const opponentCheckerOnPointElement = document.querySelector(`#checkers > [data-point="${(point.value)}"]:not([data-player="${checkerElement.player.value}"])`);
 			if (opponentCheckerOnPointElement !== null) {
 				const opponentCheckerOnPointCheckerElement = new CheckerOnBoardElement(opponentCheckerOnPointElement);
 				const oldOpponentPosition = opponentCheckerOnPointCheckerElement.position;
 				opponentCheckerOnPointCheckerElement.position = new Bar();
-				moves.push(new Move(opponentCheckerOnPointCheckerElement.player, oldOpponentPosition, opponentCheckerOnPointCheckerElement.position));
+				game = game.withTouch(new Touch(new Die(dieElement.value), move, new Hit(opponentCheckerOnPointCheckerElement.player, oldOpponentPosition)));
+			} else {
+				game = game.withTouch(new Touch(new Die(dieElement.value), move, null));
 			}
-			game = game.withTouch(new Touch(new Die(dieElement.value), moves));
 		}
 		document.getElementById(`drop-points`).replaceChildren();
 		checkerElement.target.classList.remove(`dragging`);
