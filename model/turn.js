@@ -37,7 +37,7 @@ export default class Turn {
 		if (this.#dice.values.every(die => die.value === this.#dice.values[0].value)) {
 			return Object.freeze(this.#dice.values.concat(this.#dice.values).slice(this.touches.length));
 		} else {
-			return this.#dice.values.filter(die => !this.touches.map(touch => touch.die.value).includes(die.value));
+			return this.#dice.values.filter(die => !this.touches.map(touch => touch.advancement.die.value).includes(die.value));
 		}
 	}
 
@@ -67,12 +67,10 @@ export default class Turn {
 
 export class Touch {
 	/**
-	 * @param {Die} die
 	 * @param {Advancement} advancement
 	 * @param {?Hit} hit
 	 */
-	constructor(die, advancement, hit) {
-		this.die = Object.freeze(die);
+	constructor(advancement, hit) {
 		this.advancement = Object.freeze(advancement);
 		this.hit = Object.freeze(hit);
 		Object.freeze(this);

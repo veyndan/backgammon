@@ -442,27 +442,20 @@ checkersElement.addEventListener(`click`, event => {
 	dieElement.playedAt = Date.now();
 	const oldPosition = checkerElement.position;
 	checkerElement.position = new Checker(checkerElement.player, checkerElement.position).withMoveBy(dieElement.value).position;
-	const checkerElementPosition = checkerElement.position;
-	if (checkerElementPosition instanceof Point) {
-		const move = new Advancement(checkerElement.player, oldPosition, checkerElementPosition);
-		// noinspection JSUnresolvedReference
-		/** @type {CheckerElement} */
-			// @ts-ignore
-		const opponentCheckerOnPointElement = document.querySelector(`#checkers > [data-point="${(checkerElement.position.value)}"]:not([data-player="${checkerElement.player.value}"])`);
-		if (opponentCheckerOnPointElement !== null) {
-			const opponentCheckerOnPointCheckerElement = new CheckerOnBoardElement(opponentCheckerOnPointElement);
-			const oldOpponentPosition = opponentCheckerOnPointCheckerElement.position;
-			if (oldOpponentPosition instanceof Point) {
-				opponentCheckerOnPointCheckerElement.position = new Bar();
-				game = game.withTouch(new Touch(new Die(dieElement.value), move, new Hit(opponentCheckerOnPointCheckerElement.player, oldOpponentPosition)));
-			} else {
-				throw Error(`This shouldn't be possible.`);
-			}
+	const move = new Advancement(checkerElement.player, new Die(dieElement.value), oldPosition);
+	/** @type {CheckerElement} */
+	const opponentCheckerOnPointElement = document.querySelector(`#checkers > [data-point="${move.to.value}"]:not([data-player="${checkerElement.player.value}"])`);
+	if (opponentCheckerOnPointElement !== null) {
+		const opponentCheckerOnPointCheckerElement = new CheckerOnBoardElement(opponentCheckerOnPointElement);
+		const oldOpponentPosition = opponentCheckerOnPointCheckerElement.position;
+		if (oldOpponentPosition instanceof Point) {
+			opponentCheckerOnPointCheckerElement.position = new Bar();
+			game = game.withTouch(new Touch(move, new Hit(opponentCheckerOnPointCheckerElement.player, oldOpponentPosition)));
 		} else {
-			game = game.withTouch(new Touch(new Die(dieElement.value), move, null));
+			throw Error(`This shouldn't be possible.`);
 		}
 	} else {
-		throw Error(`This shouldn't be possible.`);
+		game = game.withTouch(new Touch(move, null));
 	}
 });
 checkersElement.addEventListener(`pointerover`, event => {
@@ -598,25 +591,20 @@ checkersElement.addEventListener('pointerdown', event => {
 			dieElement.playedAt = Date.now();
 			const oldPosition = checkerElement.position;
 			checkerElement.position = point;
-			const checkerElementPosition = checkerElement.position;
-			if (checkerElementPosition instanceof Point) {
-				const move = new Advancement(checkerElement.player, oldPosition, checkerElementPosition);
-				/** @type {CheckerElement} */
-				const opponentCheckerOnPointElement = document.querySelector(`#checkers > [data-point="${(point.value)}"]:not([data-player="${checkerElement.player.value}"])`);
-				if (opponentCheckerOnPointElement !== null) {
-					const opponentCheckerOnPointCheckerElement = new CheckerOnBoardElement(opponentCheckerOnPointElement);
-					const oldOpponentPosition = opponentCheckerOnPointCheckerElement.position;
-					opponentCheckerOnPointCheckerElement.position = new Bar();
-					if (oldOpponentPosition instanceof Point) {
-						game = game.withTouch(new Touch(new Die(dieElement.value), move, new Hit(opponentCheckerOnPointCheckerElement.player, oldOpponentPosition)));
-					} else {
-						throw Error(`This shouldn't be possible.`);
-					}
+			const move = new Advancement(checkerElement.player, new Die(dieElement.value), oldPosition);
+			/** @type {CheckerElement} */
+			const opponentCheckerOnPointElement = document.querySelector(`#checkers > [data-point="${(point.value)}"]:not([data-player="${checkerElement.player.value}"])`);
+			if (opponentCheckerOnPointElement !== null) {
+				const opponentCheckerOnPointCheckerElement = new CheckerOnBoardElement(opponentCheckerOnPointElement);
+				const oldOpponentPosition = opponentCheckerOnPointCheckerElement.position;
+				opponentCheckerOnPointCheckerElement.position = new Bar();
+				if (oldOpponentPosition instanceof Point) {
+					game = game.withTouch(new Touch(move, new Hit(opponentCheckerOnPointCheckerElement.player, oldOpponentPosition)));
 				} else {
-					game = game.withTouch(new Touch(new Die(dieElement.value), move, null));
+					throw Error(`This shouldn't be possible.`);
 				}
 			} else {
-				throw Error(`This shouldn't be possible.`);
+				game = game.withTouch(new Touch(move, null));
 			}
 		}
 		document.getElementById(`drop-points`).replaceChildren();

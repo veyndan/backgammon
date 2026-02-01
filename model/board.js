@@ -1,6 +1,7 @@
 "use strict";
 
-import { Point, Position } from "./position.js";
+import {Advancement} from "./move.js";
+import {Point} from "./position.js";
 import Player from "./player.js";
 
 export default class Board {
@@ -30,49 +31,45 @@ export default class Board {
 	}
 
 	/**
-	 * @param {Player} player
-	 * @param {Position} position
-	 * @param {number} offset
+	 * @param {Advancement} advancement
 	 * @return {?Board}
 	 */
-	withMove(player, position, offset) {
-		const positionValue = position instanceof Point
-			? position.value
-			: (player.value === Player.One.value ? 25 : 0);
+	withMove(advancement) {
+		const positionValue = advancement.from instanceof Point
+			? advancement.from.value
+			: (advancement.player.value === Player.One.value ? 25 : 0);
 
 		if (this.mailbox[positionValue] === 0) {
-			throw Error(`Unable to move checker as no checker resides on ${position}.`);
+			throw Error(`Unable to move checker as no checker resides on ${advancement.from}.`);
 		}
 
-		const potentialPointValue = positionValue + (player.value === Player.One.value ? -offset : offset);
+		const potentialPointValue = positionValue + (advancement.player.value === Player.One.value ? -advancement.die.value : advancement.die.value);
 
-		if (position instanceof Point && potentialPointValue < Point.MIN.value || potentialPointValue > Point.MAX.value) {
-			return null;
-		} else if (player.value === Player.One.value && this.mailbox[potentialPointValue] >= 0) {
+		if (advancement.player.value === Player.One.value && this.mailbox[potentialPointValue] >= 0) {
 			const potentialMailbox = [...this.mailbox];
 			potentialMailbox[positionValue]--;
 			potentialMailbox[potentialPointValue]++;
 			return new Board(potentialMailbox);
-		} else if (player.value === Player.Two.value && this.mailbox[potentialPointValue] <= 0) {
+		} else if (advancement.player.value === Player.Two.value && this.mailbox[potentialPointValue] <= 0) {
 			const potentialMailbox = [...this.mailbox];
 			potentialMailbox[positionValue]++;
 			potentialMailbox[potentialPointValue]--;
 			return new Board(potentialMailbox);
-		} else if (player.value === Player.One.value && this.mailbox[potentialPointValue] === -1) {
+		} else if (advancement.player.value === Player.One.value && this.mailbox[potentialPointValue] === -1) {
 			const potentialMailbox = [...this.mailbox];
 			potentialMailbox[positionValue]--;
 			potentialMailbox[potentialPointValue] = 1;
 			potentialMailbox[0]--;
 			return new Board(potentialMailbox);
-		} else if (player.value === Player.Two.value && this.mailbox[potentialPointValue] === 1) {
+		} else if (advancement.player.value === Player.Two.value && this.mailbox[potentialPointValue] === 1) {
 			const potentialMailbox = [...this.mailbox];
 			potentialMailbox[positionValue]++;
 			potentialMailbox[potentialPointValue] = -1;
 			potentialMailbox[25]++;
 			return new Board(potentialMailbox);
-		} else if (player.value === Player.One.value && this.mailbox[potentialPointValue] < -1) {
+		} else if (advancement.player.value === Player.One.value && this.mailbox[potentialPointValue] < -1) {
 			return null;
-		} else if (player.value === Player.Two.value && this.mailbox[potentialPointValue] > 1) {
+		} else if (advancement.player.value === Player.Two.value && this.mailbox[potentialPointValue] > 1) {
 			return null;
 		} else {
 			throw Error(`Prior conditionals should've been exhaustive.`);

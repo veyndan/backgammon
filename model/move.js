@@ -1,5 +1,6 @@
 "use strict";
 
+import {Die} from "./dice.js";
 // noinspection ES6UnusedImports
 import Player from "./player.js";
 import {Point, Position} from "./position.js";
@@ -18,12 +19,14 @@ class Move {
 export class Advancement extends Move {
 	/**
 	 * @param {Player} player
+	 * @param {Die} die
 	 * @param {Position} from
-	 * @param {Point} to
 	 */
-	constructor(player, from, to) {
+	constructor(player, die, from) {
 		super(player, from);
-		this.to = Object.freeze(to);
+		this.die = Object.freeze(die);
+		const fromValue = from instanceof Point ? from.value : (player.value === Player.One.value ? 25 : 0);
+		this.to = Object.freeze(new Point(fromValue + (player.value === Player.One.value ? -die.value : die.value)));
 		Object.freeze(this);
 	}
 }
