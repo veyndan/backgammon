@@ -1,7 +1,6 @@
 "use strict";
 
 import Board from "./model/board.js";
-import Checker from "./model/checker.js";
 import Dice, {Die} from "./model/dice.js";
 import Game from "./model/game.js";
 import {Advancement, Hit} from "./model/move.js";
@@ -377,17 +376,21 @@ function updateMovabilityOfCheckers() {
 			.forEach(checkerElement => {
 				checkerElement.permissibleDestinationPoints = /** @type {Set<Point>} */ (new Set(
 					game.playableDice
-						.map(die => new Checker(checkerElement.player, checkerElement.position).withMoveBy(die.value))
-						.filter(potentialCheckerMovement => potentialCheckerMovement !== null)
-						.map(potentialCheckerMovement => potentialCheckerMovement.position)
-						.filter(potentialDestinationPosition => {
-							if (potentialDestinationPosition instanceof Point) {
-								/** @type {NodeListOf<CheckerElement>} */
-								const potentialDestinationCheckers = document.querySelectorAll(`#checkers > [data-point="${potentialDestinationPosition.value}"]`);
-								return potentialDestinationCheckers.length <= 1 || new CheckerOnBoardElement(potentialDestinationCheckers[0]).player.value === checkerElement.player.value;
-							} else {
-								throw Error();
+						.flatMap(die => {
+							try {
+								return [new Advancement(checkerElement.player, die, checkerElement.position).to];
+							} catch (error) {
+								if (error instanceof RangeError) {
+									return [];
+								} else {
+									throw error;
+								}
 							}
+						})
+						.filter(potentialDestinationPosition => {
+							/** @type {NodeListOf<CheckerElement>} */
+							const potentialDestinationCheckers = document.querySelectorAll(`#checkers > [data-point="${potentialDestinationPosition.value}"]`);
+							return potentialDestinationCheckers.length <= 1 || new CheckerOnBoardElement(potentialDestinationCheckers[0]).player.value === checkerElement.player.value;
 						}),
 				));
 			});
@@ -400,17 +403,21 @@ function updateMovabilityOfCheckers() {
 			.forEach(checkerElement => {
 				checkerElement.permissibleDestinationPoints = /** @type {Set<Point>} */ (new Set(
 					game.playableDice
-						.map(die => new Checker(checkerElement.player, checkerElement.position).withMoveBy(die.value))
-						.filter(potentialCheckerMovement => potentialCheckerMovement !== null)
-						.map(potentialCheckerMovement => potentialCheckerMovement.position)
-						.filter(potentialDestinationPosition => {
-							if (potentialDestinationPosition instanceof Point) {
-								/** @type {NodeListOf<CheckerElement>} */
-								const potentialDestinationCheckers = document.querySelectorAll(`#checkers > [data-point="${potentialDestinationPosition.value}"]`);
-								return potentialDestinationCheckers.length <= 1 || new CheckerOnBoardElement(potentialDestinationCheckers[0]).player.value === checkerElement.player.value;
-							} else {
-								throw Error();
+						.flatMap(die => {
+							try {
+								return [new Advancement(checkerElement.player, die, checkerElement.position).to];
+							} catch (error) {
+								if (error instanceof RangeError) {
+									return [];
+								} else {
+									throw error;
+								}
 							}
+						})
+						.filter(potentialDestinationPosition => {
+							/** @type {NodeListOf<CheckerElement>} */
+							const potentialDestinationCheckers = document.querySelectorAll(`#checkers > [data-point="${potentialDestinationPosition.value}"]`);
+							return potentialDestinationCheckers.length <= 1 || new CheckerOnBoardElement(potentialDestinationCheckers[0]).player.value === checkerElement.player.value;
 						}),
 				));
 			});
@@ -430,19 +437,22 @@ checkersElement.addEventListener(`click`, event => {
 		.find(dieElement =>
 			Array.from(checkerElement.permissibleDestinationPoints)
 				.some(permissibleDestinationPoint => {
-					const potentialDestinationChecker = new Checker(checkerElement.player, checkerElement.position).withMoveBy(dieElement.value);
-					if (potentialDestinationChecker === null) return false;
-					if (potentialDestinationChecker.position instanceof Point) {
-						return potentialDestinationChecker.position.value === permissibleDestinationPoint.value;
-					} else {
-						throw Error();
+					try {
+						const advancement = new Advancement(checkerElement.player, new Die(dieElement.value), checkerElement.position);
+						return advancement.to.value === permissibleDestinationPoint.value;
+					} catch (error) {
+						if (error instanceof RangeError) {
+							return false;
+						} else {
+							throw error;
+						}
 					}
 				}),
 		);
 	dieElement.playedAt = Date.now();
 	const oldPosition = checkerElement.position;
-	checkerElement.position = new Checker(checkerElement.player, checkerElement.position).withMoveBy(dieElement.value).position;
 	const move = new Advancement(checkerElement.player, new Die(dieElement.value), oldPosition);
+	checkerElement.position = move.to;
 	/** @type {CheckerElement} */
 	const opponentCheckerOnPointElement = document.querySelector(`#checkers > [data-point="${move.to.value}"]:not([data-player="${checkerElement.player.value}"])`);
 	if (opponentCheckerOnPointElement !== null) {
@@ -579,12 +589,17 @@ checkersElement.addEventListener('pointerdown', event => {
 		const point = pointFromCoordinates(coord);
 		const dieElement = Array.from(/** @type {NodeListOf<DieElement>} */ (document.querySelectorAll(`#dice veyndan-die:not([data-played-at])`)))
 			.find(unplayedDieElement => {
-				const potentialDestinationChecker = new Checker(checkerElement.player, checkerElement.position).withMoveBy(unplayedDieElement.value);
-				if (potentialDestinationChecker === null) return false;
-				if (potentialDestinationChecker.position instanceof Point) {
-					return Array.from(checkerElement.permissibleDestinationPoints).map(permissibleDestinationPoint => permissibleDestinationPoint.value).includes(potentialDestinationChecker.position.value) && point !== null && potentialDestinationChecker.position.value === point.value;
-				} else {
-					throw Error();
+				try {
+					const advancement = new Advancement(checkerElement.player, new Die(unplayedDieElement.value), checkerElement.position);
+					return Array.from(checkerElement.permissibleDestinationPoints)
+						.map(permissibleDestinationPoint => permissibleDestinationPoint.value)
+						.includes(advancement.to.value) && point !== null && advancement.to.value === point.value;
+				} catch (error) {
+					if (error instanceof RangeError) {
+						return false;
+					} else {
+						throw error;
+					}
 				}
 			});
 		if (dieElement !== undefined) {

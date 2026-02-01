@@ -24,14 +24,6 @@ export class Point extends Position {
 		Object.freeze(this);
 	}
 
-	static get MIN() {
-		return new Point(MIN_POINT_VALUE);
-	}
-
-	static get MAX() {
-		return new Point(MAX_POINT_VALUE);
-	}
-
 	toString() {
 		return `Point(${this.value})`;
 	}
