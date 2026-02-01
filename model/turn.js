@@ -14,6 +14,28 @@ export default class Turn {
 		this.touches = Object.freeze(touches);
 		Object.freeze(this);
 	}
+
+	/**
+	 * @return {Turn}
+	 */
+	get other() {
+		return new Turn(this.player.other);
+	}
+
+	/**
+	 * @param {Touch} value
+	 * @return {Turn}
+	 */
+	withTouch(value) {
+		return new Turn(this.player, this.touches.concat(value));
+	}
+
+	/**
+	 * @return {Turn}
+	 */
+	withUndoneTouch() {
+		return new Turn(this.player, this.touches.slice(0, -1));
+	}
 }
 
 export class Touch {

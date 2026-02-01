@@ -20,6 +20,13 @@ export default class Player {
 		return new Player(TWO_VALUE);
 	}
 
+	/**
+	 * @return {Player}
+	 */
+	get other() {
+		return this.value === Player.One.value ? Player.Two : Player.One;
+	}
+
 	toString() {
 		return `Player(${this.value})`;
 	}
