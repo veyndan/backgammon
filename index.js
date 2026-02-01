@@ -434,20 +434,18 @@ checkersElement.addEventListener(`click`, event => {
 	const checkerElement = new CheckerOnBoardElement((/** @type {SVGUseElement} */ (event.target)).closest(`#checkers > *`));
 	if (checkerElement.permissibleDestinationPoints.size === 0) return;
 	const dieElement = Array.from(/** @type {NodeListOf<DieElement>} */ (document.querySelectorAll(`#dice veyndan-die:not([data-played-at])`)))
-		.find(dieElement =>
-			Array.from(checkerElement.permissibleDestinationPoints)
-				.some(permissibleDestinationPoint => {
-					try {
-						const advancement = new Advancement(checkerElement.player, new Die(dieElement.value), checkerElement.position);
-						return advancement.to.value === permissibleDestinationPoint.value;
-					} catch (error) {
-						if (error instanceof RangeError) {
-							return false;
-						} else {
-							throw error;
-						}
+		.find(dieElement => {
+				try {
+					new Advancement(checkerElement.player, new Die(dieElement.value), checkerElement.position);
+					return true;
+				} catch (error) {
+					if (error instanceof RangeError) {
+						return false;
+					} else {
+						throw error;
 					}
-				}),
+				}
+			}
 		);
 	dieElement.playedAt = Date.now();
 	const oldPosition = checkerElement.position;
