@@ -2,7 +2,7 @@
 
 // noinspection ES6UnusedImports
 import Player from "./player.js";
-import {Bar, Position} from "./position.js";
+import {Bar, Point, Position} from "./position.js";
 
 export default class Move {
 	/**
@@ -33,7 +33,7 @@ export class Advancement extends Move {
 export class Hit extends Move {
 	/**
 	 * @param {Player} player
-	 * @param {Position} from
+	 * @param {Point} from
 	 */
 	constructor(player, from) {
 		super(player, from, new Bar());

@@ -456,8 +456,12 @@ checkersElement.addEventListener(`click`, event => {
 	if (opponentCheckerOnPointElement !== null) {
 		const opponentCheckerOnPointCheckerElement = new CheckerOnBoardElement(opponentCheckerOnPointElement);
 		const oldOpponentPosition = opponentCheckerOnPointCheckerElement.position;
-		opponentCheckerOnPointCheckerElement.position = new Bar();
-		game = game.withTouch(new Touch(new Die(dieElement.value), move, new Hit(opponentCheckerOnPointCheckerElement.player, oldOpponentPosition)));
+		if (oldOpponentPosition instanceof Point) {
+			opponentCheckerOnPointCheckerElement.position = new Bar();
+			game = game.withTouch(new Touch(new Die(dieElement.value), move, new Hit(opponentCheckerOnPointCheckerElement.player, oldOpponentPosition)));
+		} else {
+			throw Error(`This shouldn't be possible.`);
+		}
 	} else {
 		game = game.withTouch(new Touch(new Die(dieElement.value), move, null));
 	}
@@ -602,7 +606,11 @@ checkersElement.addEventListener('pointerdown', event => {
 				const opponentCheckerOnPointCheckerElement = new CheckerOnBoardElement(opponentCheckerOnPointElement);
 				const oldOpponentPosition = opponentCheckerOnPointCheckerElement.position;
 				opponentCheckerOnPointCheckerElement.position = new Bar();
-				game = game.withTouch(new Touch(new Die(dieElement.value), move, new Hit(opponentCheckerOnPointCheckerElement.player, oldOpponentPosition)));
+				if (oldOpponentPosition instanceof Point) {
+					game = game.withTouch(new Touch(new Die(dieElement.value), move, new Hit(opponentCheckerOnPointCheckerElement.player, oldOpponentPosition)));
+				} else {
+					throw Error(`This shouldn't be possible.`);
+				}
 			} else {
 				game = game.withTouch(new Touch(new Die(dieElement.value), move, null));
 			}
