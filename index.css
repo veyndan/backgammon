@@ -544,12 +544,6 @@ html {
 									&:hover {
 										cursor: pointer;
 									}
-
-									&.dragging {
-										cursor: move;
-										filter: drop-shadow(2px 4px 4px hsl(from var(--surface) h s l / .3));
-										transition: filter .3s;
-									}
 								}
 
 								&[data-permissible-destination-points="[]"]:hover {
