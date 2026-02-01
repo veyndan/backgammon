@@ -22,7 +22,7 @@ export class Advancement extends Move {
 	/**
 	 * @param {Player} player
 	 * @param {Position} from
-	 * @param {Position} to
+	 * @param {Point} to
 	 */
 	constructor(player, from, to) {
 		super(player, from, to);
