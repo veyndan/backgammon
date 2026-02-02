@@ -1,7 +1,7 @@
 "use strict";
 
 import {Advancement} from "./move.js";
-import {Point} from "./position.js";
+import {Bar, Point} from "./position.js";
 import Player from "./player.js";
 
 export default class Board {
@@ -54,15 +54,23 @@ export default class Board {
 		const potentialPointValue = positionValue + (advancement.player.value === Player.One.value ? -advancement.die.value : advancement.die.value);
 
 		if (advancement.player.value === Player.One.value && this.mailbox[potentialPointValue] >= 0) {
-			const potentialMailbox = [...this.mailbox];
-			potentialMailbox[positionValue]--;
-			potentialMailbox[potentialPointValue]++;
-			return new Board(potentialMailbox);
+			if (advancement.from instanceof Bar || this.mailbox[25] === 0) {
+				const potentialMailbox = [...this.mailbox];
+				potentialMailbox[positionValue]--;
+				potentialMailbox[potentialPointValue]++;
+				return new Board(potentialMailbox);
+			} else {
+				return null;
+			}
 		} else if (advancement.player.value === Player.Two.value && this.mailbox[potentialPointValue] <= 0) {
-			const potentialMailbox = [...this.mailbox];
-			potentialMailbox[positionValue]++;
-			potentialMailbox[potentialPointValue]--;
-			return new Board(potentialMailbox);
+			if (advancement.from instanceof Bar || this.mailbox[0] === 0) {
+				const potentialMailbox = [...this.mailbox];
+				potentialMailbox[positionValue]++;
+				potentialMailbox[potentialPointValue]--;
+				return new Board(potentialMailbox);
+			} else {
+				return null;
+			}
 		} else if (advancement.player.value === Player.One.value && this.mailbox[potentialPointValue] === -1) {
 			const potentialMailbox = [...this.mailbox];
 			potentialMailbox[positionValue]--;

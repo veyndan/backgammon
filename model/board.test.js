@@ -168,6 +168,18 @@ test(`withMove`, function (t) {
 			t.end();
 		});
 	});
+	t.test(`prevent move from point if bar has checker of playing player's color`, function (t) {
+		t.test(String(Player.One), function (t) {
+			const board = new Board([0, -2, 0, 0, 0, 0, 5, 0, 3, 0, 0, 0, -5, 5, 0, 0, 0, -3, 0, -5, 0, 0, 0, 0, 1, 1]);
+			t.deepEqual(board.withMove(new Advancement(Player.One, new Die(3), new Point(6))), null);
+			t.end();
+		});
+		t.test(String(Player.Two), function (t) {
+			const board = new Board([-1, -1, 0, 0, 0, 0, 5, 0, 3, 0, 0, 0, -5, 5, 0, 0, 0, -3, 0, -5, 0, 0, 0, 0, 2, 0]);
+			t.deepEqual(board.withMove(new Advancement(Player.Two, new Die(3), new Point(19))), null);
+			t.end();
+		});
+	});
 	t.test(`allow move from bar to empty point`, function (t) {
 		t.test(String(Player.One), function (t) {
 			const board = new Board([0, -2, 0, 0, 0, 0, 5, 0, 3, 0, 0, 0, -5, 5, 0, 0, 0, -3, 0, -5, 0, 0, 0, 0, 1, 1]);
