@@ -178,7 +178,6 @@ class CheckerOnBoardElement {
 }
 
 const mainElement = document.querySelector(`main`);
-const svgElement = /** @type {SVGSVGElement} */ (document.querySelector(`main > svg`));
 const checkersElement = document.getElementById('checkers');
 const confirmElement = /** @type {HTMLButtonElement} */ (document.getElementById(`confirm`));
 const diceContainerElement = /** @type {HTMLDivElement} */ (document.querySelector(`#dice-container`));
@@ -372,13 +371,7 @@ function updateMovabilityOfCheckers() {
 		.forEach(checkerElement => checkerElement.isMovable = game.isCheckerMovable(checkerElement.player, checkerElement.position));
 }
 
-let ignoreCheckerClicks = false;
-
 checkersElement.addEventListener(`click`, event => {
-	if (ignoreCheckerClicks) {
-		ignoreCheckerClicks = false;
-		return;
-	}
 	const checkerElement = new CheckerOnBoardElement((/** @type {SVGUseElement} */ (event.target)).closest(`#checkers > *`));
 	if (!checkerElement.isMovable) return;
 	const dieElement = Array.from(/** @type {NodeListOf<DieElement>} */ (document.querySelectorAll(`#dice veyndan-die:not([data-played-at])`)))
