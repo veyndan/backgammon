@@ -51,10 +51,7 @@ test(`getTouch`, function (t) {
 			const board = Board.startingPosition();
 			t.throws(
 				() => board.getTouch(Player.One, new Die(1), new Point(2)),
-				{
-					name: `Error`,
-					message: `Unable to get touch for checker as no checker resides on Point(2).`,
-				},
+				Error(`Unable to get touch for checker as no checker resides on Point(2).`),
 			);
 			t.end();
 		});
@@ -62,10 +59,7 @@ test(`getTouch`, function (t) {
 			const board = Board.startingPosition();
 			t.throws(
 				() => board.getTouch(Player.Two, new Die(1), new Point(2)),
-				{
-					name: `Error`,
-					message: `Unable to get touch for checker as no checker resides on Point(2).`,
-				},
+				Error(`Unable to get touch for checker as no checker resides on Point(2).`),
 			);
 			t.end();
 		});
@@ -75,10 +69,7 @@ test(`getTouch`, function (t) {
 			const board = Board.startingPosition();
 			t.throws(
 				() => board.getTouch(Player.One, new Die(1), new Bar()),
-				{
-					name: `Error`,
-					message: `Unable to get touch for checker as no checker resides on Bar.`
-				},
+				Error(`Unable to get touch for checker as no checker resides on Bar.`),
 			);
 			t.end();
 		});
@@ -86,10 +77,7 @@ test(`getTouch`, function (t) {
 			const board = Board.startingPosition();
 			t.throws(
 				() => board.getTouch(Player.Two, new Die(1), new Bar()),
-				{
-					name: `Error`,
-					message: `Unable to get touch for checker as no checker resides on Bar.`
-				},
+				Error(`Unable to get touch for checker as no checker resides on Bar.`),
 			);
 			t.end();
 		});
