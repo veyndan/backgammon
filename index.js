@@ -375,21 +375,16 @@ function updateMovabilityOfCheckers() {
 		positionNameToCheckerElements.get(Bar.name)
 			.forEach(checkerElement => {
 				checkerElement.isMovable = game.playableDice
-					.flatMap(die => {
+					.some(die => {
 						try {
-							return [new Advancement(checkerElement.player, die, checkerElement.position).to];
+							return game.uncommittedBoard.withMove(new Advancement(checkerElement.player, die, checkerElement.position)) !== null;
 						} catch (error) {
 							if (error instanceof RangeError) {
-								return [];
+								return false;
 							} else {
 								throw error;
 							}
 						}
-					})
-					.some(potentialDestinationPosition => {
-						/** @type {NodeListOf<CheckerElement>} */
-						const potentialDestinationCheckers = document.querySelectorAll(`#checkers > [data-point="${potentialDestinationPosition.value}"]`);
-						return potentialDestinationCheckers.length <= 1 || new CheckerOnBoardElement(potentialDestinationCheckers[0]).player.value === checkerElement.player.value;
 					});
 			});
 		(positionNameToCheckerElements.get(Point.name) ?? [])
@@ -400,21 +395,16 @@ function updateMovabilityOfCheckers() {
 		(positionNameToCheckerElements.get(Point.name) ?? [])
 			.forEach(checkerElement => {
 				checkerElement.isMovable = game.playableDice
-					.flatMap(die => {
+					.some(die => {
 						try {
-							return [new Advancement(checkerElement.player, die, checkerElement.position).to];
+							return game.uncommittedBoard.withMove(new Advancement(checkerElement.player, die, checkerElement.position)) !== null;
 						} catch (error) {
 							if (error instanceof RangeError) {
-								return [];
+								return false;
 							} else {
 								throw error;
 							}
 						}
-					})
-					.some(potentialDestinationPosition => {
-						/** @type {NodeListOf<CheckerElement>} */
-						const potentialDestinationCheckers = document.querySelectorAll(`#checkers > [data-point="${potentialDestinationPosition.value}"]`);
-						return potentialDestinationCheckers.length <= 1 || new CheckerOnBoardElement(potentialDestinationCheckers[0]).player.value === checkerElement.player.value;
 					});
 			});
 	}
