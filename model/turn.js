@@ -68,11 +68,11 @@ export default class Turn {
 export class Touch {
 	/**
 	 * @param {Advancement} advancement
-	 * @param {?Hit} hit
+	 * @param {boolean} didHitOpposingChecker
 	 */
-	constructor(advancement, hit) {
+	constructor(advancement, didHitOpposingChecker) {
 		this.advancement = Object.freeze(advancement);
-		this.hit = Object.freeze(hit);
+		this.hit = didHitOpposingChecker ? Object.freeze(new Hit(advancement.player.other, advancement.to)) : null;
 		Object.freeze(this);
 	}
 }

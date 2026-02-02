@@ -1,7 +1,7 @@
 "use strict";
 
 import {Die} from "./dice.js";
-import {Advancement, Hit} from "./move.js";
+import {Advancement} from "./move.js";
 import {Bar, Point, Position} from "./position.js";
 import Player from "./player.js";
 import {Touch} from "./turn.js";
@@ -63,20 +63,20 @@ export default class Board {
 			return null
 		} else if (player.value === Player.One.value && this.mailbox[potentialPointValue] >= 0) {
 			if (from instanceof Bar || this.mailbox[25] === 0) {
-				return new Touch(new Advancement(player, die, from, new Point(potentialPointValue)), null);
+				return new Touch(new Advancement(player, die, from, new Point(potentialPointValue)), false);
 			} else {
 				return null;
 			}
 		} else if (player.value === Player.Two.value && this.mailbox[potentialPointValue] <= 0) {
 			if (from instanceof Bar || this.mailbox[0] === 0) {
-				return new Touch(new Advancement(player, die, from, new Point(potentialPointValue)), null);
+				return new Touch(new Advancement(player, die, from, new Point(potentialPointValue)), false);
 			} else {
 				return null;
 			}
 		} else if (player.value === Player.One.value && this.mailbox[potentialPointValue] === -1) {
-			return new Touch(new Advancement(player, die, from, new Point(potentialPointValue)), new Hit(player.other, new Point(potentialPointValue)));
+			return new Touch(new Advancement(player, die, from, new Point(potentialPointValue)), true);
 		} else if (player.value === Player.Two.value && this.mailbox[potentialPointValue] === 1) {
-			return new Touch(new Advancement(player, die, from, new Point(potentialPointValue)), new Hit(player.other, new Point(potentialPointValue)));
+			return new Touch(new Advancement(player, die, from, new Point(potentialPointValue)), true);
 		} else if (player.value === Player.One.value && this.mailbox[potentialPointValue] < -1) {
 			return null;
 		} else if (player.value === Player.Two.value && this.mailbox[potentialPointValue] > 1) {

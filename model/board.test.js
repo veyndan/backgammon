@@ -6,7 +6,7 @@ import {Bar, Point} from "./position.js";
 import Player from "./player.js";
 import Board from './board.js';
 import {Touch} from "./turn.js";
-import {Advancement, Hit} from "./move.js";
+import {Advancement} from "./move.js";
 
 test(`validation`, function(t) {
 	t.test(`throw if board has an invalid number of checkers`, function (t) {
@@ -97,48 +97,48 @@ test(`getTouch`, function (t) {
 	t.test(`allow move from point to empty point`, function (t) {
 		t.test(String(Player.One), function (t) {
 			const board = Board.startingPosition();
-			t.deepEqual(board.getTouch(Player.One, new Die(3), new Point(6)), new Touch(new Advancement(Player.One, new Die(3), new Point(6), new Point(3)), null));
+			t.deepEqual(board.getTouch(Player.One, new Die(3), new Point(6)), new Touch(new Advancement(Player.One, new Die(3), new Point(6), new Point(3)), false));
 			t.end();
 		});
 		t.test(String(Player.Two), function (t) {
 			const board = Board.startingPosition();
-			t.deepEqual(board.getTouch(Player.Two, new Die(3), new Point(19)), new Touch(new Advancement(Player.Two, new Die(3), new Point(19), new Point(22)), null));
+			t.deepEqual(board.getTouch(Player.Two, new Die(3), new Point(19)), new Touch(new Advancement(Player.Two, new Die(3), new Point(19), new Point(22)), false));
 			t.end();
 		});
 	});
 	t.test(`allow move from point to point with single checker of playing player's color`, function (t) {
 		t.test(String(Player.One), function (t) {
 			const board = new Board([0, -2, 0, 0, 0, 1, 4, 0, 3, 0, 0, 0, -5, 5, 0, 0, 0, -3, 0, -5, 0, 0, 0, 0, 2, 0]);
-			t.deepEqual(board.getTouch(Player.One, new Die(3), new Point(8)), new Touch(new Advancement(Player.One, new Die(3), new Point(8), new Point(5)), null));
+			t.deepEqual(board.getTouch(Player.One, new Die(3), new Point(8)), new Touch(new Advancement(Player.One, new Die(3), new Point(8), new Point(5)), false));
 			t.end();
 		});
 		t.test(String(Player.Two), function (t) {
 			const board = new Board([0, -2, 0, 0, 0, 0, 5, 0, 3, 0, 0, 0, -5, 5, 0, 0, 0, -3, 0, -4, -1, 0, 0, 0, 2, 0]);
-			t.deepEqual(board.getTouch(Player.Two, new Die(3), new Point(17)), new Touch(new Advancement(Player.Two, new Die(3), new Point(17), new Point(20)), null));
+			t.deepEqual(board.getTouch(Player.Two, new Die(3), new Point(17)), new Touch(new Advancement(Player.Two, new Die(3), new Point(17), new Point(20)), false));
 			t.end();
 		});
 	});
 	t.test(`allow move from point to point with multiple checkers of playing player's color`, function (t) {
 		t.test(String(Player.One), function (t) {
 			const board = Board.startingPosition();
-			t.deepEqual(board.getTouch(Player.One, new Die(2), new Point(8)), new Touch(new Advancement(Player.One, new Die(2), new Point(8), new Point(6)), null));
+			t.deepEqual(board.getTouch(Player.One, new Die(2), new Point(8)), new Touch(new Advancement(Player.One, new Die(2), new Point(8), new Point(6)), false));
 			t.end();
 		});
 		t.test(String(Player.Two), function (t) {
 			const board = Board.startingPosition();
-			t.deepEqual(board.getTouch(Player.Two, new Die(2), new Point(17)), new Touch(new Advancement(Player.Two, new Die(2), new Point(17), new Point(19)), null));
+			t.deepEqual(board.getTouch(Player.Two, new Die(2), new Point(17)), new Touch(new Advancement(Player.Two, new Die(2), new Point(17), new Point(19)), false));
 			t.end();
 		});
 	});
 	t.test(`allow move from point to point with single checker of opposing player's color and move opposing player's checker to bar`, function (t) {
 		t.test(String(Player.One), function (t) {
 			const board = new Board([0, -1, 0, 0, -1, 0, 5, 0, 3, 0, 0, 0, -5, 5, 0, 0, 0, -3, 0, -5, 0, 0, 0, 0, 2, 0]);
-			t.deepEqual(board.getTouch(Player.One, new Die(2), new Point(6)), new Touch(new Advancement(Player.One, new Die(2), new Point(6), new Point(4)), new Hit(Player.Two, new Point(4))));
+			t.deepEqual(board.getTouch(Player.One, new Die(2), new Point(6)), new Touch(new Advancement(Player.One, new Die(2), new Point(6), new Point(4)), true));
 			t.end();
 		});
 		t.test(String(Player.Two), function (t) {
 			const board = new Board([0, -2, 0, 0, 0, 0, 5, 0, 3, 0, 0, 0, -5, 5, 0, 0, 0, -3, 0, -5, 0, 1, 0, 0, 1, 0]);
-			t.deepEqual(board.getTouch(Player.Two, new Die(2), new Point(19)), new Touch(new Advancement(Player.Two, new Die(2), new Point(19), new Point(21)), new Hit(Player.One, new Point(21))));
+			t.deepEqual(board.getTouch(Player.Two, new Die(2), new Point(19)), new Touch(new Advancement(Player.Two, new Die(2), new Point(19), new Point(21)), true));
 			t.end();
 		});
 	});
@@ -169,48 +169,48 @@ test(`getTouch`, function (t) {
 	t.test(`allow move from bar to empty point`, function (t) {
 		t.test(String(Player.One), function (t) {
 			const board = new Board([0, -2, 0, 0, 0, 0, 5, 0, 3, 0, 0, 0, -5, 5, 0, 0, 0, -3, 0, -5, 0, 0, 0, 0, 1, 1]);
-			t.deepEqual(board.getTouch(Player.One, new Die(3), new Bar()), new Touch(new Advancement(Player.One, new Die(3), new Bar(), new Point(22)), null));
+			t.deepEqual(board.getTouch(Player.One, new Die(3), new Bar()), new Touch(new Advancement(Player.One, new Die(3), new Bar(), new Point(22)), false));
 			t.end();
 		});
 		t.test(String(Player.Two), function (t) {
 			const board = new Board([-1, -1, 0, 0, 0, 0, 5, 0, 3, 0, 0, 0, -5, 5, 0, 0, 0, -3, 0, -5, 0, 0, 0, 0, 2, 0]);
-			t.deepEqual(board.getTouch(Player.Two, new Die(3), new Bar()), new Touch(new Advancement(Player.Two, new Die(3), new Bar(), new Point(3)), null));
+			t.deepEqual(board.getTouch(Player.Two, new Die(3), new Bar()), new Touch(new Advancement(Player.Two, new Die(3), new Bar(), new Point(3)), false));
 			t.end();
 		});
 	});
 	t.test(`allow move from bar to point with single checker of playing player's color`, function (t) {
 		t.test(String(Player.One), function (t) {
 			const board = new Board([0, -2, 0, 0, 0, 0, 5, 0, 3, 0, 0, 0, -5, 5, 0, 0, 0, -3, 0, -5, 0, 0, 0, 0, 1, 1]);
-			t.deepEqual(board.getTouch(Player.One, new Die(1), new Bar()), new Touch(new Advancement(Player.One, new Die(1), new Bar(), new Point(24)), null));
+			t.deepEqual(board.getTouch(Player.One, new Die(1), new Bar()), new Touch(new Advancement(Player.One, new Die(1), new Bar(), new Point(24)), false));
 			t.end();
 		});
 		t.test(String(Player.Two), function (t) {
 			const board = new Board([-1, -1, 0, 0, 0, 0, 5, 0, 3, 0, 0, 0, -5, 5, 0, 0, 0, -3, 0, -5, 0, 0, 0, 0, 2, 0]);
-			t.deepEqual(board.getTouch(Player.Two, new Die(1), new Bar()), new Touch(new Advancement(Player.Two, new Die(1), new Bar(), new Point(1)), null));
+			t.deepEqual(board.getTouch(Player.Two, new Die(1), new Bar()), new Touch(new Advancement(Player.Two, new Die(1), new Bar(), new Point(1)), false));
 			t.end();
 		});
 	});
 	t.test(`allow move from bar to point with multiple checkers of playing player's color`, function (t) {
 		t.test(String(Player.One), function (t) {
 			const board = new Board([0, -2, 0, 0, 0, 0, 5, 0, 3, 0, 0, 0, -5, 4, 0, 0, 0, -3, 0, -5, 0, 0, 0, 0, 2, 1]);
-			t.deepEqual(board.getTouch(Player.One, new Die(1), new Bar()), new Touch(new Advancement(Player.One, new Die(1), new Bar(), new Point(24)), null));
+			t.deepEqual(board.getTouch(Player.One, new Die(1), new Bar()), new Touch(new Advancement(Player.One, new Die(1), new Bar(), new Point(24)), false));
 			t.end();
 		});
 		t.test(String(Player.Two), function (t) {
 			const board = new Board([-1, -2, 0, 0, 0, 0, 5, 0, 3, 0, 0, 0, -4, 5, 0, 0, 0, -3, 0, -5, 0, 0, 0, 0, 2, 0]);
-			t.deepEqual(board.getTouch(Player.Two, new Die(1), new Bar()), new Touch(new Advancement(Player.Two, new Die(1), new Bar(), new Point(1)), null));
+			t.deepEqual(board.getTouch(Player.Two, new Die(1), new Bar()), new Touch(new Advancement(Player.Two, new Die(1), new Bar(), new Point(1)), false));
 			t.end();
 		});
 	});
 	t.test(`allow move from bar to point with single checker of opposing player's color and move opposing player's checker to bar`, function (t) {
 		t.test(String(Player.One), function (t) {
 			const board = new Board([0, -2, 0, 0, 0, 0, 5, 0, 3, 0, 0, 0, -5, 5, 0, 0, 0, -3, 0, -4, 0, 0, -1, 0, 1, 1]);
-			t.deepEqual(board.getTouch(Player.One, new Die(3), new Bar()), new Touch(new Advancement(Player.One, new Die(3), new Bar(), new Point(22)), new Hit(Player.Two, new Point(22))));
+			t.deepEqual(board.getTouch(Player.One, new Die(3), new Bar()), new Touch(new Advancement(Player.One, new Die(3), new Bar(), new Point(22)), true));
 			t.end();
 		});
 		t.test(String(Player.Two), function (t) {
 			const board = new Board([-1, -1, 0, 1, 0, 0, 4, 0, 3, 0, 0, 0, -5, 5, 0, 0, 0, -3, 0, -5, 0, 0, 0, 0, 2, 0]);
-			t.deepEqual(board.getTouch(Player.Two, new Die(3), new Bar()), new Touch(new Advancement(Player.Two, new Die(3), new Bar(), new Point(3)), new Hit(Player.One, new Point(3))));
+			t.deepEqual(board.getTouch(Player.Two, new Die(3), new Bar()), new Touch(new Advancement(Player.Two, new Die(3), new Bar(), new Point(3)), true));
 			t.end();
 		});
 	});
