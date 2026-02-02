@@ -189,7 +189,7 @@ const doubleElement = /** @type {HTMLButtonElement} */ (document.getElementById(
 const rollDiceElement = /** @type {HTMLButtonElement} */ (document.getElementById(`roll-dice`));
 const undoElement = /** @type {HTMLButtonElement} */ (document.getElementById(`undo`));
 
-const checkerElements = game.board.mailbox.flatMap((pointValue, point) => {
+const checkerElements = game.uncommittedBoard.mailbox.flatMap((pointValue, point) => {
 	const pointStackCount = Math.abs(pointValue);
 	return Array.from(Array(pointStackCount), (_, index) => index)
 		.map(pointStackIndex => {

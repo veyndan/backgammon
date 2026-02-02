@@ -8,14 +8,21 @@ import Dice, { Die } from "./dice.js";
 import Turn, {Touch} from "./turn.js";
 
 export default class Game {
+	/** @type {Board} */
+	#committedBoard
+
 	/**
-	 * @param {Board} board
+	 * @param {Board} commitedBoard
 	 * @param {Turn} turn
 	 */
-	constructor(board, turn) {
-		this.board = Object.freeze(board);
+	constructor(commitedBoard, turn) {
+		this.#committedBoard = Object.freeze(commitedBoard);
 		this.turn = Object.freeze(turn);
 		Object.freeze(this);
+	}
+
+	get uncommittedBoard() {
+		return this.turn.touches.reduce((previousValue, currentValue) => previousValue.withMove(currentValue.advancement), this.#committedBoard);
 	}
 
 	/**
@@ -30,14 +37,14 @@ export default class Game {
 	 * @return {Game}
 	 */
 	withDice(value) {
-		return new Game(this.board, this.turn.withDice(value));
+		return new Game(this.#committedBoard, this.turn.withDice(value));
 	}
 
 	/**
 	 * @return {Game}
 	 */
 	withChangedTurn() {
-		return new Game(this.board, this.turn.other);
+		return new Game(this.uncommittedBoard, this.turn.other);
 	}
 
 	/**
@@ -45,13 +52,13 @@ export default class Game {
 	 * @return {Game}
 	 */
 	withTouch(value) {
-		return new Game(this.board, this.turn.withTouch(value));
+		return new Game(this.#committedBoard, this.turn.withTouch(value));
 	}
 
 	/**
 	 * @return {Game}
 	 */
 	withUndoneTouch() {
-		return new Game(this.board, this.turn.withUndoneTouch());
+		return new Game(this.#committedBoard, this.turn.withUndoneTouch());
 	}
 }
