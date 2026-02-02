@@ -3,8 +3,7 @@
 import Board from "./model/board.js";
 import Dice, {Die} from "./model/dice.js";
 import Game from "./model/game.js";
-import {Advancement, Hit} from "./model/move.js";
-import Turn, {Touch} from "./model/turn.js";
+import Turn from "./model/turn.js";
 import Player from "./model/player.js";
 import {Bar, Point, Position} from "./model/position.js";
 // noinspection ES6UnusedImports
@@ -368,46 +367,9 @@ diceContainerElement.addEventListener(`click`, () => {
 });
 
 function updateMovabilityOfCheckers() {
-	const checkerElements = Array.from(/** @type {NodeListOf<CheckerElement>} */ (document.querySelectorAll(`#checkers > [data-player="${game.turn.player.value}"]`)))
-		.map(value => new CheckerOnBoardElement(value));
-	const positionNameToCheckerElements = Map.groupBy(checkerElements, checkerElement => checkerElement.position.constructor.name);
-	if (positionNameToCheckerElements.has(Bar.name)) {
-		positionNameToCheckerElements.get(Bar.name)
-			.forEach(checkerElement => {
-				checkerElement.isMovable = game.playableDice
-					.some(die => {
-						try {
-							return game.uncommittedBoard.withMove(new Advancement(checkerElement.player, die, checkerElement.position)) !== null;
-						} catch (error) {
-							if (error instanceof RangeError) {
-								return false;
-							} else {
-								throw error;
-							}
-						}
-					});
-			});
-		(positionNameToCheckerElements.get(Point.name) ?? [])
-			.forEach(checkerElement => {
-				checkerElement.isMovable = false;
-			});
-	} else {
-		(positionNameToCheckerElements.get(Point.name) ?? [])
-			.forEach(checkerElement => {
-				checkerElement.isMovable = game.playableDice
-					.some(die => {
-						try {
-							return game.uncommittedBoard.withMove(new Advancement(checkerElement.player, die, checkerElement.position)) !== null;
-						} catch (error) {
-							if (error instanceof RangeError) {
-								return false;
-							} else {
-								throw error;
-							}
-						}
-					});
-			});
-	}
+	Array.from(/** @type {NodeListOf<CheckerElement>} */ (document.querySelectorAll(`#checkers > [data-player="${game.turn.player.value}"]`)))
+		.map(value => new CheckerOnBoardElement(value))
+		.forEach(checkerElement => checkerElement.isMovable = game.isCheckerMovable(checkerElement.player, checkerElement.position));
 }
 
 let ignoreCheckerClicks = false;
@@ -420,35 +382,19 @@ checkersElement.addEventListener(`click`, event => {
 	const checkerElement = new CheckerOnBoardElement((/** @type {SVGUseElement} */ (event.target)).closest(`#checkers > *`));
 	if (!checkerElement.isMovable) return;
 	const dieElement = Array.from(/** @type {NodeListOf<DieElement>} */ (document.querySelectorAll(`#dice veyndan-die:not([data-played-at])`)))
-		.find(dieElement => {
-				try {
-					new Advancement(checkerElement.player, new Die(dieElement.value), checkerElement.position);
-					return true;
-				} catch (error) {
-					if (error instanceof RangeError) {
-						return false;
-					} else {
-						throw error;
-					}
-				}
-			}
-		);
+		.find(dieElement => game.uncommittedBoard.getTouch(checkerElement.player, new Die(dieElement.value), checkerElement.position) !== null);
 	dieElement.playedAt = Date.now();
 	const oldPosition = checkerElement.position;
-	const move = new Advancement(checkerElement.player, new Die(dieElement.value), oldPosition);
-	checkerElement.position = move.to;
-	/** @type {CheckerElement} */
-	const opponentCheckerOnPointElement = document.querySelector(`#checkers > [data-point="${move.to.value}"]:not([data-player="${checkerElement.player.value}"])`);
-	if (opponentCheckerOnPointElement !== null) {
-		const opponentCheckerOnPointCheckerElement = new CheckerOnBoardElement(opponentCheckerOnPointElement);
-		const oldOpponentPosition = opponentCheckerOnPointCheckerElement.position;
-		if (oldOpponentPosition instanceof Point) {
-			opponentCheckerOnPointCheckerElement.position = new Bar();
-			game = game.withTouch(new Touch(move, new Hit(opponentCheckerOnPointCheckerElement.player, oldOpponentPosition)));
-		} else {
-			throw Error(`This shouldn't be possible.`);
-		}
-	} else {
-		game = game.withTouch(new Touch(move, null));
+	const touch = game.uncommittedBoard.getTouch(checkerElement.player, new Die(dieElement.value), oldPosition);
+	if (touch === null) {
+		throw Error(`We should only have valid touches here.`);
 	}
+	checkerElement.position = touch.advancement.to;
+	if (touch.hit !== null) {
+		/** @type {CheckerElement} */
+		const opponentCheckerOnPointElement = document.querySelector(`#checkers > [data-point="${touch.advancement.to.value}"]:not([data-player="${checkerElement.player.value}"])`);
+		const opponentCheckerOnPointCheckerElement = new CheckerOnBoardElement(opponentCheckerOnPointElement);
+		opponentCheckerOnPointCheckerElement.position = new Bar();
+	}
+	game = game.withTouch(touch);
 });

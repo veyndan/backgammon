@@ -5,6 +5,10 @@ import Board from "./board.js";
 // noinspection ES6UnusedImports
 import Dice, { Die } from "./dice.js";
 // noinspection ES6UnusedImports
+import Player from "./player.js";
+// noinspection ES6UnusedImports
+import {Position} from "./position.js";
+// noinspection ES6UnusedImports
 import Turn, {Touch} from "./turn.js";
 
 export default class Game {
@@ -22,7 +26,7 @@ export default class Game {
 	}
 
 	get uncommittedBoard() {
-		return this.turn.touches.reduce((previousValue, currentValue) => previousValue.withMove(currentValue.advancement), this.#committedBoard);
+		return this.turn.touches.reduce((previousValue, currentValue) => previousValue.withMove(currentValue), this.#committedBoard);
 	}
 
 	/**
@@ -30,6 +34,16 @@ export default class Game {
 	 */
 	get playableDice() {
 		return this.turn.playableDice;
+	}
+
+	/**
+	 * @param {Player} player
+	 * @param {Position} from
+	 * @return {boolean}
+	 */
+	isCheckerMovable(player, from) {
+		return this.playableDice
+			.some(die => this.uncommittedBoard.getTouch(player, die, from) !== null);
 	}
 
 	/**

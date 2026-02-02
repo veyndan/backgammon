@@ -1,8 +1,10 @@
 "use strict";
 
-import {Advancement} from "./move.js";
-import {Bar, Point} from "./position.js";
+import {Die} from "./dice.js";
+import {Advancement, Hit} from "./move.js";
+import {Bar, Point, Position} from "./position.js";
 import Player from "./player.js";
+import {Touch} from "./turn.js";
 
 export default class Board {
 	/**
@@ -39,56 +41,91 @@ export default class Board {
 	}
 
 	/**
-	 * @param {Advancement} advancement
-	 * @return {?Board}
+	 * @param {Player} player
+	 * @param {Die} die
+	 * @param {Position} from
+	 * @return {?Touch}
 	 */
-	withMove(advancement) {
-		const positionValue = advancement.from instanceof Point
-			? advancement.from.value
-			: (advancement.player.value === Player.One.value ? 25 : 0);
+	getTouch(player, die, from) {
+		const positionValue = from instanceof Point
+			? from.value
+			: (player.value === Player.One.value ? 25 : 0);
 
 		if (this.mailbox[positionValue] === 0) {
-			throw Error(`Unable to move checker as no checker resides on ${advancement.from}.`);
+			throw Error(`Unable to get touch for checker as no checker resides on ${from}.`);
 		}
 
-		const potentialPointValue = positionValue + (advancement.player.value === Player.One.value ? -advancement.die.value : advancement.die.value);
+		const potentialPointValue = positionValue + (player.value === Player.One.value ? -die.value : die.value);
 
-		if (advancement.player.value === Player.One.value && this.mailbox[potentialPointValue] >= 0) {
-			if (advancement.from instanceof Bar || this.mailbox[25] === 0) {
-				const potentialMailbox = [...this.mailbox];
-				potentialMailbox[positionValue]--;
-				potentialMailbox[potentialPointValue]++;
-				return new Board(potentialMailbox);
+		if (player.value === Player.One.value && from instanceof Point && from.value - die.value < 1) {
+			return null
+		} else if (player.value === Player.Two.value && from instanceof Point && from.value + die.value > 24) {
+			return null
+		} else if (player.value === Player.One.value && this.mailbox[potentialPointValue] >= 0) {
+			if (from instanceof Bar || this.mailbox[25] === 0) {
+				return new Touch(new Advancement(player, die, from, new Point(potentialPointValue)), null);
 			} else {
 				return null;
 			}
-		} else if (advancement.player.value === Player.Two.value && this.mailbox[potentialPointValue] <= 0) {
-			if (advancement.from instanceof Bar || this.mailbox[0] === 0) {
-				const potentialMailbox = [...this.mailbox];
-				potentialMailbox[positionValue]++;
-				potentialMailbox[potentialPointValue]--;
-				return new Board(potentialMailbox);
+		} else if (player.value === Player.Two.value && this.mailbox[potentialPointValue] <= 0) {
+			if (from instanceof Bar || this.mailbox[0] === 0) {
+				return new Touch(new Advancement(player, die, from, new Point(potentialPointValue)), null);
 			} else {
 				return null;
 			}
-		} else if (advancement.player.value === Player.One.value && this.mailbox[potentialPointValue] === -1) {
-			const potentialMailbox = [...this.mailbox];
-			potentialMailbox[positionValue]--;
-			potentialMailbox[potentialPointValue] = 1;
-			potentialMailbox[0]--;
-			return new Board(potentialMailbox);
-		} else if (advancement.player.value === Player.Two.value && this.mailbox[potentialPointValue] === 1) {
-			const potentialMailbox = [...this.mailbox];
-			potentialMailbox[positionValue]++;
-			potentialMailbox[potentialPointValue] = -1;
-			potentialMailbox[25]++;
-			return new Board(potentialMailbox);
-		} else if (advancement.player.value === Player.One.value && this.mailbox[potentialPointValue] < -1) {
+		} else if (player.value === Player.One.value && this.mailbox[potentialPointValue] === -1) {
+			return new Touch(new Advancement(player, die, from, new Point(potentialPointValue)), new Hit(player.other, new Point(potentialPointValue)));
+		} else if (player.value === Player.Two.value && this.mailbox[potentialPointValue] === 1) {
+			return new Touch(new Advancement(player, die, from, new Point(potentialPointValue)), new Hit(player.other, new Point(potentialPointValue)));
+		} else if (player.value === Player.One.value && this.mailbox[potentialPointValue] < -1) {
 			return null;
-		} else if (advancement.player.value === Player.Two.value && this.mailbox[potentialPointValue] > 1) {
+		} else if (player.value === Player.Two.value && this.mailbox[potentialPointValue] > 1) {
 			return null;
 		} else {
 			throw Error(`Prior conditionals should've been exhaustive.`);
 		}
+	}
+
+	/**
+	 * @param {Touch} touch
+	 * @return {Board}
+	 */
+	withMove(touch) {
+		const mailbox = [...this.mailbox];
+		if (touch.advancement.player.value === Player.One.value) {
+			if (touch.advancement.from instanceof Point) {
+				mailbox[touch.advancement.from.value]--;
+				mailbox[touch.advancement.to.value]++;
+			} else if (touch.advancement.from instanceof Bar) {
+				mailbox[25]--;
+				mailbox[touch.advancement.to.value]++;
+			} else {
+				throw new Error();
+			}
+		} else if (touch.advancement.player.value === Player.Two.value) {
+			if (touch.advancement.from instanceof Point) {
+				mailbox[touch.advancement.from.value]++;
+				mailbox[touch.advancement.to.value]--;
+			} else if (touch.advancement.from instanceof Bar) {
+				mailbox[0]++;
+				mailbox[touch.advancement.to.value]--;
+			} else {
+				throw new Error();
+			}
+		} else {
+			throw new Error();
+		}
+		if (touch.hit !== null) {
+			if (touch.hit.player.value === Player.One.value) {
+				mailbox[touch.hit.from.value]--;
+				mailbox[25]++;
+			} else if (touch.hit.player.value === Player.Two.value) {
+				mailbox[touch.hit.from.value]++;
+				mailbox[0]--;
+			} else {
+				throw new Error();
+			}
+		}
+		return new Board(mailbox);
 	}
 }
