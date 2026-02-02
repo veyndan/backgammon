@@ -19,6 +19,14 @@ export default class Board {
 	 *
 	 */
 	constructor(mailbox) {
+		const player1CheckerCount = mailbox.reduce((previousValue, currentValue) => previousValue + Math.max(currentValue, 0), 0);
+		if (player1CheckerCount !== 15) {
+			throw Error(`Player 1 should have exactly 15 checkers on the board, but found ${player1CheckerCount}.`);
+		}
+		const player2CheckerCount = mailbox.reduce((previousValue, currentValue) => previousValue - Math.min(currentValue, 0), 0);
+		if (player2CheckerCount !== 15) {
+			throw Error(`Player 2 should have exactly 15 checkers on the board, but found ${player2CheckerCount}.`);
+		}
 		this.mailbox = Object.freeze(mailbox);
 		Object.freeze(this);
 	}

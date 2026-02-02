@@ -8,6 +8,40 @@ import Player from "./player.js";
 import Board from './board.js';
 
 test(`withMove`, function (t) {
+	t.test(`throw if board has an invalid number of checkers`, function (t) {
+		t.test(`too many`, function (t) {
+			t.test(String(Player.One), function (t) {
+				t.throws(
+					() => new Board([0, -2, 0, 0, 0, 0, 6, 0, 3, 0, 0, 0, -5, 5, 0, 0, 0, -3, 0, -5, 0, 0, 0, 0, 2, 0]),
+					Error(`Player 1 should have exactly 15 checkers on the board, but found 16.`),
+				);
+				t.end();
+			});
+			t.test(String(Player.Two), function (t) {
+				t.throws(
+					() => new Board([0, -3, 0, 0, 0, 0, 5, 0, 3, 0, 0, 0, -5, 5, 0, 0, 0, -3, 0, -5, 0, 0, 0, 0, 2, 0]),
+					Error(`Player 2 should have exactly 15 checkers on the board, but found 16.`),
+				);
+				t.end();
+			});
+		});
+		t.test(`not enough`, function (t) {
+			t.test(String(Player.One), function (t) {
+				t.throws(
+					() => new Board([0, -2, 0, 0, 0, 0, 4, 0, 3, 0, 0, 0, -5, 5, 0, 0, 0, -3, 0, -5, 0, 0, 0, 0, 2, 0]),
+					Error(`Player 1 should have exactly 15 checkers on the board, but found 14.`),
+				);
+				t.end();
+			});
+			t.test(String(Player.Two), function (t) {
+				t.throws(
+					() => new Board([0, -1, 0, 0, 0, 0, 5, 0, 3, 0, 0, 0, -5, 5, 0, 0, 0, -3, 0, -5, 0, 0, 0, 0, 2, 0]),
+					Error(`Player 2 should have exactly 15 checkers on the board, but found 14.`),
+				);
+				t.end();
+			});
+		});
+	});
 	t.test(`throw if attempting to move absent checker from point`, function (t) {
 		t.test(String(Player.One), function (t) {
 			const board = Board.startingPosition();
@@ -172,24 +206,24 @@ test(`withMove`, function (t) {
 	});
 	t.test(`allow move from bar to point with single checker of opposing player's color and move opposing player's checker to bar`, function (t) {
 		t.test(String(Player.One), function (t) {
-			const board = new Board([0, -2, 0, 0, 0, 0, 5, 0, 3, 0, 0, 0, -5, 5, 0, 0, 0, -3, 0, -4, 0, 0, -1, 0, 2, 1]);
-			t.deepEqual(board.withMove(new Advancement(Player.One, new Die(3), new Bar())), new Board([-1, -2, 0, 0, 0, 0, 5, 0, 3, 0, 0, 0, -5, 5, 0, 0, 0, -3, 0, -4, 0, 0, 1, 0, 2, 0]));
+			const board = new Board([0, -2, 0, 0, 0, 0, 5, 0, 3, 0, 0, 0, -5, 5, 0, 0, 0, -3, 0, -4, 0, 0, -1, 0, 1, 1]);
+			t.deepEqual(board.withMove(new Advancement(Player.One, new Die(3), new Bar())), new Board([-1, -2, 0, 0, 0, 0, 5, 0, 3, 0, 0, 0, -5, 5, 0, 0, 0, -3, 0, -4, 0, 0, 1, 0, 1, 0]));
 			t.end();
 		});
 		t.test(String(Player.Two), function (t) {
-			const board = new Board([-1, -2, 0, 1, 0, 0, 4, 0, 3, 0, 0, 0, -5, 5, 0, 0, 0, -3, 0, -5, 0, 0, 0, 0, 2, 0]);
-			t.deepEqual(board.withMove(new Advancement(Player.Two, new Die(3), new Bar())), new Board([0, -2, 0, -1, 0, 0, 4, 0, 3, 0, 0, 0, -5, 5, 0, 0, 0, -3, 0, -5, 0, 0, 0, 0, 2, 1]));
+			const board = new Board([-1, -1, 0, 1, 0, 0, 4, 0, 3, 0, 0, 0, -5, 5, 0, 0, 0, -3, 0, -5, 0, 0, 0, 0, 2, 0]);
+			t.deepEqual(board.withMove(new Advancement(Player.Two, new Die(3), new Bar())), new Board([0, -1, 0, -1, 0, 0, 4, 0, 3, 0, 0, 0, -5, 5, 0, 0, 0, -3, 0, -5, 0, 0, 0, 0, 2, 1]));
 			t.end();
 		});
 	});
 	t.test(`prevent move from bar to point with multiple checkers of opposing player's color`, function (t) {
 		t.test(String(Player.One), function (t) {
-			const board = new Board([0, -2, 0, 0, 0, 0, 5, 0, 3, 0, 0, 0, -5, 5, 0, 0, 0, -3, 0, -5, 0, 0, 0, 0, 2, 1]);
+			const board = new Board([0, -2, 0, 0, 0, 0, 5, 0, 3, 0, 0, 0, -5, 5, 0, 0, 0, -3, 0, -5, 0, 0, 0, 0, 1, 1]);
 			t.deepEqual(board.withMove(new Advancement(Player.One, new Die(6), new Bar())), null);
 			t.end();
 		});
 		t.test(String(Player.Two), function (t) {
-			const board = new Board([-1, -2, 0, 0, 0, 0, 5, 0, 3, 0, 0, 0, -5, 5, 0, 0, 0, -3, 0, -5, 0, 0, 0, 0, 2, 0]);
+			const board = new Board([-1, -1, 0, 0, 0, 0, 5, 0, 3, 0, 0, 0, -5, 5, 0, 0, 0, -3, 0, -5, 0, 0, 0, 0, 2, 0]);
 			t.deepEqual(board.withMove(new Advancement(Player.Two, new Die(6), new Bar())), null);
 			t.end();
 		});
