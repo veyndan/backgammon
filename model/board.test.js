@@ -8,6 +8,43 @@ import Board from './board.js';
 import {Touch} from "./turn.js";
 import {Advancement, Hit} from "./move.js";
 
+test(`validation`, function(t) {
+	t.test(`throw if board has an invalid number of checkers`, function (t) {
+		t.test(`too many`, function (t) {
+			t.test(String(Player.One), function (t) {
+				t.throws(
+					() => new Board([0, -2, 0, 0, 0, 0, 6, 0, 3, 0, 0, 0, -5, 5, 0, 0, 0, -3, 0, -5, 0, 0, 0, 0, 2, 0]),
+					Error(`Player 1 should have exactly 15 checkers on the board, but found 16.`),
+				);
+				t.end();
+			});
+			t.test(String(Player.Two), function (t) {
+				t.throws(
+					() => new Board([0, -3, 0, 0, 0, 0, 5, 0, 3, 0, 0, 0, -5, 5, 0, 0, 0, -3, 0, -5, 0, 0, 0, 0, 2, 0]),
+					Error(`Player 2 should have exactly 15 checkers on the board, but found 16.`),
+				);
+				t.end();
+			});
+		});
+		t.test(`not enough`, function (t) {
+			t.test(String(Player.One), function (t) {
+				t.throws(
+					() => new Board([0, -2, 0, 0, 0, 0, 4, 0, 3, 0, 0, 0, -5, 5, 0, 0, 0, -3, 0, -5, 0, 0, 0, 0, 2, 0]),
+					Error(`Player 1 should have exactly 15 checkers on the board, but found 14.`),
+				);
+				t.end();
+			});
+			t.test(String(Player.Two), function (t) {
+				t.throws(
+					() => new Board([0, -1, 0, 0, 0, 0, 5, 0, 3, 0, 0, 0, -5, 5, 0, 0, 0, -3, 0, -5, 0, 0, 0, 0, 2, 0]),
+					Error(`Player 2 should have exactly 15 checkers on the board, but found 14.`),
+				);
+				t.end();
+			});
+		});
+	});
+});
+
 test(`getTouch`, function (t) {
 	t.test(`throw if attempting to move absent checker from point`, function (t) {
 		t.test(String(Player.One), function (t) {
@@ -204,40 +241,6 @@ test(`getTouch`, function (t) {
 });
 
 test(`withMove`, function (t) {
-	t.test(`throw if board has an invalid number of checkers`, function (t) {
-		t.test(`too many`, function (t) {
-			t.test(String(Player.One), function (t) {
-				t.throws(
-					() => new Board([0, -2, 0, 0, 0, 0, 6, 0, 3, 0, 0, 0, -5, 5, 0, 0, 0, -3, 0, -5, 0, 0, 0, 0, 2, 0]),
-					Error(`Player 1 should have exactly 15 checkers on the board, but found 16.`),
-				);
-				t.end();
-			});
-			t.test(String(Player.Two), function (t) {
-				t.throws(
-					() => new Board([0, -3, 0, 0, 0, 0, 5, 0, 3, 0, 0, 0, -5, 5, 0, 0, 0, -3, 0, -5, 0, 0, 0, 0, 2, 0]),
-					Error(`Player 2 should have exactly 15 checkers on the board, but found 16.`),
-				);
-				t.end();
-			});
-		});
-		t.test(`not enough`, function (t) {
-			t.test(String(Player.One), function (t) {
-				t.throws(
-					() => new Board([0, -2, 0, 0, 0, 0, 4, 0, 3, 0, 0, 0, -5, 5, 0, 0, 0, -3, 0, -5, 0, 0, 0, 0, 2, 0]),
-					Error(`Player 1 should have exactly 15 checkers on the board, but found 14.`),
-				);
-				t.end();
-			});
-			t.test(String(Player.Two), function (t) {
-				t.throws(
-					() => new Board([0, -1, 0, 0, 0, 0, 5, 0, 3, 0, 0, 0, -5, 5, 0, 0, 0, -3, 0, -5, 0, 0, 0, 0, 2, 0]),
-					Error(`Player 2 should have exactly 15 checkers on the board, but found 14.`),
-				);
-				t.end();
-			});
-		});
-	});
 	t.test(`move from point to empty point`, function (t) {
 		t.test(String(Player.One), function (t) {
 			const board = Board.startingPosition();
