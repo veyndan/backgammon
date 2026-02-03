@@ -59,7 +59,7 @@
 	}
 }
 
-:host([data-played-at]) {
+:host([data-played]) {
 	opacity: .5;
 }
 

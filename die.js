@@ -10,25 +10,13 @@ export default class DieElement extends HTMLElement {
 	}
 
 	/**
-	 * @return {(number|undefined)}
+	 * @param {boolean} value
 	 */
-	get playedAt() {
-		const playedAtDataAttribute = this.dataset[`playedAt`];
-		if (playedAtDataAttribute !== undefined) {
-			return Number(playedAtDataAttribute);
+	set played(value) {
+		if (value) {
+			this.dataset[`played`] = ``;
 		} else {
-			return undefined;
-		}
-	}
-
-	/**
-	 * @param {(number|undefined)} value
-	 */
-	set playedAt(value) {
-		if (value !== undefined) {
-			this.dataset[`playedAt`] = String(value);
-		} else {
-			delete this.dataset[`playedAt`];
+			delete this.dataset[`played`];
 		}
 	}
 

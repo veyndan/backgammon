@@ -45,6 +45,13 @@ export default class Turn {
 	}
 
 	/**
+	 * @return {Readonly<Die>}
+	 */
+	get lastPlayedDie() {
+		return this.moves.at(-1).die;
+	}
+
+	/**
 	 * @return {Readonly<Die[]>}
 	 */
 	get playableDice() {

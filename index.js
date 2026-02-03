@@ -261,7 +261,6 @@ confirmElement.addEventListener(`click`, () => {
 
 undoElement.addEventListener(`click`, () => {
 	const lastMove = game.turn.moves.at(-1);
-	game = game.withUndoneMove();
 	if (lastMove instanceof Advancement) {
 		let lastMovedCheckerElement = Array.from(/** @type {NodeListOf<CheckerElement>} */ (document.querySelectorAll(`#checkers > [data-point="${lastMove.to.value}"]`)))
 			.map(target => new CheckerOnBoardElement(target))
@@ -274,9 +273,9 @@ undoElement.addEventListener(`click`, () => {
 	} else {
 		throw new Error();
 	}
-	const lastPlayedDieElement = Array.from(/** @type {NodeListOf<DieElement>} */ (document.querySelectorAll(`#dice veyndan-die[data-played-at]`)))
-		.reduce((mostRecentlyPlayedDieElement, dieElement) => mostRecentlyPlayedDieElement.playedAt > dieElement.playedAt ? mostRecentlyPlayedDieElement : dieElement);
-	lastPlayedDieElement.playedAt = undefined;
+	const lastPlayedDieElement = /** @type {DieElement} */ (document.querySelector(`#dice veyndan-die[data-value="${game.lastPlayedDie.value}"]`));
+	lastPlayedDieElement.played = false;
+	game = game.withUndoneMove();
 	undoElement.disabled = !game.isMoveUndoable;
 	confirmElement.disabled = true;
 });
@@ -352,9 +351,9 @@ function updateMovabilityOfCheckers() {
 checkersElement.addEventListener(`click`, event => {
 	const checkerElement = new CheckerOnBoardElement((/** @type {SVGUseElement} */ (event.target)).closest(`#checkers > *`));
 	if (!checkerElement.isMovable) return;
-	const dieElement = Array.from(/** @type {NodeListOf<DieElement>} */ (document.querySelectorAll(`#dice veyndan-die:not([data-played-at])`)))
+	const dieElement = Array.from(/** @type {NodeListOf<DieElement>} */ (document.querySelectorAll(`#dice veyndan-die:not([data-played])`)))
 		.find(dieElement => game.uncommittedBoard.getMove(checkerElement.player, new Die(dieElement.value), checkerElement.position) !== null);
-	dieElement.playedAt = Date.now();
+	dieElement.played = true;
 	const oldPosition = checkerElement.position;
 	const move = game.uncommittedBoard.getMove(checkerElement.player, new Die(dieElement.value), oldPosition);
 	if (move === null) {

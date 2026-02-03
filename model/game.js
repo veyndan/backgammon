@@ -46,6 +46,13 @@ export default class Game {
 	}
 
 	/**
+	 * @return {Readonly<Die>}
+	 */
+	get lastPlayedDie() {
+		return this.turn.lastPlayedDie;
+	}
+
+	/**
 	 * @return {Readonly<Die[]>}
 	 */
 	get playableDice() {
