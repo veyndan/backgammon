@@ -48,7 +48,7 @@ export default class Turn {
 	 * @return {Readonly<Die[]>}
 	 */
 	get playableDice() {
-		if (this.#dice.values[0].value === this.#dice.values[1].value) {
+		if (this.#dice.isDoubles) {
 			return Object.freeze(this.#dice.values.concat(this.#dice.values).slice(this.moves.length));
 		} else {
 			return this.#dice.values.filter(die => !this.moves.map(move => move.die.value).includes(die.value));

@@ -9,6 +9,13 @@ export default class Dice {
 		this.values = Object.freeze([die1, die2]);
 		Object.freeze(this);
 	}
+
+	/**
+	 * @return {boolean}
+	 */
+	get isDoubles() {
+		return this.values[0].value === this.values[1].value;
+	}
 }
 
 export class Die {

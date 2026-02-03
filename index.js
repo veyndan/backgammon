@@ -323,10 +323,11 @@ rollDiceElement.addEventListener(`click`, () => {
 					clearInterval(intervalID);
 					firstDieElement.classList.remove(`rolling`);
 					secondDieElement.classList.remove(`rolling`);
-					if (firstDieElement.value === secondDieElement.value) {
+					const dice = new Dice(new Die(firstDieElement.value), new Die(secondDieElement.value));
+					if (dice.isDoubles) {
 						diceElement.append(firstDieElement.cloneNode(true), secondDieElement.cloneNode(true));
 					}
-					game = game.withDice(new Dice(new Die(firstDieElement.value), new Die(secondDieElement.value)));
+					game = game.withDice(dice);
 					updateMovabilityOfCheckers();
 				}
 			},
