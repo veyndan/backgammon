@@ -8,7 +8,7 @@ import Move from "./move.js";
 import Player from "./player.js";
 
 export default class Turn {
-	/** @type {Dice} */
+	/** @type {?Dice} */
 	#dice;
 
 	/**
@@ -55,7 +55,9 @@ export default class Turn {
 	 * @return {Readonly<Die[]>}
 	 */
 	get playableDice() {
-		if (this.#dice.isDoubles) {
+		if (this.#dice === null) {
+			return Object.freeze([]);
+		} else if (this.#dice.isDoubles) {
 			return Object.freeze(this.#dice.values.concat(this.#dice.values).slice(this.moves.length));
 		} else {
 			return this.#dice.values.filter(die => !this.moves.map(move => move.die.value).includes(die.value));
@@ -74,6 +76,9 @@ export default class Turn {
 	 * @return {Turn}
 	 */
 	withSwappedDice() {
+		if (this.#dice === null) {
+			throw Error(`There are no dice to swap.`);
+		}
 		return new Turn(this.player, this.moves, this.#dice.swapped);
 	}
 
