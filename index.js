@@ -248,34 +248,6 @@ checkersObserver.observe(
 	},
 );
 
-const diceObserver = new MutationObserver(mutations => {
-	mutations.forEach(mutation => {
-		confirmElement.hidden = false;
-		undoElement.hidden = false;
-		const dieElement = /** @type {DieElement} */ (mutation.target);
-		if (dieElement.playedAt !== undefined) {
-			undoElement.disabled = false;
-			if (game.isTurnCommittable) {
-				confirmElement.disabled = false;
-			}
-		} else {
-			if (!game.isTouchUndoable) {
-				undoElement.disabled = true;
-			} else {
-				confirmElement.disabled = true;
-			}
-		}
-	});
-});
-
-diceObserver.observe(
-	diceElement,
-	{
-		attributeFilter: [`data-played-at`],
-		subtree: true,
-	},
-);
-
 confirmElement.addEventListener(`click`, () => {
 	diceContainerElement.style.display = `none`;
 	doubleElement.hidden = false;
@@ -300,6 +272,8 @@ undoElement.addEventListener(`click`, () => {
 	const lastPlayedDieElement = Array.from(/** @type {NodeListOf<DieElement>} */ (document.querySelectorAll(`#dice veyndan-die[data-played-at]`)))
 		.reduce((mostRecentlyPlayedDieElement, dieElement) => mostRecentlyPlayedDieElement.playedAt > dieElement.playedAt ? mostRecentlyPlayedDieElement : dieElement);
 	lastPlayedDieElement.playedAt = undefined;
+	undoElement.disabled = !game.isTouchUndoable;
+	confirmElement.disabled = true;
 });
 
 rollDiceElement.addEventListener(`click`, () => {
@@ -388,4 +362,6 @@ checkersElement.addEventListener(`click`, event => {
 		opponentCheckerOnPointCheckerElement.position = new Bar();
 	}
 	game = game.withTouch(touch);
+	undoElement.disabled = false;
+	confirmElement.disabled = !game.isTurnCommittable;
 });
