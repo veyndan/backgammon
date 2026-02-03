@@ -179,8 +179,8 @@ html {
 			min-block-size: 0;
 			margin-block: auto;
 
-			&:has(> .aspect-ratio-lock > .backgammon > #play-mode > option[value="opposite"]:checked) {
-				&[data-player="1"] > .aspect-ratio-lock > .backgammon > #board > #controls > div {
+			&:has(> .container-backgammon > .backgammon > #play-mode > option[value="opposite"]:checked) {
+				&[data-player="1"] > .container-backgammon > .backgammon > #board > #controls > div {
 					&:first-of-type {
 						grid-area: controls-left;
 					}
@@ -190,7 +190,7 @@ html {
 					}
 				}
 
-				&[data-player="2"] > .aspect-ratio-lock > .backgammon > #board > #controls > div {
+				&[data-player="2"] > .container-backgammon > .backgammon > #board > #controls > div {
 					rotate: .5turn;
 
 					&:first-of-type {
@@ -202,7 +202,7 @@ html {
 					}
 				}
 
-				& > .aspect-ratio-lock {
+				& > .container-backgammon {
 					aspect-ratio: 32 / 21;
 
 					& > .backgammon {
@@ -233,8 +233,8 @@ html {
 				}
 			}
 
-			&:has(> .aspect-ratio-lock > .backgammon > #play-mode > option[value="side-by-side"]:checked) {
-				&[data-player="1"] > .aspect-ratio-lock > .backgammon > #board > #controls > div {
+			&:has(> .container-backgammon > .backgammon > #play-mode > option[value="side-by-side"]:checked) {
+				&[data-player="1"] > .container-backgammon > .backgammon > #board > #controls > div {
 					&:first-of-type {
 						grid-area: controls-right;
 					}
@@ -244,7 +244,7 @@ html {
 					}
 				}
 
-				&[data-player="2"] > .aspect-ratio-lock > .backgammon > #board > #controls > div {
+				&[data-player="2"] > .container-backgammon > .backgammon > #board > #controls > div {
 					&:first-of-type {
 						grid-area: controls-left;
 					}
@@ -254,7 +254,7 @@ html {
 					}
 				}
 
-				& > .aspect-ratio-lock {
+				& > .container-backgammon {
 					aspect-ratio: 20 / 21;
 
 					& > .backgammon {
@@ -287,12 +287,12 @@ html {
 				}
 			}
 
-			&[data-player="1"] > .aspect-ratio-lock > .backgammon > #players > veyndan-player[data-player="1"],
-			&[data-player="2"] > .aspect-ratio-lock > .backgammon > #players > veyndan-player[data-player="2"] {
+			&[data-player="1"] > .container-backgammon > .backgammon > #players > veyndan-player[data-player="1"],
+			&[data-player="2"] > .container-backgammon > .backgammon > #players > veyndan-player[data-player="2"] {
 				background: var(--primary-container);
 			}
 
-			& > .aspect-ratio-lock {
+			& > .container-backgammon {
 				container-type: size;
 				max-block-size: 100%;
 				margin-inline: auto;
