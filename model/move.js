@@ -5,12 +5,16 @@ import {Die} from "./dice.js";
 import Player from "./player.js";
 import {Point, Position} from "./position.js";
 
-class Move {
+export default class Move {
 	/**
 	 * @param {Player} player
+	 * @param {Die} die
+	 * @param {Position} from
 	 */
-	constructor(player) {
+	constructor(player, die, from) {
 		this.player = Object.freeze(player);
+		this.die = Object.freeze(die);
+		this.from = Object.freeze(from);
 	}
 }
 
@@ -20,24 +24,12 @@ export class Advancement extends Move {
 	 * @param {Die} die
 	 * @param {Position} from
 	 * @param {Point} to
+	 * @param {boolean} didHitOpposingChecker
 	 */
-	constructor(player, die, from, to) {
-		super(player);
-		this.die = Object.freeze(die);
-		this.from = Object.freeze(from);
+	constructor(player, die, from, to, didHitOpposingChecker) {
+		super(player, die, from);
 		this.to = Object.freeze(to);
-		Object.freeze(this);
-	}
-}
-
-export class Hit extends Move {
-	/**
-	 * @param {Player} player
-	 * @param {Point} from
-	 */
-	constructor(player, from) {
-		super(player);
-		this.from = Object.freeze(from);
+		this.didHitOpposingChecker = Object.freeze(didHitOpposingChecker);
 		Object.freeze(this);
 	}
 }

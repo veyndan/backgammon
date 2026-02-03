@@ -3,6 +3,7 @@
 import Board from "./model/board.js";
 import Dice, {Die} from "./model/dice.js";
 import Game from "./model/game.js";
+import {Advancement} from "./model/move.js";
 import Turn from "./model/turn.js";
 import Player from "./model/player.js";
 import {Bar, Point, Position} from "./model/position.js";
@@ -259,20 +260,24 @@ confirmElement.addEventListener(`click`, () => {
 });
 
 undoElement.addEventListener(`click`, () => {
-	const lastTouch = game.turn.touches.at(-1);
-	game = game.withUndoneTouch();
-	let lastMovedCheckerElement = Array.from(/** @type {NodeListOf<CheckerElement>} */ (document.querySelectorAll(`#checkers > [data-point="${lastTouch.advancement.to.value}"]`)))
-		.map(target => new CheckerOnBoardElement(target))
-		.find(checkerElement => checkerElement.pointStackIndex === checkerElement.pointStackCount - 1);
-	lastMovedCheckerElement.position = lastTouch.advancement.from;
-	if (lastTouch.hit !== null) {
-		let lastMovedCheckerElement = new CheckerOnBoardElement(document.querySelector(`#checkers > [data-player="${lastTouch.hit.player.value}"][data-hit]`));
-		lastMovedCheckerElement.position = lastTouch.hit.from;
+	const lastMove = game.turn.moves.at(-1);
+	game = game.withUndoneMove();
+	if (lastMove instanceof Advancement) {
+		let lastMovedCheckerElement = Array.from(/** @type {NodeListOf<CheckerElement>} */ (document.querySelectorAll(`#checkers > [data-point="${lastMove.to.value}"]`)))
+			.map(target => new CheckerOnBoardElement(target))
+			.find(checkerElement => checkerElement.pointStackIndex === checkerElement.pointStackCount - 1);
+		lastMovedCheckerElement.position = lastMove.from;
+		if (lastMove.didHitOpposingChecker) {
+			let lastMovedCheckerElement = new CheckerOnBoardElement(document.querySelector(`#checkers > [data-player="${lastMove.player.other.value}"][data-hit]`));
+			lastMovedCheckerElement.position = lastMove.to;
+		}
+	} else {
+		throw new Error();
 	}
 	const lastPlayedDieElement = Array.from(/** @type {NodeListOf<DieElement>} */ (document.querySelectorAll(`#dice veyndan-die[data-played-at]`)))
 		.reduce((mostRecentlyPlayedDieElement, dieElement) => mostRecentlyPlayedDieElement.playedAt > dieElement.playedAt ? mostRecentlyPlayedDieElement : dieElement);
 	lastPlayedDieElement.playedAt = undefined;
-	undoElement.disabled = !game.isTouchUndoable;
+	undoElement.disabled = !game.isMoveUndoable;
 	confirmElement.disabled = true;
 });
 
@@ -347,21 +352,25 @@ checkersElement.addEventListener(`click`, event => {
 	const checkerElement = new CheckerOnBoardElement((/** @type {SVGUseElement} */ (event.target)).closest(`#checkers > *`));
 	if (!checkerElement.isMovable) return;
 	const dieElement = Array.from(/** @type {NodeListOf<DieElement>} */ (document.querySelectorAll(`#dice veyndan-die:not([data-played-at])`)))
-		.find(dieElement => game.uncommittedBoard.getTouch(checkerElement.player, new Die(dieElement.value), checkerElement.position) !== null);
+		.find(dieElement => game.uncommittedBoard.getMove(checkerElement.player, new Die(dieElement.value), checkerElement.position) !== null);
 	dieElement.playedAt = Date.now();
 	const oldPosition = checkerElement.position;
-	const touch = game.uncommittedBoard.getTouch(checkerElement.player, new Die(dieElement.value), oldPosition);
-	if (touch === null) {
-		throw Error(`We should only have valid touches here.`);
+	const move = game.uncommittedBoard.getMove(checkerElement.player, new Die(dieElement.value), oldPosition);
+	if (move === null) {
+		throw Error(`We should only have valid moves here.`);
 	}
-	checkerElement.position = touch.advancement.to;
-	if (touch.hit !== null) {
-		/** @type {CheckerElement} */
-		const opponentCheckerOnPointElement = document.querySelector(`#checkers > [data-point="${touch.advancement.to.value}"]:not([data-player="${checkerElement.player.value}"])`);
-		const opponentCheckerOnPointCheckerElement = new CheckerOnBoardElement(opponentCheckerOnPointElement);
-		opponentCheckerOnPointCheckerElement.position = new Bar();
+	if (move instanceof Advancement) {
+		checkerElement.position = move.to;
+		if (move.didHitOpposingChecker) {
+			/** @type {CheckerElement} */
+			const opponentCheckerOnPointElement = document.querySelector(`#checkers > [data-point="${move.to.value}"]:not([data-player="${checkerElement.player.value}"])`);
+			const opponentCheckerOnPointCheckerElement = new CheckerOnBoardElement(opponentCheckerOnPointElement);
+			opponentCheckerOnPointCheckerElement.position = new Bar();
+		}
+	} else {
+		throw new Error();
 	}
-	game = game.withTouch(touch);
+	game = game.withMove(move);
 	undoElement.disabled = false;
 	confirmElement.disabled = !game.isTurnCommittable;
 });

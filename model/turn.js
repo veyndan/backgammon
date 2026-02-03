@@ -3,7 +3,7 @@
 // noinspection ES6UnusedImports
 import Dice, {Die} from "./dice.js";
 // noinspection ES6UnusedImports
-import {Advancement, Hit } from "./move.js";
+import Move from "./move.js";
 // noinspection ES6UnusedImports
 import Player from "./player.js";
 
@@ -13,12 +13,12 @@ export default class Turn {
 
 	/**
 	 * @param {Player} player
-	 * @param {Readonly<Touch[]>} touches
+	 * @param {Readonly<Move[]>} moves
 	 * @param {?Dice} dice
 	 */
-	constructor(player, touches, dice) {
+	constructor(player, moves, dice) {
 		this.player = Object.freeze(player);
-		this.touches = Object.freeze(touches);
+		this.moves = Object.freeze(moves);
 		this.#dice = Object.freeze(dice);
 		Object.freeze(this);
 	}
@@ -33,8 +33,8 @@ export default class Turn {
 	/**
 	 * @return {boolean}
 	 */
-	get isTouchUndoable() {
-		return this.touches.length > 0;
+	get isMoveUndoable() {
+		return this.moves.length > 0;
 	}
 
 	/**
@@ -49,9 +49,9 @@ export default class Turn {
 	 */
 	get playableDice() {
 		if (this.#dice.values[0].value === this.#dice.values[1].value) {
-			return Object.freeze(this.#dice.values.concat(this.#dice.values).slice(this.touches.length));
+			return Object.freeze(this.#dice.values.concat(this.#dice.values).slice(this.moves.length));
 		} else {
-			return this.#dice.values.filter(die => !this.touches.map(touch => touch.advancement.die.value).includes(die.value));
+			return this.#dice.values.filter(die => !this.moves.map(move => move.die.value).includes(die.value));
 		}
 	}
 
@@ -60,33 +60,21 @@ export default class Turn {
 	 * @return {Turn}
 	 */
 	withDice(value) {
-		return new Turn(this.player, this.touches, value);
+		return new Turn(this.player, this.moves, value);
 	}
 
 	/**
-	 * @param {Touch} value
+	 * @param {Move} value
 	 * @return {Turn}
 	 */
-	withTouch(value) {
-		return new Turn(this.player, this.touches.concat(value), this.#dice);
+	withMove(value) {
+		return new Turn(this.player, this.moves.concat(value), this.#dice);
 	}
 
 	/**
 	 * @return {Turn}
 	 */
-	withUndoneTouch() {
-		return new Turn(this.player, this.touches.slice(0, -1), this.#dice);
-	}
-}
-
-export class Touch {
-	/**
-	 * @param {Advancement} advancement
-	 * @param {boolean} didHitOpposingChecker
-	 */
-	constructor(advancement, didHitOpposingChecker) {
-		this.advancement = Object.freeze(advancement);
-		this.hit = didHitOpposingChecker ? Object.freeze(new Hit(advancement.player.other, advancement.to)) : null;
-		Object.freeze(this);
+	withUndoneMove() {
+		return new Turn(this.player, this.moves.slice(0, -1), this.#dice);
 	}
 }

@@ -5,11 +5,13 @@ import Board from "./board.js";
 // noinspection ES6UnusedImports
 import Dice, { Die } from "./dice.js";
 // noinspection ES6UnusedImports
+import Move from "./move.js";
+// noinspection ES6UnusedImports
 import Player from "./player.js";
 // noinspection ES6UnusedImports
 import {Position} from "./position.js";
 // noinspection ES6UnusedImports
-import Turn, {Touch} from "./turn.js";
+import Turn from "./turn.js";
 
 export default class Game {
 	/** @type {Board} */
@@ -35,12 +37,12 @@ export default class Game {
 	/**
 	 * @return {boolean}
 	 */
-	get isTouchUndoable() {
-		return this.turn.isTouchUndoable;
+	get isMoveUndoable() {
+		return this.turn.isMoveUndoable;
 	}
 
 	get uncommittedBoard() {
-		return this.turn.touches.reduce((previousValue, currentValue) => previousValue.withMove(currentValue), this.#committedBoard);
+		return this.turn.moves.reduce((previousValue, currentValue) => previousValue.withMove(currentValue), this.#committedBoard);
 	}
 
 	/**
@@ -57,7 +59,7 @@ export default class Game {
 	 */
 	isCheckerMovable(player, from) {
 		return this.playableDice
-			.some(die => this.uncommittedBoard.getTouch(player, die, from) !== null);
+			.some(die => this.uncommittedBoard.getMove(player, die, from) !== null);
 	}
 
 	/**
@@ -76,17 +78,17 @@ export default class Game {
 	}
 
 	/**
-	 * @param {Touch} value
+	 * @param {Move} value
 	 * @return {Game}
 	 */
-	withTouch(value) {
-		return new Game(this.#committedBoard, this.turn.withTouch(value));
+	withMove(value) {
+		return new Game(this.#committedBoard, this.turn.withMove(value));
 	}
 
 	/**
 	 * @return {Game}
 	 */
-	withUndoneTouch() {
-		return new Game(this.#committedBoard, this.turn.withUndoneTouch());
+	withUndoneMove() {
+		return new Game(this.#committedBoard, this.turn.withUndoneMove());
 	}
 }
