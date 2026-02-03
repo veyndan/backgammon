@@ -339,6 +339,7 @@ rollDiceElement.addEventListener(`click`, () => {
 
 diceContainerElement.addEventListener(`click`, () => {
 	if (diceSwapElement.style.visibility === `hidden`) return;
+	game = game.withSwappedDice();
 	diceElement.children[1].after(diceElement.children[0]);
 });
 
@@ -351,14 +352,12 @@ function updateMovabilityOfCheckers() {
 checkersElement.addEventListener(`click`, event => {
 	const checkerElement = new CheckerOnBoardElement((/** @type {SVGUseElement} */ (event.target)).closest(`#checkers > *`));
 	if (!checkerElement.isMovable) return;
-	const dieElement = Array.from(/** @type {NodeListOf<DieElement>} */ (document.querySelectorAll(`#dice veyndan-die:not([data-played])`)))
-		.find(dieElement => game.uncommittedBoard.getMove(checkerElement.player, new Die(dieElement.value), checkerElement.position) !== null);
-	dieElement.played = true;
-	const oldPosition = checkerElement.position;
-	const move = game.uncommittedBoard.getMove(checkerElement.player, new Die(dieElement.value), oldPosition);
-	if (move === null) {
+	const move = game.firstValidMove(checkerElement.player, checkerElement.position);
+	if (move === undefined) {
 		throw Error(`We should only have valid moves here.`);
 	}
+	const dieElement = /** @type {DieElement} */ (document.querySelector(`#dice veyndan-die[data-value="${move.die.value}"]`));
+	dieElement.played = true;
 	if (move instanceof Advancement) {
 		checkerElement.position = move.to;
 		if (move.didHitOpposingChecker) {

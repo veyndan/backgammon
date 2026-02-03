@@ -16,6 +16,16 @@ export default class Dice {
 	get isDoubles() {
 		return this.values[0].value === this.values[1].value;
 	}
+
+	/**
+	 * @return {Dice}
+	 */
+	get swapped() {
+		if (this.isDoubles) {
+			throw new Error(`Doubles cannot be swapped.`);
+		}
+		return new Dice(this.values[1], this.values[0]);
+	}
 }
 
 export class Die {

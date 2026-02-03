@@ -71,6 +71,13 @@ export default class Turn {
 	}
 
 	/**
+	 * @return {Turn}
+	 */
+	withSwappedDice() {
+		return new Turn(this.player, this.moves, this.#dice.swapped);
+	}
+
+	/**
 	 * @param {Move} value
 	 * @return {Turn}
 	 */

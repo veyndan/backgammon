@@ -70,11 +70,30 @@ export default class Game {
 	}
 
 	/**
+	 * @param {Player} player
+	 * @param {Position} from
+	 * @return {?Move}
+	 */
+	firstValidMove(player, from) {
+		const validMove = this.playableDice
+			.map(die => this.uncommittedBoard.getMove(player, die, from))
+			.find(move => move !== null);
+		return validMove !== undefined ? validMove : null;
+	}
+
+	/**
 	 * @param {Dice} value
 	 * @return {Game}
 	 */
 	withDice(value) {
 		return new Game(this.#committedBoard, this.turn.withDice(value));
+	}
+
+	/**
+	 * @return {Game}
+	 */
+	withSwappedDice() {
+		return new Game(this.#committedBoard, this.turn.withSwappedDice());
 	}
 
 	/**
