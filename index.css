@@ -179,8 +179,8 @@ html {
 			min-block-size: 0;
 			margin-block: auto;
 
-			&:has(> .backgammon > .aspect-ratio-lock > #play-mode > option[value="opposite"]:checked) {
-				&[data-player="1"] > .backgammon > .aspect-ratio-lock > #board > #controls > div {
+			&:has(> .aspect-ratio-lock > .backgammon > #play-mode > option[value="opposite"]:checked) {
+				&[data-player="1"] > .aspect-ratio-lock > .backgammon > #board > #controls > div {
 					&:first-of-type {
 						grid-area: controls-left;
 					}
@@ -190,7 +190,7 @@ html {
 					}
 				}
 
-				&[data-player="2"] > .backgammon > .aspect-ratio-lock > #board > #controls > div {
+				&[data-player="2"] > .aspect-ratio-lock > .backgammon > #board > #controls > div {
 					rotate: .5turn;
 
 					&:first-of-type {
@@ -202,10 +202,10 @@ html {
 					}
 				}
 
-				& > .backgammon {
+				& > .aspect-ratio-lock {
 					aspect-ratio: 32 / 21;
 
-					& > .aspect-ratio-lock {
+					& > .backgammon {
 						grid-template:
 							".       .     drop-points-top    drop-points-top    drop-points-top    .       .        " 2.625cqb
 							"players timer quadrant-13-18     bar                quadrant-19-24     sidebar play-mode" auto
@@ -233,8 +233,8 @@ html {
 				}
 			}
 
-			&:has(> .backgammon > .aspect-ratio-lock > #play-mode > option[value="side-by-side"]:checked) {
-				&[data-player="1"] > .backgammon > .aspect-ratio-lock > #board > #controls > div {
+			&:has(> .aspect-ratio-lock > .backgammon > #play-mode > option[value="side-by-side"]:checked) {
+				&[data-player="1"] > .aspect-ratio-lock > .backgammon > #board > #controls > div {
 					&:first-of-type {
 						grid-area: controls-right;
 					}
@@ -244,7 +244,7 @@ html {
 					}
 				}
 
-				&[data-player="2"] > .backgammon > .aspect-ratio-lock > #board > #controls > div {
+				&[data-player="2"] > .aspect-ratio-lock > .backgammon > #board > #controls > div {
 					&:first-of-type {
 						grid-area: controls-left;
 					}
@@ -254,10 +254,10 @@ html {
 					}
 				}
 
-				& > .backgammon {
+				& > .aspect-ratio-lock {
 					aspect-ratio: 20 / 21;
 
-					& > .aspect-ratio-lock {
+					& > .backgammon {
 						grid-template:
 							".         players            players            players            .       " auto
 							".         timer              timer              timer              .       " auto
@@ -287,17 +287,17 @@ html {
 				}
 			}
 
-			&[data-player="1"] > .backgammon > .aspect-ratio-lock > #players > veyndan-player[data-player="1"],
-			&[data-player="2"] > .backgammon > .aspect-ratio-lock > #players > veyndan-player[data-player="2"] {
+			&[data-player="1"] > .aspect-ratio-lock > .backgammon > #players > veyndan-player[data-player="1"],
+			&[data-player="2"] > .aspect-ratio-lock > .backgammon > #players > veyndan-player[data-player="2"] {
 				background: var(--primary-container);
 			}
 
-			& > .backgammon {
+			& > .aspect-ratio-lock {
 				container-type: size;
 				max-block-size: 100%;
 				margin-inline: auto;
 
-				& > .aspect-ratio-lock {
+				& > .backgammon {
 					display: grid;
 					gap: 1.75cqmin;
 					align-items: stretch;
