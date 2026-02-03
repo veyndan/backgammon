@@ -179,40 +179,44 @@ html {
 			min-block-size: 0;
 			margin-block: auto;
 
-			&:has(> .container-backgammon > .backgammon > #play-mode > option[value="opposite"]:checked) {
-				&[data-player="1"] > .container-backgammon > .backgammon > #board > #controls > div {
-					&:first-of-type {
-						grid-area: controls-left;
-					}
+			& > .container-backgammon {
+				container-type: size;
+				max-block-size: 100%;
+				margin-inline: auto;
 
-					&:last-of-type {
-						grid-area: controls-right;
-					}
-				}
-
-				&[data-player="2"] > .container-backgammon > .backgammon > #board > #controls > div {
-					rotate: .5turn;
-
-					&:first-of-type {
-						grid-area: controls-right;
-					}
-
-					&:last-of-type {
-						grid-area: controls-left;
-					}
-				}
-
-				& > .container-backgammon {
+				&:has(> .backgammon > #play-mode > option[value="opposite"]:checked) {
 					aspect-ratio: 32 / 21;
 
 					& > .backgammon {
 						grid-template:
-							".       .     drop-points-top    drop-points-top    drop-points-top    .       .        " 2.625cqb
-							"players timer quadrant-13-18     bar                quadrant-19-24     sidebar play-mode" auto
-							"players timer controls-left      bar                controls-right     sidebar play-mode" auto
-							"players timer quadrant-7-12      bar                quadrant-1-6       sidebar play-mode" auto
-							".       .     drop-points-bottom drop-points-bottom drop-points-bottom .       .        " 2.625cqb /
-							auto     auto  auto               auto               auto               auto    auto      ;
+						".       .     drop-points-top    drop-points-top    drop-points-top    .       .        " 2.625cqb
+						"players timer quadrant-13-18     bar                quadrant-19-24     sidebar play-mode" auto
+						"players timer controls-left      bar                controls-right     sidebar play-mode" auto
+						"players timer quadrant-7-12      bar                quadrant-1-6       sidebar play-mode" auto
+						".       .     drop-points-bottom drop-points-bottom drop-points-bottom .       .        " 2.625cqb /
+						auto     auto  auto               auto               auto               auto    auto      ;
+
+						&[data-player="2"] > #board > #controls > div {
+							rotate: .5turn;
+
+							&:first-of-type {
+								grid-area: controls-right;
+							}
+
+							&:last-of-type {
+								grid-area: controls-left;
+							}
+						}
+
+						&[data-player="1"] > #board > #controls > div {
+							&:first-of-type {
+								grid-area: controls-left;
+							}
+
+							&:last-of-type {
+								grid-area: controls-right;
+							}
+						}
 
 						& > #players {
 							writing-mode: sideways-lr;
@@ -231,30 +235,8 @@ html {
 						}
 					}
 				}
-			}
 
-			&:has(> .container-backgammon > .backgammon > #play-mode > option[value="side-by-side"]:checked) {
-				&[data-player="1"] > .container-backgammon > .backgammon > #board > #controls > div {
-					&:first-of-type {
-						grid-area: controls-right;
-					}
-
-					&:last-of-type {
-						grid-area: controls-left;
-					}
-				}
-
-				&[data-player="2"] > .container-backgammon > .backgammon > #board > #controls > div {
-					&:first-of-type {
-						grid-area: controls-left;
-					}
-
-					&:last-of-type {
-						grid-area: controls-right;
-					}
-				}
-
-				& > .container-backgammon {
+				&:has(> .backgammon > #play-mode > option[value="side-by-side"]:checked) {
 					aspect-ratio: 20 / 21;
 
 					& > .backgammon {
@@ -267,6 +249,26 @@ html {
 							"play-mode quadrant-7-12      bar                quadrant-1-6       sidebar " auto
 							".         drop-points-bottom drop-points-bottom drop-points-bottom .       " 2.625cqb /
 							auto       auto               auto               auto               auto    ;
+
+						&[data-player="1"] > #board > #controls > div {
+							&:first-of-type {
+								grid-area: controls-right;
+							}
+
+							&:last-of-type {
+								grid-area: controls-left;
+							}
+						}
+
+						&[data-player="2"] > #board > #controls > div {
+							&:first-of-type {
+								grid-area: controls-left;
+							}
+
+							&:last-of-type {
+								grid-area: controls-right;
+							}
+						}
 
 						& > #players {
 							justify-self: center;
@@ -285,17 +287,6 @@ html {
 						}
 					}
 				}
-			}
-
-			&[data-player="1"] > .container-backgammon > .backgammon > #players > veyndan-player[data-player="1"],
-			&[data-player="2"] > .container-backgammon > .backgammon > #players > veyndan-player[data-player="2"] {
-				background: var(--primary-container);
-			}
-
-			& > .container-backgammon {
-				container-type: size;
-				max-block-size: 100%;
-				margin-inline: auto;
 
 				& > .backgammon {
 					display: grid;
@@ -304,6 +295,11 @@ html {
 					justify-content: center;
 
 					block-size: 100%;
+
+					&[data-player="1"] > #players > veyndan-player[data-player="1"],
+					&[data-player="2"] > #players > veyndan-player[data-player="2"] {
+						background: var(--primary-container);
+					}
 
 					& > #players {
 						display: flex;

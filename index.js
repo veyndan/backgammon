@@ -177,7 +177,7 @@ class CheckerOnBoardElement {
 	}
 }
 
-const mainElement = document.querySelector(`main`);
+const backgammonElement = /** @type {HTMLDivElement} */ (document.querySelector(`.backgammon`));
 const checkersElement = document.getElementById('checkers');
 const confirmElement = /** @type {HTMLButtonElement} */ (document.getElementById(`confirm`));
 const diceContainerElement = /** @type {HTMLDivElement} */ (document.querySelector(`#dice-container`));
@@ -255,7 +255,7 @@ confirmElement.addEventListener(`click`, () => {
 	confirmElement.hidden = true;
 	undoElement.hidden = true;
 	game = game.withChangedTurn();
-	mainElement.dataset[`player`] = game.turn.player.value;
+	backgammonElement.dataset[`player`] = game.turn.player.value;
 });
 
 undoElement.addEventListener(`click`, () => {
