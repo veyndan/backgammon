@@ -65,6 +65,7 @@ export default class Game {
 	 * @return {boolean}
 	 */
 	isCheckerMovable(player, from) {
+		if (this.turn.player.value !== player.value) return false;
 		return this.playableDice
 			.some(die => this.uncommittedBoard.getMove(player, die, from) !== null);
 	}
@@ -75,6 +76,7 @@ export default class Game {
 	 * @return {?Move}
 	 */
 	firstValidMove(player, from) {
+		if (this.turn.player.value !== player.value) return null;
 		const validMove = this.playableDice
 			.map(die => this.uncommittedBoard.getMove(player, die, from))
 			.find(move => move !== null);
