@@ -255,13 +255,11 @@ const diceObserver = new MutationObserver(mutations => {
 		const dieElement = /** @type {DieElement} */ (mutation.target);
 		if (dieElement.playedAt !== undefined) {
 			undoElement.disabled = false;
-			const unplayedDieElements = Array.from(/** @type {NodeListOf<DieElement>} */ (document.querySelectorAll(`#dice veyndan-die:not([data-played-at])`)));
-			if (unplayedDieElements.length === 0) {
+			if (game.isTurnCommittable) {
 				confirmElement.disabled = false;
 			}
 		} else {
-			const playedDieElements = Array.from(/** @type {NodeListOf<DieElement>} */ (document.querySelectorAll(`#dice veyndan-die[data-played-at]`)));
-			if (playedDieElements.length === 0) {
+			if (!game.isTouchUndoable) {
 				undoElement.disabled = true;
 			} else {
 				confirmElement.disabled = true;

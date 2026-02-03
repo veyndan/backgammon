@@ -25,6 +25,20 @@ export default class Game {
 		Object.freeze(this);
 	}
 
+	/**
+	 * @return {boolean}
+	 */
+	get isTurnCommittable() {
+		return this.turn.isCommittable;
+	}
+
+	/**
+	 * @return {boolean}
+	 */
+	get isTouchUndoable() {
+		return this.turn.isTouchUndoable;
+	}
+
 	get uncommittedBoard() {
 		return this.turn.touches.reduce((previousValue, currentValue) => previousValue.withMove(currentValue), this.#committedBoard);
 	}

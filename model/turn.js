@@ -24,6 +24,20 @@ export default class Turn {
 	}
 
 	/**
+	 * @return {boolean}
+	 */
+	get isCommittable() {
+		return this.playableDice.length === 0;
+	}
+
+	/**
+	 * @return {boolean}
+	 */
+	get isTouchUndoable() {
+		return this.touches.length > 0;
+	}
+
+	/**
 	 * @return {Turn}
 	 */
 	get other() {
