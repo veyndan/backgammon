@@ -38,13 +38,6 @@ class CheckerOnBoardElement {
 	}
 
 	/**
-	 * @return {boolean}
-	 */
-	get isMovable() {
-		return `movable` in this.target.dataset;
-	}
-
-	/**
 	 * @param {boolean} value
 	 */
 	set isMovable(value) {
@@ -351,11 +344,8 @@ function updateMovabilityOfCheckers() {
 
 checkersElement.addEventListener(`click`, event => {
 	const checkerElement = new CheckerOnBoardElement((/** @type {SVGUseElement} */ (event.target)).closest(`#checkers > *`));
-	if (!checkerElement.isMovable) return;
 	const move = game.firstValidMove(checkerElement.player, checkerElement.position);
-	if (move === undefined) {
-		throw Error(`We should only have valid moves here.`);
-	}
+	if (move === null) return;
 	const dieElement = /** @type {DieElement} */ (document.querySelector(`#dice veyndan-die[data-value="${move.die.value}"]`));
 	dieElement.played = true;
 	if (move instanceof Advancement) {
