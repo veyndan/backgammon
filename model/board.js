@@ -55,42 +55,20 @@ export default class Board {
 			throw Error(`Unable to get move for checker as no checker resides on ${from}.`);
 		}
 
-		const potentialPointValue = positionValue + (player.value === Player.One.value ? -die.value : die.value);
-
-		if (player.value === Player.One.value && from instanceof Point && from.value - die.value < 1) {
-			return null
-		} else if (player.value === Player.Two.value && from instanceof Point && from.value + die.value > 24) {
-			return null
-		} else if (player.value === Player.One.value && this.mailbox[potentialPointValue] >= 0) {
-			if (from instanceof Bar || this.mailbox[25] === 0) {
-				return new Advancement(player, die, from, new Point(potentialPointValue), false);
+		if (player.value === Player.One.value) {
+			const potentialPointValue = positionValue - die.value;
+			if (!(from instanceof Point && from.value - die.value < 1) && (from instanceof Bar || this.mailbox[25] === 0) && this.mailbox[potentialPointValue] >= -1) {
+				return new Advancement(player, die, from, new Point(potentialPointValue), this.mailbox[potentialPointValue] === -1);
 			} else {
-				return null;
+				return null
 			}
-		} else if (player.value === Player.Two.value && this.mailbox[potentialPointValue] <= 0) {
-			if (from instanceof Bar || this.mailbox[0] === 0) {
-				return new Advancement(player, die, from, new Point(potentialPointValue), false);
-			} else {
-				return null;
-			}
-		} else if (player.value === Player.One.value && this.mailbox[potentialPointValue] === -1) {
-			if (from instanceof Bar || this.mailbox[25] === 0) {
-				return new Advancement(player, die, from, new Point(potentialPointValue), true);
-			} else {
-				return null;
-			}
-		} else if (player.value === Player.Two.value && this.mailbox[potentialPointValue] === 1) {
-			if (from instanceof Bar || this.mailbox[0] === 0) {
-				return new Advancement(player, die, from, new Point(potentialPointValue), true);
-			} else {
-				return null;
-			}
-		} else if (player.value === Player.One.value && this.mailbox[potentialPointValue] < -1) {
-			return null;
-		} else if (player.value === Player.Two.value && this.mailbox[potentialPointValue] > 1) {
-			return null;
 		} else {
-			throw Error(`Prior conditionals should've been exhaustive.`);
+			const potentialPointValue = positionValue + die.value;
+			if (!(from instanceof Point && from.value + die.value > 24) && (from instanceof Bar || this.mailbox[0] === 0) && this.mailbox[potentialPointValue] <= 1) {
+				return new Advancement(player, die, from, new Point(potentialPointValue), this.mailbox[potentialPointValue] === 1);
+			} else {
+				return null;
+			}
 		}
 	}
 
