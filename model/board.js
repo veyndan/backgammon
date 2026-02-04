@@ -74,9 +74,17 @@ export default class Board {
 				return null;
 			}
 		} else if (player.value === Player.One.value && this.mailbox[potentialPointValue] === -1) {
-			return new Advancement(player, die, from, new Point(potentialPointValue), true);
+			if (from instanceof Bar || this.mailbox[25] === 0) {
+				return new Advancement(player, die, from, new Point(potentialPointValue), true);
+			} else {
+				return null;
+			}
 		} else if (player.value === Player.Two.value && this.mailbox[potentialPointValue] === 1) {
-			return new Advancement(player, die, from, new Point(potentialPointValue), true);
+			if (from instanceof Bar || this.mailbox[0] === 0) {
+				return new Advancement(player, die, from, new Point(potentialPointValue), true);
+			} else {
+				return null;
+			}
 		} else if (player.value === Player.One.value && this.mailbox[potentialPointValue] < -1) {
 			return null;
 		} else if (player.value === Player.Two.value && this.mailbox[potentialPointValue] > 1) {
