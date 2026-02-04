@@ -2,9 +2,10 @@
 
 import Board from "./model/board.js";
 import Dice, {Die} from "./model/dice.js";
-import Game from "./model/game.js";
+// noinspection ES6UnusedImports
+import Game, {GameTurnRollDice, GameTurnStart} from "./model/game.js";
 import {Advancement} from "./model/move.js";
-import Turn from "./model/turn.js";
+import {TurnStart} from "./model/turn.js";
 import Player from "./model/player.js";
 import {Bar, Point, Position} from "./model/position.js";
 // noinspection ES6UnusedImports
@@ -27,7 +28,8 @@ Math.clamp = function (x, lower, upper) {
 	return Math.min(Math.max(x, lower), upper);
 };
 
-let game = new Game(Board.startingPosition(), new Turn(Player.One, [], null));
+/** @type {Game} */
+let game = new GameTurnStart(Board.startingPosition(), new TurnStart(Player.One));
 
 class CheckerOnBoardElement {
 	/**
@@ -181,7 +183,7 @@ const doubleElement = /** @type {HTMLButtonElement} */ (document.getElementById(
 const rollDiceElement = /** @type {HTMLButtonElement} */ (document.getElementById(`roll-dice`));
 const undoElement = /** @type {HTMLButtonElement} */ (document.getElementById(`undo`));
 
-const checkerElements = game.uncommittedBoard.mailbox.flatMap((pointValue, point) => {
+const checkerElements = (/** @type GameTurnStart */ (game)).committedBoard.mailbox.flatMap((pointValue, point) => {
 	const pointStackCount = Math.abs(pointValue);
 	return Array.from(Array(pointStackCount), (_, index) => index)
 		.map(pointStackIndex => {
@@ -248,12 +250,12 @@ confirmElement.addEventListener(`click`, () => {
 	rollDiceElement.hidden = false;
 	confirmElement.hidden = true;
 	undoElement.hidden = true;
-	game = game.withChangedTurn();
-	backgammonElement.dataset[`player`] = game.turn.player.value;
+	game = (/** @type {GameTurnRollDice} */ (game)).withChangedTurn();
+	backgammonElement.dataset[`player`] = (/** @type {GameTurnStart} */ (game)).turn.player.value;
 });
 
 undoElement.addEventListener(`click`, () => {
-	const lastMove = game.turn.moves.at(-1);
+	const lastMove = (/** @type {GameTurnRollDice} */ (game)).turn.moves.at(-1);
 	if (lastMove instanceof Advancement) {
 		let lastMovedCheckerElement = Array.from(/** @type {NodeListOf<CheckerElement>} */ (document.querySelectorAll(`#checkers > [data-point="${lastMove.to.value}"]`)))
 			.map(target => new CheckerOnBoardElement(target))
@@ -266,10 +268,10 @@ undoElement.addEventListener(`click`, () => {
 	} else {
 		throw new Error();
 	}
-	const lastPlayedDieElement = /** @type {DieElement} */ (document.querySelector(`#dice veyndan-die[data-value="${game.lastPlayedDie.value}"]`));
+	const lastPlayedDieElement = /** @type {DieElement} */ (document.querySelector(`#dice veyndan-die[data-value="${(/** @type {GameTurnRollDice} */ (game)).lastPlayedDie.value}"]`));
 	lastPlayedDieElement.played = false;
-	game = game.withUndoneMove();
-	undoElement.disabled = !game.isMoveUndoable;
+	game = (/** @type {GameTurnRollDice} */ (game)).withUndoneMove();
+	undoElement.disabled = !(/** @type {GameTurnRollDice} */ (game)).isMoveUndoable;
 	confirmElement.disabled = true;
 });
 
@@ -319,7 +321,7 @@ rollDiceElement.addEventListener(`click`, () => {
 					if (dice.isDoubles) {
 						diceElement.append(firstDieElement.cloneNode(true), secondDieElement.cloneNode(true));
 					}
-					game = game.withDice(dice);
+					game = (/** @type {GameTurnStart} */ (game)).withDice(dice);
 					updateMovabilityOfCheckers();
 				}
 			},
@@ -332,19 +334,19 @@ rollDiceElement.addEventListener(`click`, () => {
 
 diceContainerElement.addEventListener(`click`, () => {
 	if (diceSwapElement.style.visibility === `hidden`) return;
-	game = game.withSwappedDice();
+	game = (/** @type {GameTurnRollDice} */ (game)).withSwappedDice();
 	diceElement.children[1].after(diceElement.children[0]);
 });
 
 function updateMovabilityOfCheckers() {
-	Array.from(/** @type {NodeListOf<CheckerElement>} */ (document.querySelectorAll(`#checkers > [data-player="${game.turn.player.value}"]`)))
+	Array.from(/** @type {NodeListOf<CheckerElement>} */ (document.querySelectorAll(`#checkers > [data-player="${(/** @type {GameTurnStart} */ (game)).turn.player.value}"]`)))
 		.map(value => new CheckerOnBoardElement(value))
-		.forEach(checkerElement => checkerElement.isMovable = game.isCheckerMovable(checkerElement.player, checkerElement.position));
+		.forEach(checkerElement => checkerElement.isMovable = (/** @type {GameTurnRollDice} */ (game)).isCheckerMovable(checkerElement.player, checkerElement.position));
 }
 
 checkersElement.addEventListener(`click`, event => {
 	const checkerElement = new CheckerOnBoardElement((/** @type {SVGUseElement} */ (event.target)).closest(`#checkers > *`));
-	const move = game.firstValidMove(checkerElement.player, checkerElement.position);
+	const move = (/** @type {GameTurnRollDice} */ (game)).firstValidMove(checkerElement.player, checkerElement.position);
 	if (move === null) return;
 	const dieElement = /** @type {DieElement} */ (document.querySelector(`#dice veyndan-die[data-value="${move.die.value}"]`));
 	dieElement.played = true;
@@ -359,7 +361,7 @@ checkersElement.addEventListener(`click`, event => {
 	} else {
 		throw new Error();
 	}
-	game = game.withMove(move);
+	game = (/** @type {GameTurnRollDice} */ (game)).withMove(move);
 	undoElement.disabled = false;
-	confirmElement.disabled = !game.isTurnCommittable;
+	confirmElement.disabled = !(/** @type {GameTurnRollDice} */ (game)).isTurnCommittable;
 });

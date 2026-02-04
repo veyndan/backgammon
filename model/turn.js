@@ -7,16 +7,38 @@ import Move from "./move.js";
 // noinspection ES6UnusedImports
 import Player from "./player.js";
 
-export default class Turn {
-	/** @type {?Dice} */
+class Turn {}
+
+export class TurnStart extends Turn {
+	/**
+	 * @param {Player} player
+	 */
+	constructor(player) {
+		super();
+		this.player = Object.freeze(player);
+		Object.freeze(this);
+	}
+
+	/**
+	 * @param {Dice} value
+	 * @return {TurnRollDice}
+	 */
+	withDice(value) {
+		return new TurnRollDice(this.player, [], value);
+	}
+}
+
+export class TurnRollDice extends Turn {
+	/** @type {Dice} */
 	#dice;
 
 	/**
 	 * @param {Player} player
 	 * @param {Readonly<Move[]>} moves
-	 * @param {?Dice} dice
+	 * @param {Dice} dice
 	 */
 	constructor(player, moves, dice) {
+		super();
 		this.player = Object.freeze(player);
 		this.moves = Object.freeze(moves);
 		this.#dice = Object.freeze(dice);
@@ -38,10 +60,10 @@ export default class Turn {
 	}
 
 	/**
-	 * @return {Turn}
+	 * @return {TurnStart}
 	 */
 	get other() {
-		return new Turn(this.player.other, [], null);
+		return new TurnStart(this.player.other);
 	}
 
 	/**
@@ -55,9 +77,7 @@ export default class Turn {
 	 * @return {Readonly<Die[]>}
 	 */
 	get playableDice() {
-		if (this.#dice === null) {
-			return Object.freeze([]);
-		} else if (this.#dice.isDoubles) {
+		if (this.#dice.isDoubles) {
 			return Object.freeze(this.#dice.values.concat(this.#dice.values).slice(this.moves.length));
 		} else {
 			return this.#dice.values.filter(die => !this.moves.map(move => move.die.value).includes(die.value));
@@ -65,35 +85,24 @@ export default class Turn {
 	}
 
 	/**
-	 * @param {Dice} value
-	 * @return {Turn}
-	 */
-	withDice(value) {
-		return new Turn(this.player, this.moves, value);
-	}
-
-	/**
-	 * @return {Turn}
+	 * @return {TurnRollDice}
 	 */
 	withSwappedDice() {
-		if (this.#dice === null) {
-			throw Error(`There are no dice to swap.`);
-		}
-		return new Turn(this.player, this.moves, this.#dice.swapped);
+		return new TurnRollDice(this.player, this.moves, this.#dice.swapped);
 	}
 
 	/**
 	 * @param {Move} value
-	 * @return {Turn}
+	 * @return {TurnRollDice}
 	 */
 	withMove(value) {
-		return new Turn(this.player, this.moves.concat(value), this.#dice);
+		return new TurnRollDice(this.player, this.moves.concat(value), this.#dice);
 	}
 
 	/**
-	 * @return {Turn}
+	 * @return {TurnRollDice}
 	 */
 	withUndoneMove() {
-		return new Turn(this.player, this.moves.slice(0, -1), this.#dice);
+		return new TurnRollDice(this.player, this.moves.slice(0, -1), this.#dice);
 	}
 }

@@ -11,17 +11,41 @@ import Player from "./player.js";
 // noinspection ES6UnusedImports
 import {Position} from "./position.js";
 // noinspection ES6UnusedImports
-import Turn from "./turn.js";
+import {TurnRollDice, TurnStart} from "./turn.js";
 
-export default class Game {
+export default class Game {}
+
+export class GameTurnStart extends Game {
+	/**
+	 * @param {Board} commitedBoard
+	 * @param {TurnStart} turn
+	 */
+	constructor(commitedBoard, turn) {
+		super();
+		this.committedBoard = Object.freeze(commitedBoard);
+		this.turn = Object.freeze(turn);
+		Object.freeze(this);
+	}
+
+	/**
+	 * @param {Dice} value
+	 * @return {GameTurnRollDice}
+	 */
+	withDice(value) {
+		return new GameTurnRollDice(this.committedBoard, this.turn.withDice(value));
+	}
+}
+
+export class GameTurnRollDice extends Game {
 	/** @type {Board} */
 	#committedBoard
 
 	/**
 	 * @param {Board} commitedBoard
-	 * @param {Turn} turn
+	 * @param {TurnRollDice} turn
 	 */
 	constructor(commitedBoard, turn) {
+		super();
 		this.#committedBoard = Object.freeze(commitedBoard);
 		this.turn = Object.freeze(turn);
 		Object.freeze(this);
@@ -84,39 +108,31 @@ export default class Game {
 	}
 
 	/**
-	 * @param {Dice} value
-	 * @return {Game}
-	 */
-	withDice(value) {
-		return new Game(this.#committedBoard, this.turn.withDice(value));
-	}
-
-	/**
-	 * @return {Game}
+	 * @return {GameTurnRollDice}
 	 */
 	withSwappedDice() {
-		return new Game(this.#committedBoard, this.turn.withSwappedDice());
+		return new GameTurnRollDice(this.#committedBoard, this.turn.withSwappedDice());
 	}
 
 	/**
-	 * @return {Game}
+	 * @return {GameTurnStart}
 	 */
 	withChangedTurn() {
-		return new Game(this.uncommittedBoard, this.turn.other);
+		return new GameTurnStart(this.uncommittedBoard, this.turn.other);
 	}
 
 	/**
 	 * @param {Move} value
-	 * @return {Game}
+	 * @return {GameTurnRollDice}
 	 */
 	withMove(value) {
-		return new Game(this.#committedBoard, this.turn.withMove(value));
+		return new GameTurnRollDice(this.#committedBoard, this.turn.withMove(value));
 	}
 
 	/**
-	 * @return {Game}
+	 * @return {GameTurnRollDice}
 	 */
 	withUndoneMove() {
-		return new Game(this.#committedBoard, this.turn.withUndoneMove());
+		return new GameTurnRollDice(this.#committedBoard, this.turn.withUndoneMove());
 	}
 }
