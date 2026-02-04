@@ -10,20 +10,18 @@ import Move from "./move.js";
 import Player from "./player.js";
 // noinspection ES6UnusedImports
 import {Position} from "./position.js";
-// noinspection ES6UnusedImports
-import {TurnRollDice, TurnStart} from "./turn.js";
 
 export default class Game {}
 
 export class GameTurnStart extends Game {
 	/**
 	 * @param {Board} commitedBoard
-	 * @param {TurnStart} turn
+	 * @param {Player} player
 	 */
-	constructor(commitedBoard, turn) {
+	constructor(commitedBoard, player) {
 		super();
 		this.committedBoard = Object.freeze(commitedBoard);
-		this.turn = Object.freeze(turn);
+		this.player = Object.freeze(player);
 		Object.freeze(this);
 	}
 
@@ -32,22 +30,28 @@ export class GameTurnStart extends Game {
 	 * @return {GameTurnRollDice}
 	 */
 	withDice(value) {
-		return new GameTurnRollDice(this.committedBoard, this.turn.withDice(value));
+		return new GameTurnRollDice(this.committedBoard, this.player, [], value);
 	}
 }
 
 export class GameTurnRollDice extends Game {
 	/** @type {Board} */
 	#committedBoard
+	/** @type {Dice} */
+	#dice;
 
 	/**
 	 * @param {Board} commitedBoard
-	 * @param {TurnRollDice} turn
+	 * @param {Player} player
+	 * @param {Readonly<Move[]>} moves
+	 * @param {Dice} dice
 	 */
-	constructor(commitedBoard, turn) {
+	constructor(commitedBoard, player, moves, dice) {
 		super();
 		this.#committedBoard = Object.freeze(commitedBoard);
-		this.turn = Object.freeze(turn);
+		this.player = Object.freeze(player);
+		this.moves = Object.freeze(moves);
+		this.#dice = Object.freeze(dice);
 		Object.freeze(this);
 	}
 
@@ -55,32 +59,36 @@ export class GameTurnRollDice extends Game {
 	 * @return {boolean}
 	 */
 	get isTurnCommittable() {
-		return this.turn.isCommittable;
+		return this.playableDice.length === 0;
 	}
 
 	/**
 	 * @return {boolean}
 	 */
 	get isMoveUndoable() {
-		return this.turn.isMoveUndoable;
+		return this.moves.length > 0;
 	}
 
 	get uncommittedBoard() {
-		return this.turn.moves.reduce((previousValue, currentValue) => previousValue.withMove(currentValue), this.#committedBoard);
+		return this.moves.reduce((previousValue, currentValue) => previousValue.withMove(currentValue), this.#committedBoard);
 	}
 
 	/**
 	 * @return {Readonly<Die>}
 	 */
 	get lastPlayedDie() {
-		return this.turn.lastPlayedDie;
+		return this.moves.at(-1).die;
 	}
 
 	/**
 	 * @return {Readonly<Die[]>}
 	 */
 	get playableDice() {
-		return this.turn.playableDice;
+		if (this.#dice.isDoubles) {
+			return Object.freeze(this.#dice.values.concat(this.#dice.values).slice(this.moves.length));
+		} else {
+			return this.#dice.values.filter(die => !this.moves.map(move => move.die.value).includes(die.value));
+		}
 	}
 
 	/**
@@ -89,7 +97,7 @@ export class GameTurnRollDice extends Game {
 	 * @return {boolean}
 	 */
 	isCheckerMovable(player, from) {
-		if (this.turn.player.value !== player.value) return false;
+		if (this.player.value !== player.value) return false;
 		return this.playableDice
 			.some(die => this.uncommittedBoard.getMove(player, die, from) !== null);
 	}
@@ -100,7 +108,7 @@ export class GameTurnRollDice extends Game {
 	 * @return {?Move}
 	 */
 	firstValidMove(player, from) {
-		if (this.turn.player.value !== player.value) return null;
+		if (this.player.value !== player.value) return null;
 		const validMove = this.playableDice
 			.map(die => this.uncommittedBoard.getMove(player, die, from))
 			.find(move => move !== null);
@@ -111,14 +119,14 @@ export class GameTurnRollDice extends Game {
 	 * @return {GameTurnRollDice}
 	 */
 	withSwappedDice() {
-		return new GameTurnRollDice(this.#committedBoard, this.turn.withSwappedDice());
+		return new GameTurnRollDice(this.#committedBoard, this.player, this.moves, this.#dice.swapped);
 	}
 
 	/**
 	 * @return {GameTurnStart}
 	 */
 	withChangedTurn() {
-		return new GameTurnStart(this.uncommittedBoard, this.turn.other);
+		return new GameTurnStart(this.uncommittedBoard,  this.player.other);
 	}
 
 	/**
@@ -126,13 +134,13 @@ export class GameTurnRollDice extends Game {
 	 * @return {GameTurnRollDice}
 	 */
 	withMove(value) {
-		return new GameTurnRollDice(this.#committedBoard, this.turn.withMove(value));
+		return new GameTurnRollDice(this.#committedBoard, this.player, this.moves.concat(value), this.#dice);
 	}
 
 	/**
 	 * @return {GameTurnRollDice}
 	 */
 	withUndoneMove() {
-		return new GameTurnRollDice(this.#committedBoard, this.turn.withUndoneMove());
+		return new GameTurnRollDice(this.#committedBoard, this.player, this.moves.slice(0, -1), this.#dice);
 	}
 }

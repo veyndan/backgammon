@@ -5,7 +5,6 @@ import Dice, {Die} from "./model/dice.js";
 // noinspection ES6UnusedImports
 import Game, {GameTurnRollDice, GameTurnStart} from "./model/game.js";
 import {Advancement} from "./model/move.js";
-import {TurnStart} from "./model/turn.js";
 import Player from "./model/player.js";
 import {Bar, Point, Position} from "./model/position.js";
 // noinspection ES6UnusedImports
@@ -29,7 +28,7 @@ Math.clamp = function (x, lower, upper) {
 };
 
 /** @type {Game} */
-let game = new GameTurnStart(Board.startingPosition(), new TurnStart(Player.One));
+let game = new GameTurnStart(Board.startingPosition(), Player.One);
 
 class CheckerOnBoardElement {
 	/**
@@ -251,11 +250,11 @@ confirmElement.addEventListener(`click`, () => {
 	confirmElement.hidden = true;
 	undoElement.hidden = true;
 	game = (/** @type {GameTurnRollDice} */ (game)).withChangedTurn();
-	backgammonElement.dataset[`player`] = (/** @type {GameTurnStart} */ (game)).turn.player.value;
+	backgammonElement.dataset[`player`] = (/** @type {GameTurnStart} */ (game)).player.value;
 });
 
 undoElement.addEventListener(`click`, () => {
-	const lastMove = (/** @type {GameTurnRollDice} */ (game)).turn.moves.at(-1);
+	const lastMove = (/** @type {GameTurnRollDice} */ (game)).moves.at(-1);
 	if (lastMove instanceof Advancement) {
 		let lastMovedCheckerElement = Array.from(/** @type {NodeListOf<CheckerElement>} */ (document.querySelectorAll(`#checkers > [data-point="${lastMove.to.value}"]`)))
 			.map(target => new CheckerOnBoardElement(target))
@@ -339,7 +338,7 @@ diceContainerElement.addEventListener(`click`, () => {
 });
 
 function updateMovabilityOfCheckers() {
-	Array.from(/** @type {NodeListOf<CheckerElement>} */ (document.querySelectorAll(`#checkers > [data-player="${(/** @type {GameTurnStart} */ (game)).turn.player.value}"]`)))
+	Array.from(/** @type {NodeListOf<CheckerElement>} */ (document.querySelectorAll(`#checkers > [data-player="${(/** @type {GameTurnStart} */ (game)).player.value}"]`)))
 		.map(value => new CheckerOnBoardElement(value))
 		.forEach(checkerElement => checkerElement.isMovable = (/** @type {GameTurnRollDice} */ (game)).isCheckerMovable(checkerElement.player, checkerElement.position));
 }
