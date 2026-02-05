@@ -176,7 +176,6 @@ const backgammonElement = /** @type {HTMLDivElement} */ (document.querySelector(
 const checkersElement = document.getElementById('checkers');
 const confirmElement = /** @type {HTMLButtonElement} */ (document.getElementById(`confirm`));
 const diceContainerElement = /** @type {HTMLDivElement} */ (document.querySelector(`#dice-container`));
-const diceSwapElement = /** @type {SVGSVGElement} */ (document.querySelector(`#dice-swap`));
 const diceElement = /** @type {HTMLDivElement} */ (document.querySelector(`#dice`));
 const doubleElement = /** @type {HTMLButtonElement} */ (document.getElementById(`double`));
 const rollDiceElement = /** @type {HTMLButtonElement} */ (document.getElementById(`roll-dice`));
@@ -332,7 +331,6 @@ rollDiceElement.addEventListener(`click`, () => {
 });
 
 diceContainerElement.addEventListener(`click`, () => {
-	if (diceSwapElement.style.visibility === `hidden`) return;
 	game = (/** @type {GameTurnRollDice} */ (game)).withSwappedDice();
 	diceElement.children[1].after(diceElement.children[0]);
 });

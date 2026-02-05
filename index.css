@@ -474,6 +474,8 @@ html {
 								}
 
 								& > #dice-container {
+									pointer-events: none;
+
 									display: none;
 									flex-direction: column;
 									align-items: center;
@@ -482,6 +484,7 @@ html {
 									margin-block-end: 3.5cqmin;
 
 									&:has(> #dice > veyndan-die:not(.rolling):first-child:nth-last-child(2)) {
+										pointer-events: auto;
 										cursor: pointer;
 
 										& > #dice-swap {
