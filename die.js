@@ -1,5 +1,7 @@
 "use strict";
 
+import {Die} from "./model/dice.js";
+
 export default class DieElement extends HTMLElement {
 	constructor() {
 		super();
@@ -21,17 +23,17 @@ export default class DieElement extends HTMLElement {
 	}
 
 	/**
-	 * @return {number}
+	 * @return {Die}
 	 */
 	get value() {
-		return Number(this.dataset[`value`]);
+		return new Die(Number(this.dataset[`value`]));
 	}
 
 	/**
-	 * @param {number} value
+	 * @param {Die} value
 	 */
 	set value(value) {
-		this.dataset[`value`] = String(value);
+		this.dataset[`value`] = String(value.value);
 	}
 }
 

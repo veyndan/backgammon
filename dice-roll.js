@@ -44,31 +44,31 @@ export default class DiceRollElement extends HTMLElement {
 	 */
 	async roll(limit) {
 		/**
-		 * @return {number}
+		 * @return {Die}
 		 */
-		function generateRandomValue() {
-			return Math.floor(Math.random() * 6 + 1);
+		function generateRandomDie() {
+			return new Die(Math.floor(Math.random() * 6 + 1));
 		}
 
 		const dieElement0 = /** @type {DieElement} */ (document.createElement(`veyndan-die`));
-		dieElement0.value = generateRandomValue();
+		dieElement0.value = generateRandomDie();
 		dieElement0.classList.add(`rolling`);
 		const dieElement1 = /** @type {DieElement} */ (document.createElement(`veyndan-die`));
-		dieElement1.value = generateRandomValue();
+		dieElement1.value = generateRandomDie();
 		dieElement1.classList.add(`rolling`);
 		this.#diceElement.replaceChildren(dieElement0, dieElement1);
 		let count = 1;
 		return new Promise(resolve => {
 			const intervalID = setInterval(
 				() => {
-					dieElement0.value = generateRandomValue();
-					dieElement1.value = generateRandomValue();
+					dieElement0.value = generateRandomDie();
+					dieElement1.value = generateRandomDie();
 
 					if (++count === limit) {
 						clearInterval(intervalID);
 						dieElement0.classList.remove(`rolling`);
 						dieElement1.classList.remove(`rolling`);
-						const dice = new Dice(new Die(dieElement0.value), new Die(dieElement1.value));
+						const dice = new Dice(dieElement0.value, dieElement1.value);
 						if (dice.isDoubles) {
 							this.#diceElement.append(dieElement0.cloneNode(true), dieElement1.cloneNode(true));
 						}
