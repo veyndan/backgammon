@@ -473,51 +473,8 @@ html {
 									}
 								}
 
-								& > #dice-container {
-									pointer-events: none;
-
+								& > veyndan-dice-roll {
 									display: none;
-									flex-direction: column;
-									align-items: center;
-
-									inline-size: 100%;
-									margin-block-end: 3.5cqmin;
-
-									&:has(> #dice > veyndan-die:not(.rolling):first-child:nth-last-child(2)) {
-										pointer-events: auto;
-										cursor: pointer;
-
-										& > #dice-swap {
-											visibility: visible;
-										}
-									}
-
-									& > #dice-swap {
-										block-size: 2.625cqmin;
-										margin-block: -.21875cqmin;
-										visibility: hidden;
-									}
-
-									& > #dice {
-										display: flex;
-										justify-content: center;
-
-										margin: 0;
-										padding: 0;
-
-										list-style-type: none;
-
-										& > veyndan-die {
-											overflow: hidden;
-											flex: 0 1 calc(var(--die-side-length-unitless) * .21875cqmin + 3.0625cqmin);
-											margin-inline: .4375cqmin;
-
-											&:nth-child(n + 3) {
-												animation: .5s .2s backwards flex-grow,
-												.2s .8125s backwards fade-in;
-											}
-										}
-									}
 								}
 							}
 						}
