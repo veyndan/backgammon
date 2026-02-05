@@ -86,7 +86,7 @@ export default class DiceRollElement extends HTMLElement {
 	handleEvent(event) {
 		switch (event.type) {
 			case `click`: {
-				this.#diceElement.children[1].after(this.#diceElement.children[0]);
+				this.#diceElement.classList.toggle(`swapped`);
 				this.dispatchEvent(new CustomEvent(`swap-dice`));
 			}
 		}

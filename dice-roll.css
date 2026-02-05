@@ -23,6 +23,10 @@
 
 		list-style-type: none;
 
+		&.swapped > veyndan-die:first-child {
+			order: 1;
+		}
+
 		& > veyndan-die {
 			overflow: hidden;
 			flex: 0 1 calc(var(--die-side-length-unitless) * .21875cqmin + 3.0625cqmin);
