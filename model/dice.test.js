@@ -5,14 +5,23 @@ import {Die} from "./dice.js";
 
 test(`random`,  (t) => {
 	const testArguments = [
-		{randomNumber: 0, expected: 1},
-		{randomNumber: .5, expected: 4},
-		{randomNumber: .99, expected: 6},
+		{exclude: null, randomNumber: 0, expected: 1},
+		{exclude: null, randomNumber: .2, expected: 2},
+		{exclude: null, randomNumber: .99, expected: 6},
+		{exclude: 1, randomNumber: 0, expected: 2},
+		{exclude: 2, randomNumber: 0, expected: 1},
+		{exclude: 6, randomNumber: 0, expected: 1},
+		{exclude: 1, randomNumber: 0.2, expected: 2},
+		{exclude: 2, randomNumber: 0.2, expected: 3},
+		{exclude: 6, randomNumber: 0.2, expected: 2},
+		{exclude: 1, randomNumber: 0.99, expected: 6},
+		{exclude: 2, randomNumber: 0.99, expected: 6},
+		{exclude: 6, randomNumber: 0.99, expected: 1},
 	];
-	for (const {randomNumber, expected} of testArguments) {
-		const mathRandom = () => randomNumber;
-		t.test(String(randomNumber),  (t) => {
-			t.deepEqual(Die.random(mathRandom), new Die(expected));
+	for (const {exclude, randomNumber, expected} of testArguments) {
+		t.test(`exclude ${exclude} given ${randomNumber}`,  (t) => {
+			const mathRandom = () => randomNumber
+			t.deepEqual(Die.random(exclude, mathRandom), new Die(expected));
 			t.end();
 		});
 	}

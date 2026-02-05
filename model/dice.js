@@ -41,10 +41,12 @@ export class Die {
 	}
 
 	/**
+	 * @param {?number} exclude
 	 * @param {() => number} mathRandom
 	 * @return {Die}
 	 */
-	static random(mathRandom = Math.random) {
-		return new Die(Math.floor(mathRandom() * 6 + 1));
+	static random(exclude = null, mathRandom = Math.random) {
+		const dieValue = Math.floor(mathRandom() * 6 + 1);
+		return new Die(exclude === dieValue ? dieValue % 6 + 1 : dieValue);
 	}
 }

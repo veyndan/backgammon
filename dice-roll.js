@@ -54,8 +54,8 @@ export default class DiceRollElement extends HTMLElement {
 		return new Promise(resolve => {
 			const intervalID = setInterval(
 				() => {
-					dieElement0.value = Die.random();
-					dieElement1.value = Die.random();
+					dieElement0.value = Die.random(dieElement0.value.value);
+					dieElement1.value = Die.random(dieElement1.value.value);
 
 					if (++count === limit) {
 						clearInterval(intervalID);
