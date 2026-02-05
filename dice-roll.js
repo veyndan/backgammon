@@ -1,7 +1,7 @@
 "use strict";
 
 // @ts-ignore
-import stylesheet from "./dice-roll.css" with { type: "css" };
+import stylesheet from "./dice-roll.css" with {type: "css"};
 // noinspection ES6UnusedImports
 import DieElement from "./die.js";
 // noinspection ES6UnusedImports
@@ -61,21 +61,16 @@ export default class DiceRollElement extends HTMLElement {
 		return new Promise(resolve => {
 			const intervalID = setInterval(
 				() => {
-					const firstDieElement = /** @type {DieElement} */ (document.createElement(`veyndan-die`));
-					firstDieElement.value = generateRandomValue();
-					firstDieElement.classList.add(`rolling`);
-					const secondDieElement = /** @type {DieElement} */ (document.createElement(`veyndan-die`));
-					secondDieElement.value = generateRandomValue();
-					secondDieElement.classList.add(`rolling`);
-					this.#diceElement.replaceChildren(firstDieElement, secondDieElement);
+					dieElement0.value = generateRandomValue();
+					dieElement1.value = generateRandomValue();
 
 					if (++count === limit) {
 						clearInterval(intervalID);
-						firstDieElement.classList.remove(`rolling`);
-						secondDieElement.classList.remove(`rolling`);
-						const dice = new Dice(new Die(firstDieElement.value), new Die(secondDieElement.value));
+						dieElement0.classList.remove(`rolling`);
+						dieElement1.classList.remove(`rolling`);
+						const dice = new Dice(new Die(dieElement0.value), new Die(dieElement1.value));
 						if (dice.isDoubles) {
-							this.#diceElement.append(firstDieElement.cloneNode(true), secondDieElement.cloneNode(true));
+							this.#diceElement.append(dieElement0.cloneNode(true), dieElement1.cloneNode(true));
 						}
 						resolve(dice);
 					}
