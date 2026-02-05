@@ -472,10 +472,6 @@ html {
 										--color: hsl(0 0% 100%);
 									}
 								}
-
-								& > veyndan-dice-roll {
-									display: none;
-								}
 							}
 						}
 

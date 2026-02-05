@@ -174,7 +174,6 @@ class CheckerOnBoardElement {
 const backgammonElement = /** @type {HTMLDivElement} */ (document.querySelector(`.backgammon`));
 const checkersElement = document.getElementById('checkers');
 const confirmElement = /** @type {HTMLButtonElement} */ (document.getElementById(`confirm`));
-const diceRollElement = /** @type {DiceRollElement} */ (document.querySelector(`veyndan-dice-roll`));
 const doubleElement = /** @type {HTMLButtonElement} */ (document.getElementById(`double`));
 const rollDiceElement = /** @type {HTMLButtonElement} */ (document.getElementById(`roll-dice`));
 const undoElement = /** @type {HTMLButtonElement} */ (document.getElementById(`undo`));
@@ -241,7 +240,7 @@ checkersObserver.observe(
 );
 
 confirmElement.addEventListener(`click`, () => {
-	diceRollElement.style.display = `none`;
+	(/** @type {DiceRollElement} */ (document.querySelector(`veyndan-dice-roll`))).remove();
 	doubleElement.hidden = false;
 	rollDiceElement.hidden = false;
 	confirmElement.hidden = true;
@@ -264,7 +263,7 @@ undoElement.addEventListener(`click`, () => {
 	} else {
 		throw new Error();
 	}
-	diceRollElement.unplayed = (/** @type {GameTurnRollDice} */ (game)).lastPlayedDie;
+	(/** @type {DiceRollElement} */ (document.querySelector(`veyndan-dice-roll`))).unplayed = (/** @type {GameTurnRollDice} */ (game)).lastPlayedDie;
 	game = (/** @type {GameTurnRollDice} */ (game)).withUndoneMove();
 	undoElement.disabled = !(/** @type {GameTurnRollDice} */ (game)).isMoveUndoable;
 	confirmElement.disabled = true;
@@ -273,7 +272,8 @@ undoElement.addEventListener(`click`, () => {
 rollDiceElement.addEventListener(`click`, () => {
 	doubleElement.hidden = true;
 	rollDiceElement.hidden = true;
-	diceRollElement.style.display = `flex`;
+	const diceRollElement = /** @type {DiceRollElement} */ (document.createElement(`veyndan-dice-roll`));
+	rollDiceElement.after(diceRollElement);
 	confirmElement.hidden = false;
 	confirmElement.disabled = true;
 	undoElement.hidden = false;
@@ -284,10 +284,10 @@ rollDiceElement.addEventListener(`click`, () => {
 			game = (/** @type {GameTurnStart} */ (game)).withDice(dice);
 			updateMovabilityOfCheckers();
 		});
-});
 
-diceRollElement.addEventListener(`swap-dice`, () => {
-	game = (/** @type {GameTurnRollDice} */ (game)).withSwappedDice();
+	diceRollElement.addEventListener(`swap-dice`, () => {
+		game = (/** @type {GameTurnRollDice} */ (game)).withSwappedDice();
+	});
 });
 
 function updateMovabilityOfCheckers() {
@@ -300,7 +300,7 @@ checkersElement.addEventListener(`click`, event => {
 	const checkerElement = new CheckerOnBoardElement((/** @type {SVGUseElement} */ (event.target)).closest(`#checkers > *`));
 	const move = (/** @type {GameTurnRollDice} */ (game)).firstValidMove(checkerElement.player, checkerElement.position);
 	if (move === null) return;
-	diceRollElement.played = move.die;
+	(/** @type {DiceRollElement} */ (document.querySelector(`veyndan-dice-roll`))).played = move.die;
 	if (move instanceof Advancement) {
 		checkerElement.position = move.to;
 		if (move.didHitOpposingChecker) {

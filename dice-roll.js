@@ -1,5 +1,7 @@
 "use strict";
 
+// @ts-ignore
+import stylesheet from "./dice-roll.css" with { type: "css" };
 // noinspection ES6UnusedImports
 import DieElement from "./die.js";
 // noinspection ES6UnusedImports
@@ -15,6 +17,7 @@ export default class DiceRollElement extends HTMLElement {
 		this
 			.attachShadow({mode: "open"})
 			.appendChild(template.content.cloneNode(true));
+		this.shadowRoot.adoptedStyleSheets = [stylesheet];
 		this.shadowRoot.addEventListener(`click`, this);
 		this.#diceElement = this.shadowRoot.querySelector(`#dice`);
 	}
