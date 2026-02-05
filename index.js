@@ -266,7 +266,7 @@ undoElement.addEventListener(`click`, () => {
 	} else {
 		throw new Error();
 	}
-	const lastPlayedDieElement = /** @type {DieElement} */ (document.querySelector(`#dice veyndan-die[data-value="${(/** @type {GameTurnRollDice} */ (game)).lastPlayedDie.value}"]`));
+	const lastPlayedDieElement = Array.from(/** @type {NodeListOf<DieElement>} */ (document.querySelectorAll(`#dice veyndan-die[data-value="${(/** @type {GameTurnRollDice} */ (game)).lastPlayedDie.value}"][data-played]`))).at(-1);
 	lastPlayedDieElement.played = false;
 	game = (/** @type {GameTurnRollDice} */ (game)).withUndoneMove();
 	undoElement.disabled = !(/** @type {GameTurnRollDice} */ (game)).isMoveUndoable;
@@ -345,7 +345,7 @@ checkersElement.addEventListener(`click`, event => {
 	const checkerElement = new CheckerOnBoardElement((/** @type {SVGUseElement} */ (event.target)).closest(`#checkers > *`));
 	const move = (/** @type {GameTurnRollDice} */ (game)).firstValidMove(checkerElement.player, checkerElement.position);
 	if (move === null) return;
-	const dieElement = /** @type {DieElement} */ (document.querySelector(`#dice veyndan-die[data-value="${move.die.value}"]`));
+	const dieElement = /** @type {DieElement} */ (document.querySelector(`#dice veyndan-die[data-value="${move.die.value}"]:not([data-played])`));
 	dieElement.played = true;
 	if (move instanceof Advancement) {
 		checkerElement.position = move.to;
