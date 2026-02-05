@@ -43,26 +43,19 @@ export default class DiceRollElement extends HTMLElement {
 	 * @return {Promise<Dice>}
 	 */
 	async roll(limit) {
-		/**
-		 * @return {Die}
-		 */
-		function generateRandomDie() {
-			return new Die(Math.floor(Math.random() * 6 + 1));
-		}
-
 		const dieElement0 = /** @type {DieElement} */ (document.createElement(`veyndan-die`));
-		dieElement0.value = generateRandomDie();
+		dieElement0.value = Die.random();
 		dieElement0.classList.add(`rolling`);
 		const dieElement1 = /** @type {DieElement} */ (document.createElement(`veyndan-die`));
-		dieElement1.value = generateRandomDie();
+		dieElement1.value = Die.random();
 		dieElement1.classList.add(`rolling`);
 		this.#diceElement.replaceChildren(dieElement0, dieElement1);
 		let count = 1;
 		return new Promise(resolve => {
 			const intervalID = setInterval(
 				() => {
-					dieElement0.value = generateRandomDie();
-					dieElement1.value = generateRandomDie();
+					dieElement0.value = Die.random();
+					dieElement1.value = Die.random();
 
 					if (++count === limit) {
 						clearInterval(intervalID);

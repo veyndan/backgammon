@@ -39,4 +39,12 @@ export class Die {
 		this.value = Object.freeze(value);
 		Object.freeze(this);
 	}
+
+	/**
+	 * @param {() => number} mathRandom
+	 * @return {Die}
+	 */
+	static random(mathRandom = Math.random) {
+		return new Die(Math.floor(mathRandom() * 6 + 1));
+	}
 }
