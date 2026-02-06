@@ -102,16 +102,6 @@
 	}
 }
 
-@keyframes flex-grow {
-	from {
-		flex: 0;
-		margin-inline: 0;
-	}
-	to {
-		flex: 0 1 calc(var(--die-side-length-unitless) * .21875cqmin + 3.0625cqmin);
-	}
-}
-
 button {
 	cursor: pointer;
 
