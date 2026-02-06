@@ -1,5 +1,7 @@
 "use strict";
 
+// @ts-ignore
+import stylesheet from "./die.css" with {type: "css"};
 import {Die} from "./model/dice.js";
 
 export default class DieElement extends HTMLElement {
@@ -9,6 +11,7 @@ export default class DieElement extends HTMLElement {
 		this
 			.attachShadow({mode: "open"})
 			.appendChild(template.content.cloneNode(true));
+		this.shadowRoot.adoptedStyleSheets = [stylesheet];
 	}
 
 	/**
