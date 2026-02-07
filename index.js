@@ -302,23 +302,34 @@ rollDiceElement.addEventListener(`click`, () => {
 		game = (/** @type {GameTurnRollDice} */ (game)).withSwappedDice();
 	});
 
+	const timeElement = /** @type {HTMLTimeElement} */ (timerElement.querySelector(`time[data-player="${(/** @type {GameTurnStart} */ (game)).player.value}"]`));
 	// @ts-ignore
 	// noinspection JSUnresolvedReference
 	let delay = Temporal.Duration.from(timerDelayElement.dateTime);
+	// @ts-ignore
+	// noinspection JSUnresolvedReference
+	let time = Temporal.Duration.from(timeElement.dateTime);
 	// @ts-ignore
 	// noinspection JSUnresolvedReference
 	let increment = Temporal.Duration.from({seconds: 1});
 	// @ts-ignore
 	timerIntervalId = setInterval(
 		() => {
-			// @ts-ignore
-			// noinspection JSUnresolvedReference
-			delay = delay.subtract(increment);
-			timerDelayElement.dateTime = delay.toString();
-			timerDelayElement.textContent = delay.total(`seconds`);
 			// noinspection JSUnresolvedReference
 			if (delay.blank) {
-				clearInterval(timerIntervalId);
+				// noinspection JSUnresolvedReference
+				time = time.subtract(increment);
+				timeElement.dateTime = time.toString();
+				timeElement.textContent = time.toLocaleString(navigator.language, {style: `digital`, hoursDisplay: `auto`});
+				// noinspection JSUnresolvedReference
+				if (time.blank) {
+					clearInterval(timerIntervalId);
+				}
+			} else {
+				// noinspection JSUnresolvedReference
+				delay = delay.subtract(increment);
+				timerDelayElement.dateTime = delay.toString();
+				timerDelayElement.textContent = delay.total(`seconds`);
 			}
 		},
 		increment.total(`milliseconds`),
