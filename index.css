@@ -210,7 +210,8 @@ html {
 						> .controls-interface {
 							writing-mode: sideways-rl;
 
-							> #play-mode > button > svg {
+							> #play-mode > button > svg,
+							> #play-pause > svg {
 								rotate: .25turn;
 							}
 						}
@@ -262,7 +263,8 @@ html {
 						> .controls-interface {
 							writing-mode: sideways-lr;
 
-							> #play-mode > button > svg {
+							> #play-mode > button > svg,
+							> #play-pause > svg {
 								rotate: .75turn;
 							}
 						}
@@ -567,6 +569,7 @@ html {
 					> .controls-interface {
 						display: flex;
 						grid-area: controls-interface;
+						gap: calc(8 * .21875cqmin);
 						align-items: center;
 						justify-content: center;
 
@@ -623,6 +626,26 @@ html {
 								&::checkmark {
 									order: 1;
 								}
+							}
+						}
+
+						> #play-pause {
+							display: flex;
+							align-items: center;
+							justify-content: center;
+
+							aspect-ratio: 1;
+							inline-size: calc(40 * .21875cqmin);
+							padding: 0;
+							border: none;
+
+							background: var(--tertiary-container);
+							clip-path: circle();
+
+							> svg {
+								aspect-ratio: 1;
+								inline-size: 50%;
+								fill: currentColor;
 							}
 						}
 					}
