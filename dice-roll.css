@@ -12,7 +12,7 @@
 		flex-basis: 0;
 	}
 	to {
-		flex-basis: calc((var(--die-side-length-unitless) + 12) * .21875cqmin);
+		flex-basis: calc((var(--die-side-length-unitless) + 8) * .21875cqmin);
 	}
 }
 
@@ -45,7 +45,7 @@
 
 		& > veyndan-die {
 			overflow: hidden;
-			flex: 0 1 calc((var(--die-side-length-unitless) + 12) * .21875cqmin);
+			flex: 0 1 calc((var(--die-side-length-unitless) + 8) * .21875cqmin);
 
 			&:nth-child(n + 3) {
 				animation: .5s .2s backwards flex-basis,

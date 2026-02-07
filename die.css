@@ -6,12 +6,12 @@
 	justify-content: center;
 
 	aspect-ratio: 1;
-	inline-size: calc((var(--die-side-length-unitless) + 12) * .21875cqmin);
+	inline-size: calc((var(--die-side-length-unitless) + 8) * .21875cqmin);
 
 	& > .motion-lines {
 		position: absolute;
 		aspect-ratio: 1;
-		inline-size: calc(12 * .21875cqmin);
+		inline-size: calc(8 * .21875cqmin);
 		visibility: hidden;
 
 		& > path {
