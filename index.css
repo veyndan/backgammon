@@ -302,7 +302,7 @@ html {
 
 						background: var(--surface-container-high);
 
-						& > #move {
+						& > #delay {
 							color: var(--secondary);
 						}
 					}
