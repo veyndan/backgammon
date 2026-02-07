@@ -303,6 +303,9 @@ html {
 						background: var(--surface-container-high);
 
 						& > #delay {
+							display: flex;
+							justify-content: center;
+							inline-size: 2ch;
 							color: var(--secondary);
 						}
 					}

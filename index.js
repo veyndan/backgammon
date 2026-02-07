@@ -173,6 +173,7 @@ class CheckerOnBoardElement {
 
 const backgammonElement = /** @type {HTMLDivElement} */ (document.querySelector(`.backgammon`));
 const checkersElement = document.getElementById('checkers');
+const timerElement = /** @type {HTMLDivElement} */ (document.querySelector(`#timer`));
 const confirmElement = /** @type {HTMLButtonElement} */ (document.getElementById(`confirm`));
 const doubleElement = /** @type {HTMLButtonElement} */ (document.getElementById(`double`));
 const rollDiceElement = /** @type {HTMLButtonElement} */ (document.getElementById(`roll-dice`));
@@ -288,6 +289,17 @@ rollDiceElement.addEventListener(`click`, () => {
 	diceRollElement.addEventListener(`swap-dice`, () => {
 		game = (/** @type {GameTurnRollDice} */ (game)).withSwappedDice();
 	});
+
+	let delay = 12;
+	const intervalId = setInterval(
+		() => {
+			timerElement.querySelector(`#delay`).textContent = String(--delay);
+			if (delay === 0) {
+				clearInterval(intervalId);
+			}
+		},
+		1000,
+	);
 });
 
 function updateMovabilityOfCheckers() {
