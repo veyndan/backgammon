@@ -240,7 +240,14 @@ checkersObserver.observe(
 	},
 );
 
+/**
+ * @type {?number}
+ */
+let timerIntervalId = null;
+
 confirmElement.addEventListener(`click`, () => {
+	clearInterval(timerIntervalId);
+	timerElement.querySelector(`#delay`).textContent = `12`;
 	(/** @type {DiceRollElement} */ (document.querySelector(`veyndan-dice-roll`))).remove();
 	doubleElement.hidden = false;
 	rollDiceElement.hidden = false;
@@ -291,11 +298,12 @@ rollDiceElement.addEventListener(`click`, () => {
 	});
 
 	let delay = 12;
-	const intervalId = setInterval(
+	// @ts-ignore
+	timerIntervalId = setInterval(
 		() => {
 			timerElement.querySelector(`#delay`).textContent = String(--delay);
 			if (delay === 0) {
-				clearInterval(intervalId);
+				clearInterval(timerIntervalId);
 			}
 		},
 		1000,
