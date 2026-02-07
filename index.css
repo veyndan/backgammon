@@ -279,7 +279,7 @@ html {
 
 					&[data-player="1"] > #players > veyndan-player[data-player="1"],
 					&[data-player="2"] > #players > veyndan-player[data-player="2"] {
-						background: var(--primary-container);
+						--background: var(--primary-container);
 					}
 
 					& > #players {

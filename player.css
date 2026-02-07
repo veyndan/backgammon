@@ -1,15 +1,17 @@
 :host {
+	--background: var(--surface-container-high);
+
 	border-radius: 1.75cqmin;
-	background: var(--surface-container-high);
+	background: var(--background);
 	transition: background-color 400ms;
 
 	& > div {
 		display: grid;
 		grid-template-columns: 1fr auto;
-		gap: 1.75cqmin 2.625cqmin;
+		gap: calc(6 * .21875cqmin) calc(8 * .21875cqmin);
 
-		padding-block: 1.75cqmin;
-		padding-inline: 2.625cqmin;
+		padding-block: calc(6 * .21875cqmin);
+		padding-inline: calc(8 * .21875cqmin);
 
 		& > veyndan-checker {
 			--checker-radius-unitless: 8;
@@ -37,4 +39,14 @@
 			align-items: end;
 		}
 	}
+}
+
+::slotted([slot="name"]) {
+	padding-block: calc(2 * .21875cqmin);
+	padding-inline: calc(4 * .21875cqmin);
+	border-radius: calc(4 * .21875cqmin);
+}
+
+::slotted([slot="name"]:hover) {
+	background: hsl(from var(--background) h s calc(l - 10) / .5);
 }
