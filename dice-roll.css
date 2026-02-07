@@ -7,13 +7,12 @@
 	}
 }
 
-@keyframes flex-grow {
+@keyframes flex-basis {
 	from {
-		flex: 0;
-		margin-inline: 0;
+		flex-basis: 0;
 	}
 	to {
-		flex: 0 1 calc(var(--die-side-length-unitless) * .21875cqmin + 3.0625cqmin);
+		flex-basis: calc((var(--die-side-length-unitless) + 12) * .21875cqmin);
 	}
 }
 
@@ -22,14 +21,12 @@
 
 	display: flex;
 	flex-direction: column;
-	align-items: center;
 
 	inline-size: 100%;
 	margin-block-end: 3.5cqmin;
 
 	& > #dice-swap {
 		block-size: 2.625cqmin;
-		margin-block: -.21875cqmin;
 		visibility: hidden;
 	}
 
@@ -48,11 +45,10 @@
 
 		& > veyndan-die {
 			overflow: hidden;
-			flex: 0 1 calc(var(--die-side-length-unitless) * .21875cqmin + 3.0625cqmin);
-			margin-inline: .4375cqmin;
+			flex: 0 1 calc((var(--die-side-length-unitless) + 12) * .21875cqmin);
 
 			&:nth-child(n + 3) {
-				animation: .5s .2s backwards flex-grow,
+				animation: .5s .2s backwards flex-basis,
 				.2s .8125s backwards fade-in;
 			}
 		}
