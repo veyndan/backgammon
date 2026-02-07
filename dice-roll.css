@@ -25,12 +25,12 @@
 	inline-size: 100%;
 	margin-block-end: 3.5cqmin;
 
-	& > #dice-swap {
+	> #dice-swap {
 		block-size: 2.625cqmin;
 		visibility: hidden;
 	}
 
-	& > #dice {
+	> #dice {
 		display: flex;
 		justify-content: center;
 
@@ -43,7 +43,7 @@
 			order: 1;
 		}
 
-		& > veyndan-die {
+		> veyndan-die {
 			overflow: hidden;
 			flex: 0 1 calc((var(--die-side-length-unitless) + 8) * .21875cqmin);
 
@@ -60,7 +60,7 @@
 	pointer-events: auto;
 	cursor: pointer;
 
-	& > #dice-swap {
+	> #dice-swap {
 		visibility: visible;
 	}
 }

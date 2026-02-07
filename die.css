@@ -8,13 +8,13 @@
 	aspect-ratio: 1;
 	inline-size: calc((var(--die-side-length-unitless) + 8) * .21875cqmin);
 
-	& > .motion-lines {
+	> .motion-lines {
 		position: absolute;
 		aspect-ratio: 1;
 		inline-size: calc(8 * .21875cqmin);
 		visibility: hidden;
 
-		& > path {
+		> path {
 			fill: none;
 			stroke: var(--player-current-checker-text-color);
 			stroke-linecap: round;
@@ -36,7 +36,7 @@
 		}
 	}
 
-	& > .pips {
+	> .pips {
 		--pip-diameter: 1.75cqmin;
 
 		position: relative;

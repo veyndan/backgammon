@@ -5,7 +5,7 @@
 	background: var(--background);
 	transition: background-color 400ms;
 
-	& > div {
+	> div {
 		display: grid;
 		grid-template-columns: 1fr auto;
 		gap: calc(6 * .21875cqmin) calc(8 * .21875cqmin);
@@ -13,21 +13,21 @@
 		padding-block: calc(6 * .21875cqmin);
 		padding-inline: calc(8 * .21875cqmin);
 
-		& > veyndan-checker {
+		> veyndan-checker {
 			--checker-radius-unitless: 8;
 			--checker-diameter-unitless: calc(var(--checker-radius-unitless) * 2);
 
 			justify-self: end;
 		}
 
-		& > .score {
+		> .score {
 			display: flex;
 			flex-direction: column;
 			justify-content: end;
 		}
 
-		& > .points {
-			& > span:first-of-type > span {
+		> .points {
+			> span:first-of-type > span {
 				padding-inline-start: .21875cqmin;
 				line-height: 2;
 				color: var(--on-surface-variable);
@@ -35,7 +35,7 @@
 			}
 		}
 
-		& > .pip {
+		> .pip {
 			align-items: end;
 		}
 	}

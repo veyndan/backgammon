@@ -115,7 +115,7 @@ html {
 	block-size: 100dvb;
 	font: 16px/1.5 system-ui;
 
-	& > body {
+	> body {
 		display: flex;
 		flex-direction: column;
 		gap: 8px;
@@ -123,13 +123,13 @@ html {
 		block-size: 100%;
 		padding: 16px;
 
-		& > :not(main) > * {
+		> :not(main) > * {
 			margin-inline: auto;
 			padding-inline: 1rem;
 		}
 
-		& > header > nav {
-			& > ul {
+		> header > nav {
+			> ul {
 				display: flex;
 				flex-wrap: wrap;
 				gap: 1em;
@@ -139,7 +139,7 @@ html {
 				font-weight: bold;
 				list-style-type: none;
 
-				& > li:first-child:has(> a[href="/index.html"]) {
+				> li:first-child:has(> a[href="/index.html"]) {
 					margin-inline-end: auto;
 				}
 			}
@@ -156,11 +156,11 @@ html {
 			}
 		}
 
-		& > main {
+		> main {
 			min-block-size: 0;
 			margin-block: auto;
 
-			& > .container-backgammon {
+			> .container-backgammon {
 				container-type: size;
 				max-block-size: 100%;
 				margin-inline: auto;
@@ -168,7 +168,7 @@ html {
 				&:has(> .backgammon > #play-mode > option[value="opposite"]:checked) {
 					aspect-ratio: 32 / 21;
 
-					& > .backgammon {
+					> .backgammon {
 						grid-template:
 						".       .     drop-points-top    drop-points-top    drop-points-top    .       .        " 2.625cqb
 						"players timer quadrant-13-18     bar                quadrant-19-24     sidebar play-mode" auto
@@ -199,18 +199,18 @@ html {
 							}
 						}
 
-						& > #players {
+						> #players {
 							writing-mode: sideways-lr;
 						}
 
-						& > #timer {
+						> #timer {
 							writing-mode: sideways-lr;
 						}
 
-						& > #play-mode {
+						> #play-mode {
 							writing-mode: sideways-rl;
 
-							& > button > svg {
+							> button > svg {
 								rotate: .25turn;
 							}
 						}
@@ -220,7 +220,7 @@ html {
 				&:has(> .backgammon > #play-mode > option[value="side-by-side"]:checked) {
 					aspect-ratio: 20 / 21;
 
-					& > .backgammon {
+					> .backgammon {
 						grid-template:
 							".         players            players            players            .       " auto
 							".         timer              timer              timer              .       " auto
@@ -251,25 +251,25 @@ html {
 							}
 						}
 
-						& > #players {
+						> #players {
 							justify-self: center;
 						}
 
-						& > #timer {
+						> #timer {
 							justify-self: center;
 						}
 
-						& > #play-mode {
+						> #play-mode {
 							writing-mode: sideways-lr;
 
-							& > button > svg {
+							> button > svg {
 								rotate: .75turn;
 							}
 						}
 					}
 				}
 
-				& > .backgammon {
+				> .backgammon {
 					display: grid;
 					gap: 1.75cqmin;
 					align-items: stretch;
@@ -282,14 +282,14 @@ html {
 						--background: var(--primary-container);
 					}
 
-					& > #players {
+					> #players {
 						display: flex;
 						grid-area: players;
 						gap: 1.75cqmin;
 						align-self: center;
 					}
 
-					& > #timer {
+					> #timer {
 						display: flex;
 						grid-area: timer;
 						gap: 1.75cqmin;
@@ -302,7 +302,7 @@ html {
 
 						background: var(--surface-container-high);
 
-						& > #delay {
+						> #delay {
 							display: flex;
 							justify-content: center;
 							inline-size: 2ch;
@@ -311,7 +311,7 @@ html {
 					}
 
 					/* TODO Add additional 8px spacing between board and timer & board and play mode. */
-					& > #board {
+					> #board {
 						display: contents;
 
 						/*noinspection CssInvalidFunction*/
@@ -331,7 +331,7 @@ html {
 								);
 						}
 
-						& > .half {
+						> .half {
 							display: flex;
 							flex-direction: column;
 							justify-content: space-between;
@@ -350,10 +350,10 @@ html {
 								grid-area: quadrant-19-24 / quadrant-19-24 / quadrant-1-6 / quadrant-1-6;
 							}
 
-							& > .quadrant {
+							> .quadrant {
 								display: flex;
 
-								& > veyndan-point {
+								> veyndan-point {
 									&:nth-child(even) {
 										color: hsl(from var(--secondary) h s 50%);
 									}
@@ -369,14 +369,14 @@ html {
 							}
 						}
 
-						& > .bar {
+						> .bar {
 							grid-area: bar;
 							aspect-ratio: var(--bar-width-unitless) / var(--half-height-unitless);
 							border-radius: 1.75cqmin;
 							background: var(--secondary-container);
 						}
 
-						& > #sidebar {
+						> #sidebar {
 							display: flex;
 							grid-area: sidebar;
 							align-items: center;
@@ -384,7 +384,7 @@ html {
 
 							writing-mode: sideways-rl;
 
-							& > .hold {
+							> .hold {
 								--checker-radius-unitless: 14;
 								--gap-unitless: 1;
 								--padding-unitless: 2;
@@ -401,7 +401,7 @@ html {
 								background: var(--secondary-container);
 							}
 
-							& > #doubling-cube-face {
+							> #doubling-cube-face {
 								--die-side-length-unitless: 28;
 
 								display: flex;
@@ -418,10 +418,10 @@ html {
 							}
 						}
 
-						& > #controls {
+						> #controls {
 							display: contents;
 
-							& > div {
+							> div {
 								z-index: 1;
 
 								display: flex;
@@ -429,7 +429,7 @@ html {
 								align-items: center;
 								justify-content: center;
 
-								& > button {
+								> button {
 									--surface: var(--player-current-checker-background);
 									--color: var(--player-current-checker-text-color);
 									--alpha: 1;
@@ -459,13 +459,13 @@ html {
 							}
 						}
 
-						& > #checkers {
+						> #checkers {
 							pointer-events: none;
 							z-index: 2;
 							grid-area: quadrant-13-18 / quadrant-13-18 / quadrant-1-6 / quadrant-1-6;
 
 							/*noinspection CssInvalidFunction*/
-							& > veyndan-checker {
+							> veyndan-checker {
 								pointer-events: auto;
 
 								position: absolute;
@@ -486,7 +486,7 @@ html {
 									cursor: not-allowed;
 								}
 
-								& > text {
+								> text {
 									user-select: none;
 									dominant-baseline: central;
 									text-anchor: middle;
@@ -538,12 +538,12 @@ html {
 							}
 						}
 
-						& > #drop-points {
+						> #drop-points {
 							pointer-events: none;
 							grid-area: drop-points-top / drop-points-top / drop-points-bottom / drop-points-bottom;
 
 							/*noinspection CssInvalidFunction*/
-							& > .drop-point {
+							> .drop-point {
 								--drop-point-diameter: 2.625cqmin;
 
 								position: absolute;
@@ -564,7 +564,7 @@ html {
 						}
 					}
 
-					& > #play-mode {
+					> #play-mode {
 						grid-area: play-mode;
 						gap: 1.3125cqmin;
 						align-items: center;
@@ -604,13 +604,13 @@ html {
 							rotate: 180deg;
 						}
 
-						& > button > svg {
+						> button > svg {
 							aspect-ratio: 1;
 							inline-size: 2.625cqmin;
 							fill: currentColor;
 						}
 
-						& > option {
+						> option {
 							gap: 3.5cqmin;
 							padding-block: 3.5cqmin;
 							padding-inline: 7cqmin;
