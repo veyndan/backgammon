@@ -174,6 +174,7 @@ class CheckerOnBoardElement {
 const backgammonElement = /** @type {HTMLDivElement} */ (document.querySelector(`.backgammon`));
 const checkersElement = document.getElementById('checkers');
 const timerElement = /** @type {HTMLDivElement} */ (document.querySelector(`#timer`));
+const timerDelayElement = /** @type {HTMLTimeElement} */ (timerElement.querySelector(`#delay`));
 const confirmElement = /** @type {HTMLButtonElement} */ (document.getElementById(`confirm`));
 const doubleElement = /** @type {HTMLButtonElement} */ (document.getElementById(`double`));
 const rollDiceElement = /** @type {HTMLButtonElement} */ (document.getElementById(`roll-dice`));
@@ -247,7 +248,11 @@ let timerIntervalId = null;
 
 confirmElement.addEventListener(`click`, () => {
 	clearInterval(timerIntervalId);
-	timerElement.querySelector(`#delay`).textContent = `12`;
+	// @ts-ignore
+	// noinspection JSUnresolvedReference
+	let delay = Temporal.Duration.from({seconds: 12});
+	timerDelayElement.dateTime = delay.toString();
+	timerDelayElement.textContent = delay.total(`seconds`);
 	(/** @type {DiceRollElement} */ (document.querySelector(`veyndan-dice-roll`))).remove();
 	doubleElement.hidden = false;
 	rollDiceElement.hidden = false;
@@ -297,16 +302,26 @@ rollDiceElement.addEventListener(`click`, () => {
 		game = (/** @type {GameTurnRollDice} */ (game)).withSwappedDice();
 	});
 
-	let delay = 12;
+	// @ts-ignore
+	// noinspection JSUnresolvedReference
+	let delay = Temporal.Duration.from(timerDelayElement.dateTime);
+	// @ts-ignore
+	// noinspection JSUnresolvedReference
+	let increment = Temporal.Duration.from({seconds: 1});
 	// @ts-ignore
 	timerIntervalId = setInterval(
 		() => {
-			timerElement.querySelector(`#delay`).textContent = String(--delay);
-			if (delay === 0) {
+			// @ts-ignore
+			// noinspection JSUnresolvedReference
+			delay = delay.subtract(increment);
+			timerDelayElement.dateTime = delay.toString();
+			timerDelayElement.textContent = delay.total(`seconds`);
+			// noinspection JSUnresolvedReference
+			if (delay.blank) {
 				clearInterval(timerIntervalId);
 			}
 		},
-		1000,
+		increment.total(`milliseconds`),
 	);
 });
 
