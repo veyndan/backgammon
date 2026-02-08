@@ -162,21 +162,28 @@
 						<div id="drop-points"></div>
 					</div>
 					<div class="controls-interface">
-						<select id="play-mode" title="Play mode">
-							<button class="typography-label-small-700">
-								<selectedcontent></selectedcontent>
-								<svg xmlns="http://www.w3.org/2000/svg" viewBox="280 -560 400 200">
-									<path d="M480-360 280-560h400z"/>
-								</svg>
-							</button>
-							<option value="opposite" class="typography-label-small-700">Opposite</option>
-							<option value="side-by-side" class="typography-label-small-700">Side-By-Side</option>
-						</select>
+						<div id="play-mode-container">
+							<select id="play-mode" title="Play mode">
+								<button class="typography-label-small-700">
+									<selectedcontent></selectedcontent>
+									<svg xmlns="http://www.w3.org/2000/svg" viewBox="280 -560 400 200">
+										<path d="M480-360 280-560h400z"/>
+									</svg>
+								</button>
+								<option value="opposite" class="typography-label-small-700">Opposite</option>
+								<option value="side-by-side" class="typography-label-small-700">Side-By-Side</option>
+							</select>
+						</div>
 						<button id="play-pause" type="button" aria-pressed="false">
 							<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 28 28">
 								<path d="M 4 0 v 28 h 8 v -28 z m 12 0 v 28 h 8 v -28 z"/>
 							</svg>
 						</button>
+						<div id="exit-match-container">
+							<button id="exit-match" class="typography-label-small-700" type="button">
+								Exit Match
+							</button>
+						</div>
 					</div>
 				</div>
 			</div>
