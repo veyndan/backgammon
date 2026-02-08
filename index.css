@@ -210,7 +210,6 @@ html {
 						> .controls-interface {
 							writing-mode: sideways-rl;
 
-							> #play-mode-container > #play-mode > button > svg,
 							> #play-pause > svg {
 								rotate: .25turn;
 							}
@@ -263,7 +262,14 @@ html {
 						> .controls-interface {
 							writing-mode: sideways-lr;
 
-							> #play-mode-container > #play-mode > button > svg,
+							> #play-mode-container > #play-mode::picker-icon {
+								rotate: .5turn;
+							}
+
+							> #play-mode-container > #play-mode:open::picker-icon {
+								rotate: 1turn;
+							}
+
 							> #play-pause > svg {
 								rotate: .75turn;
 							}
@@ -603,8 +609,16 @@ html {
 								appearance: base-select;
 
 								&::picker-icon {
-									/*content: "a"; TODO Convert this to the svg using a background: url(data-base64-of-svg) so we can animate rotation. */
 									content: "";
+
+									inline-size: calc(8 * .21875cqmin);
+									block-size: calc(4 * .21875cqmin);
+
+									background: currentColor;
+
+									mask-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1 2"><path d="m 0 1 1 -1 v 2 z"/></svg>');
+									mask-size: cover;
+
 									transition: 0.4s rotate;
 								}
 
@@ -622,13 +636,7 @@ html {
 								}
 
 								&:open::picker-icon {
-									rotate: 180deg;
-								}
-
-								> button > svg {
-									aspect-ratio: 1;
-									inline-size: 2.625cqmin;
-									fill: currentColor;
+									rotate: .5turn;
 								}
 
 								> option {
