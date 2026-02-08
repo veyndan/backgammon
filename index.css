@@ -600,7 +600,7 @@ html {
 							display: flex;
 							justify-content: end;
 
-							& > #play-mode {
+							> #play-mode {
 								gap: 1.3125cqmin;
 								align-items: center;
 								align-self: center;
