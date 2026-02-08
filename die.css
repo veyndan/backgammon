@@ -18,6 +18,14 @@
 			fill: none;
 			stroke: var(--player-current-checker-text-color);
 			stroke-linecap: round;
+
+			&:first-of-type {
+				stroke-width: calc(.75 * .21875cqmin);
+			}
+
+			&:last-of-type {
+				stroke-width: calc(1.5 * .21875cqmin);
+			}
 		}
 
 		&:first-of-type {
