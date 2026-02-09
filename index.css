@@ -403,10 +403,17 @@ html {
 
 								aspect-ratio: var(--hold-width-unitless) / calc(var(--checkers-per-player) * var(--checker-thickness-unitless) + 2 * var(--padding-unitless) + (var(--checkers-per-player) - 1) * var(--gap-unitless));
 								block-size: calc(var(--hold-width-unitless) * .21875cqmin);
+								margin: 0;
 								padding: calc(var(--padding-unitless) * .21875cqmin);
 								border-radius: .875cqmin;
 
+								list-style-type: none;
+
 								background: var(--secondary-container);
+
+								> li {
+									display: flex;
+								}
 							}
 
 							> #doubling-cube-face {
