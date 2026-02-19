@@ -1,11 +1,11 @@
 :host {
-	inline-size: calc(var(--checker-diameter-unitless) * .21875cqmin);
 	color: var(--player-current-checker-text-color);
 	background: var(--player-current-checker-background);
 }
 
 :host(.flat) {
 	aspect-ratio: 1;
+	inline-size: calc(var(--checker-diameter-unitless) * .21875cqmin);
 	border-radius: 50%;
 }
 
