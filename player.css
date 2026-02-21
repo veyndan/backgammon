@@ -15,7 +15,6 @@
 
 		> veyndan-checker {
 			--checker-radius-unitless: 8;
-			--checker-diameter-unitless: calc(var(--checker-radius-unitless) * 2);
 
 			justify-self: end;
 		}

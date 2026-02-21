@@ -5,11 +5,11 @@
 
 :host(.flat) {
 	aspect-ratio: 1;
-	inline-size: calc(var(--checker-diameter-unitless) * .21875cqmin);
+	inline-size: calc(--checker-diameter-unitless() * .21875cqmin);
 	border-radius: 50%;
 }
 
 :host(.upright) {
-	inline-size: calc(var(--checker-thickness-unitless) * .21875cqmin);
+	inline-size: calc(--checker-thickness-unitless() * .21875cqmin);
 	border-radius: .4375cqmin;
 }
