@@ -1,7 +1,7 @@
 :host {
 	--background: var(--surface-container-high);
 
-	border-radius: 1.75cqmin;
+	border-radius: calc(8 * .21875cqmin);
 	background: var(--background);
 	transition: background-color 400ms;
 

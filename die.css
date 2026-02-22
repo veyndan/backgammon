@@ -45,7 +45,7 @@
 	}
 
 	> .pips {
-		--pip-diameter: 1.75cqmin;
+		--pip-diameter: calc(8 * .21875cqmin);
 
 		position: relative;
 
@@ -57,7 +57,7 @@
 
 		aspect-ratio: 1;
 		inline-size: calc(var(--die-side-length-unitless) * .21875cqmin);
-		border-radius: .875cqmin;
+		border-radius: calc(4 * .21875cqmin);
 
 		background: var(--player-current-checker-background);
 

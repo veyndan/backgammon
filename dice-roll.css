@@ -23,10 +23,10 @@
 	flex-direction: column;
 
 	inline-size: 100%;
-	margin-block-end: 3.5cqmin;
+	margin-block-end: calc(16 * .21875cqmin);
 
 	> #dice-swap {
-		block-size: 2.625cqmin;
+		block-size: calc(12 * .21875cqmin);
 		visibility: hidden;
 	}
 
