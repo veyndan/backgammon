@@ -1,15 +1,14 @@
 :host {
 	block-size: calc(--checker-diameter-unitless() * .21875cqmin);
+	border-radius: 100vmax;
 	color: var(--player-current-checker-text-color);
 	background: var(--player-current-checker-background);
 }
 
 :host(.flat) {
 	aspect-ratio: 1;
-	border-radius: 50%;
 }
 
 :host(.upright) {
 	aspect-ratio: --checker-diameter-unitless() / --checker-thickness-unitless();
-	border-radius: .4375cqmin;
 }
