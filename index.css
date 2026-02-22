@@ -194,12 +194,12 @@ html {
 
 					> .backgammon {
 						grid-template:
-						".       .     drop-points-top    drop-points-top    drop-points-top    .       .                 " 2.625cqb
-						"players timer quadrant-13-18     bar                quadrant-19-24     sidebar controls-interface" auto
-						"players timer controls-left      bar                controls-right     sidebar controls-interface" auto
-						"players timer quadrant-7-12      bar                quadrant-1-6       sidebar controls-interface" auto
-						".       .     drop-points-bottom drop-points-bottom drop-points-bottom .       .                 " 2.625cqb /
-						auto     auto  auto               auto               auto               auto    auto              ;
+							".       .     drop-points-top    drop-points-top    drop-points-top    .       .                 " 2.625cqb
+							"players timer quadrant-13-18     bar                quadrant-19-24     sidebar controls-interface" auto
+							"players timer controls-left      bar                controls-right     sidebar controls-interface" auto
+							"players timer quadrant-7-12      bar                quadrant-1-6       sidebar controls-interface" auto
+							".       .     drop-points-bottom drop-points-bottom drop-points-bottom .       .                 " 2.625cqb /
+							auto     auto  auto               auto               auto               auto    auto              ;
 
 						&[data-player="2"] > #board > #controls > div {
 							rotate: .5turn;
