@@ -101,10 +101,6 @@
 	result: calc(--point-width-unitless() * 6);
 }
 
-@function --hold-width-unitless() {
-	result: var(--checker-diameter-unitless);
-}
-
 @function --point-height-unitless() {
 	result: calc(var(--checker-diameter-unitless) * 4);
 }
@@ -425,8 +421,8 @@ html {
 								flex-direction: row-reverse;
 								gap: calc(var(--gap-unitless) * .21875cqmin);
 
-								aspect-ratio: calc(--hold-width-unitless() + var(--padding-unitless) * 2) / calc(var(--checkers-per-player) * --checker-thickness-unitless() + 2 * var(--padding-unitless) + (var(--checkers-per-player) - 1) * var(--gap-unitless));
-								block-size: calc((--hold-width-unitless() + var(--padding-unitless) * 2) * .21875cqmin);
+								aspect-ratio: calc(var(--checker-diameter-unitless) + var(--padding-unitless) * 2) / calc(var(--checkers-per-player) * --checker-thickness-unitless() + 2 * var(--padding-unitless) + (var(--checkers-per-player) - 1) * var(--gap-unitless));
+								block-size: calc((var(--checker-diameter-unitless) + var(--padding-unitless) * 2) * .21875cqmin);
 								margin: 0;
 								padding: calc(var(--padding-unitless) * .21875cqmin);
 								border-radius: .875cqmin;
