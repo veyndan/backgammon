@@ -1,16 +1,14 @@
 {
 	"extends": [
-		"stylelint-config-clean-order"
+		"stylelint-config-clean-order",
+		"stylelint-plugin-logical-css/configs/recommended"
 	],
 	"plugins": [
 		"stylelint-declaration-block-no-ignored-properties",
-		"stylelint-plugin-logical-css",
 		"stylelint-use-nesting"
 	],
 	"rules": {
 		"plugin/declaration-block-no-ignored-properties": true,
-		"plugin/use-logical-properties-and-values": [true, { "severity": "error" }],
-		"plugin/use-logical-units": [true, { "severity": "error"}],
 		"csstools/use-nesting": "always"
 	},
 	"reportDescriptionlessDisables": true,
