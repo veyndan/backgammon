@@ -14,7 +14,7 @@
 		padding-inline: calc(4 * .21875cqmin) calc(8 * .21875cqmin);
 
 		> veyndan-checker {
-			--checker-radius-unitless: 8;
+			--checker-diameter-unitless: 16;
 
 			justify-self: end;
 		}

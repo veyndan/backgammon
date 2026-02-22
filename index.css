@@ -75,7 +75,7 @@
 
 :root {
 	--bar-width-unitless: 38;
-	--checker-radius-unitless: 16;
+	--checker-diameter-unitless: 32;
 	--checkers-per-player: 15;
 	--die-side-length-unitless: 36;
 	--point-count: 24;
@@ -85,16 +85,16 @@
 	color-scheme: light dark;
 }
 
-@function --checker-diameter-unitless() {
-	result: calc(var(--checker-radius-unitless) * 2);
+@function --checker-radius-unitless() {
+	result: calc(var(--checker-diameter-unitless) / 2);
 }
 
 @function --checker-thickness-unitless() {
-	result: calc(--checker-diameter-unitless() * (5 / 28));
+	result: calc(var(--checker-diameter-unitless) * (5 / 28));
 }
 
 @function --half-height-unitless() {
-	result: calc(--point-height-unitless() * 2 + --checker-diameter-unitless() * 2 + var(--die-side-length-unitless) + 61);
+	result: calc(--point-height-unitless() * 2 + var(--checker-diameter-unitless) * 2 + var(--die-side-length-unitless) + 61);
 }
 
 @function --half-width-unitless() {
@@ -102,11 +102,11 @@
 }
 
 @function --hold-width-unitless() {
-	result: --checker-diameter-unitless();
+	result: var(--checker-diameter-unitless);
 }
 
 @function --point-height-unitless() {
-	result: calc(--checker-diameter-unitless() * 4);
+	result: calc(var(--checker-diameter-unitless) * 4);
 }
 
 @function --point-per-side() {
@@ -114,7 +114,7 @@
 }
 
 @function --point-width-unitless() {
-	result: --checker-diameter-unitless();
+	result: var(--checker-diameter-unitless);
 }
 
 button {
@@ -357,8 +357,8 @@ html {
 							--is-right-point: round(down, abs(calc((var(--point-max) + var(--point-min)) / 2) - var(--point)) / 6, 1);
 							--translate-x:
 								calc(
-									var(--is-top-point) * (--checker-diameter-unitless() * .21875cqmin * rem(var(--point) - 1, --point-per-side()))
-									+ var(--is-bottom-point) * (2 * --half-width-unitless() * .21875cqmin - --checker-diameter-unitless() * .21875cqmin * (rem(var(--point) - 1, --point-per-side()) + 1))
+									var(--is-top-point) * (var(--checker-diameter-unitless) * .21875cqmin * rem(var(--point) - 1, --point-per-side()))
+									+ var(--is-bottom-point) * (2 * --half-width-unitless() * .21875cqmin - var(--checker-diameter-unitless) * .21875cqmin * (rem(var(--point) - 1, --point-per-side()) + 1))
 									+ var(--is-right-point) * (var(--bar-width-unitless) * .21875cqmin + 3.5cqmin)
 								);
 						}
@@ -417,7 +417,7 @@ html {
 							writing-mode: sideways-rl;
 
 							> .hold {
-								--checker-radius-unitless: 14;
+								--checker-diameter-unitless: 28;
 								--gap-unitless: 1;
 								--padding-unitless: 2;
 
@@ -538,20 +538,20 @@ html {
 								}
 
 								&[data-hit] {
-									translate: calc(--half-width-unitless() * .21875cqmin + 1.75cqmin + (var(--bar-width-unitless) * .21875cqmin - --checker-diameter-unitless() * .21875cqmin) / 2) var(--translate-y);
+									translate: calc(--half-width-unitless() * .21875cqmin + 1.75cqmin + (var(--bar-width-unitless) * .21875cqmin - var(--checker-diameter-unitless) * .21875cqmin) / 2) var(--translate-y);
 
 									&[data-player="1"] {
-										--translate-y: calc(--checker-diameter-unitless() * .21875cqmin * 2.5);
+										--translate-y: calc(var(--checker-diameter-unitless) * .21875cqmin * 2.5);
 									}
 
 									&[data-player="2"] {
-										--translate-y: calc(--half-height-unitless() * .21875cqmin - --checker-diameter-unitless() * .21875cqmin * 3.5);
+										--translate-y: calc(--half-height-unitless() * .21875cqmin - var(--checker-diameter-unitless) * .21875cqmin * 3.5);
 									}
 								}
 
 								&:not([data-hit]) {
-									--top-point-translate-y: calc(--checker-diameter-unitless() * .21875cqmin * min(var(--point-stack-index), ((5 - 1) * var(--point-stack-index)) / max(var(--point-stack-count) - 1, 1)));
-									--bottom-point-translate-y: calc(--half-height-unitless() * .21875cqmin - var(--top-point-translate-y) - --checker-diameter-unitless() * .21875cqmin);
+									--top-point-translate-y: calc(var(--checker-diameter-unitless) * .21875cqmin * min(var(--point-stack-index), ((5 - 1) * var(--point-stack-index)) / max(var(--point-stack-count) - 1, 1)));
+									--bottom-point-translate-y: calc(--half-height-unitless() * .21875cqmin - var(--top-point-translate-y) - var(--checker-diameter-unitless) * .21875cqmin);
 
 									--top-point-mask-position-vertical: calc(150% + -1 * round(down, calc(var(--point-stack-count) / 6), 1) * (1 - round(down, calc((var(--point-stack-index) + 1) / var(--point-stack-count)), 1)) * (105% - ((4 / max(var(--point-stack-count) - 1, 1)) * 100%)));
 									--bottom-point-mask-position-vertical: calc(100% - var(--top-point-mask-position-vertical));
@@ -564,13 +564,13 @@ html {
 										);
 									mask-image:
 										radial-gradient(
-											black calc(var(--checker-radius-unitless) * .21875cqmin),
-											transparent calc(var(--checker-radius-unitless) * .21875cqmin)
+											black calc(--checker-radius-unitless() * .21875cqmin),
+											transparent calc(--checker-radius-unitless() * .21875cqmin)
 										),
 										radial-gradient(
 											circle at center calc(var(--is-top-point) * var(--top-point-mask-position-vertical) + var(--is-bottom-point) * var(--bottom-point-mask-position-vertical)),
-											black calc(var(--checker-radius-unitless) * .21875cqmin),
-											transparent calc(var(--checker-radius-unitless) * .21875cqmin)
+											black calc(--checker-radius-unitless() * .21875cqmin),
+											transparent calc(--checker-radius-unitless() * .21875cqmin)
 										);
 									mask-composite: subtract;
 								}
@@ -588,7 +588,7 @@ html {
 								position: absolute;
 								translate:
 									calc(
-										var(--translate-x) + (--checker-diameter-unitless() * .21875cqmin - var(--drop-point-diameter)) / 2
+										var(--translate-x) + (var(--checker-diameter-unitless) * .21875cqmin - var(--drop-point-diameter)) / 2
 									)
 									calc(
 										var(--is-bottom-point) * (--half-height-unitless() * .21875cqmin + 6.125cqmin)
