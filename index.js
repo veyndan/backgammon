@@ -119,10 +119,8 @@ class CheckerOnBoardElement {
 	set #point(value) {
 		if (value !== null) {
 			this.target.dataset[`point`] = `${value.value}`
-			this.target.style.setProperty(`--point`, `${value.value}`);
 		} else {
 			delete this.target.dataset[`point`];
-			this.target.style.removeProperty(`--point`);
 		}
 	}
 
@@ -139,10 +137,8 @@ class CheckerOnBoardElement {
 	set pointStackIndex(value) {
 		if (value !== null) {
 			this.target.dataset[`pointStackIndex`] = `${value}`
-			this.target.style.setProperty(`--point-stack-index`, `${value}`);
 		} else {
 			delete this.target.dataset[`pointStackIndex`];
-			this.target.style.removeProperty(`--point-stack-index`);
 		}
 	}
 
@@ -159,12 +155,10 @@ class CheckerOnBoardElement {
 	set pointStackCount(value) {
 		if (value !== null) {
 			this.target.dataset[`pointStackCount`] = `${value}`
-			this.target.style.setProperty(`--point-stack-count`, `${value}`);
 
 			this.target.querySelector(`[slot="text"]`).textContent = value > 5 && this.pointStackIndex === value - 1 ? `${this.pointStackIndex + 1}` : null;
 		} else {
 			delete this.target.dataset[`pointStackCount`];
-			this.target.style.removeProperty(`--point-stack-count`);
 
 			this.target.querySelector(`[slot="text"]`).textContent = null;
 		}
@@ -190,9 +184,6 @@ const checkerElements = (/** @type GameTurnStart */ (game)).committedBoard.mailb
 			checkerElement.dataset[`point`] = `${point}`;
 			checkerElement.dataset[`pointStackIndex`] = `${pointStackIndex}`;
 			checkerElement.dataset[`pointStackCount`] = `${pointStackCount}`;
-			checkerElement.style.setProperty(`--point`, `${point}`);
-			checkerElement.style.setProperty(`--point-stack-index`, `${pointStackIndex}`);
-			checkerElement.style.setProperty(`--point-stack-count`, `${pointStackCount}`);
 			const textElement = document.createElement(`span`);
 			textElement.slot = `text`;
 			checkerElement.append(textElement);
