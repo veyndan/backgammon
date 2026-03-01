@@ -190,12 +190,8 @@ html {
 
 					> .backgammon {
 						grid-template:
-							".       .     drop-points-top    drop-points-top    drop-points-top    .       .                 " calc(12 * .21875cqb)
-							"players timer quadrant-13-18     bar                quadrant-19-24     sidebar controls-interface" auto
-							"players timer controls-left      bar                controls-right     sidebar controls-interface" auto
-							"players timer quadrant-7-12      bar                quadrant-1-6       sidebar controls-interface" auto
-							".       .     drop-points-bottom drop-points-bottom drop-points-bottom .       .                 " calc(12 * .21875cqb) /
-							auto     auto  auto               auto               auto               auto    auto              ;
+							"players timer board controls-interface" auto /
+							auto     auto  auto  auto              ;
 
 						&[data-player="2"] > #board > #controls > div {
 							rotate: .5turn;
@@ -242,14 +238,10 @@ html {
 
 					> .backgammon {
 						grid-template:
-							".                  players            players            players            .       " auto
-							".                  timer              timer              timer              .       " auto
-							".                  drop-points-top    drop-points-top    drop-points-top    .       " calc(12 * .21875cqb)
-							"controls-interface quadrant-13-18     bar                quadrant-19-24     sidebar " auto
-							"controls-interface controls-left      bar                controls-right     sidebar " auto
-							"controls-interface quadrant-7-12      bar                quadrant-1-6       sidebar " auto
-							".                  drop-points-bottom drop-points-bottom drop-points-bottom .       " calc(12 * .21875cqb) /
-							auto                auto               auto               auto               auto    ;
+							".                  players " auto
+							".                  timer   " auto
+							"controls-interface board   " auto /
+							auto                auto    ;
 
 						&[data-player="1"] > #board > #controls > div {
 							&:first-of-type {
@@ -340,7 +332,19 @@ html {
 
 					/* TODO Add additional 8px spacing between board and timer & board and play mode. */
 					> #board {
-						display: contents;
+						display: grid;
+						grid-area: board;
+						grid-template:
+							"drop-points-top    drop-points-top    drop-points-top    .       " calc(12 * .21875cqb)
+							"quadrant-13-18     bar                quadrant-19-24     sidebar " auto
+							"controls-left      bar                controls-right     sidebar " auto
+							"quadrant-7-12      bar                quadrant-1-6       sidebar " auto
+							"drop-points-bottom drop-points-bottom drop-points-bottom .       " calc(12 * .21875cqb) /
+							auto                auto               auto               auto    ;
+						gap: inherit;
+
+						min-inline-size: 0;
+						min-block-size: 0;
 
 						/*noinspection CssInvalidFunction*/
 						.drop-point,
