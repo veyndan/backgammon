@@ -16,6 +16,6 @@
 		"stylelint-use-nesting": "6.0.2",
 		"tape": "5.9.0",
 		"typescript": "6.0.2",
-		"vite": "8.0.3"
+		"vite": "8.0.5"
 	}
 }
